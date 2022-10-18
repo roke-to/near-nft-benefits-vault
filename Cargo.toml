@@ -16,10 +16,10 @@ panic = "abort"
 overflow-checks = true
 
 [dependencies]
-near-sdk = "*"
-near-contract-standards = "*"
+near-sdk = "4.0"
+near-contract-standards = "4.0"
 
 [dev-dependencies]
-tokio = { version = "*", features = ["macros", "rt"] }
-anyhow = "*"
-workspaces = "*"
+tokio = { version = "1.21", features = ["macros", "rt"] }
+anyhow = "1.0"
+workspaces = "0.6"
