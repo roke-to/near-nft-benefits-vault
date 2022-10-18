@@ -1,4 +1,4 @@
-use near_sdk::{borsh, near_bindgen, serde_json};
+use near_sdk::{borsh, near_bindgen};
 
 use crate::{Contract, ContractExt};
 
