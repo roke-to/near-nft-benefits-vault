@@ -4,13 +4,18 @@ mod interface;
 #[cfg(test)]
 mod tests;
 mod vault;
+mod view;
 
-use asset::Asset;
 use near_contract_standards::non_fungible_token::TokenId;
-use near_sdk::{collections::UnorderedMap, env, near_bindgen, AccountId};
+use near_sdk::{
+    borsh::{self, BorshDeserialize, BorshSerialize},
+    collections::UnorderedMap,
+    env, near_bindgen, AccountId,
+};
 use vault::Vault;
 
 #[near_bindgen]
+#[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Contract {
     vaults: UnorderedMap<TokenId, Vault>,
 }

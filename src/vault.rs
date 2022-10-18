@@ -1,6 +1,9 @@
 use near_contract_standards::non_fungible_token::TokenId;
-use near_primitives::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{collections::UnorderedMap, AccountId};
+use near_sdk::{
+    borsh::{self, BorshDeserialize, BorshSerialize},
+    collections::UnorderedMap,
+    AccountId,
+};
 
 use crate::asset::Asset;
 

@@ -7,7 +7,7 @@ use crate::{Contract, ContractExt};
 impl FungibleTokenReceiver for Contract {
     fn ft_on_transfer(
         &mut self,
-        _sender_id: AccountId,
+        sender_id: AccountId,
         amount: U128,
         msg: String,
     ) -> PromiseOrValue<U128> {

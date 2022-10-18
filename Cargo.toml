@@ -18,10 +18,8 @@ overflow-checks = true
 [dependencies]
 near-sdk = "*"
 near-contract-standards = "*"
-near-primitives = "=0.14.0"
 
 [dev-dependencies]
 tokio = { version = "*", features = ["macros", "rt"] }
 anyhow = "*"
-workspaces = "0.5.0"
-near-primitives = "=0.14.0"
+workspaces = "*"

@@ -1,5 +1,7 @@
-use near_primitives::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{AccountId, Balance};
+use near_sdk::{
+    borsh::{self, BorshDeserialize, BorshSerialize},
+    AccountId, Balance,
+};
 
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Asset {
