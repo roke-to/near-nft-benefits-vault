@@ -18,6 +18,7 @@ overflow-checks = true
 [dependencies]
 near-sdk = "4.0"
 near-contract-standards = "4.0"
+serde = "1.0"
 
 [dev-dependencies]
 tokio = { version = "1.21", features = ["macros", "rt"] }
