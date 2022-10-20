@@ -15,7 +15,7 @@ pub struct Vault {
 
 impl Vault {
     pub fn new(key: TokenId) -> Self {
-        let assets = UnorderedMap::new(b"v");
+        let assets = UnorderedMap::new(b"b");
         Self { key, assets }
     }
 
@@ -24,7 +24,7 @@ impl Vault {
             asset.balance += amount;
             asset
         } else {
-            Asset::new(ft_account_id.clone(), amount)
+            Asset::new(amount)
         };
         self.assets.insert(&ft_account_id, &asset);
     }
@@ -34,7 +34,7 @@ impl Vault {
             self.assets.get(&ft_account_id).is_none(),
             "Asset already exists"
         );
-        let asset = Asset::new(ft_account_id.clone(), initial_balance);
+        let asset = Asset::new(initial_balance);
         self.assets.insert(&ft_account_id, &asset);
     }
 }
