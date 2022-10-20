@@ -7,6 +7,7 @@ use near_sdk::{
 
 use crate::asset::Asset;
 
+/// Stores map with different FT assets.
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Vault {
     pub key: TokenId,
@@ -14,11 +15,13 @@ pub struct Vault {
 }
 
 impl Vault {
+    /// Creates new vault.
     pub fn new(key: TokenId) -> Self {
         let assets = UnorderedMap::new(b"b");
         Self { key, assets }
     }
 
+    /// Increases balance of the FT by provided amount.
     pub fn store(&mut self, ft_account_id: AccountId, amount: u128) {
         let asset = if let Some(mut asset) = self.assets.get(&ft_account_id) {
             asset.balance += amount;
@@ -29,6 +32,7 @@ impl Vault {
         self.assets.insert(&ft_account_id, &asset);
     }
 
+    /// Adds FT asset to the inner map.
     pub fn add_asset(&mut self, ft_account_id: AccountId, initial_balance: u128) {
         assert!(
             self.assets.get(&ft_account_id).is_none(),
