@@ -7,6 +7,7 @@ use near_sdk::{
 
 use crate::{Contract, ContractExt};
 
+/// Complete list of tokens in the Vault.
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct Balance {
@@ -14,6 +15,7 @@ pub struct Balance {
     pub tokens: Vec<Token>,
 }
 
+/// Info about FT.
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct Token {
@@ -23,6 +25,7 @@ pub struct Token {
 
 #[near_bindgen]
 impl Contract {
+    /// Function to view the content of the vault.
     pub fn balance_of(&self, nft_id: TokenId) -> Option<Balance> {
         let vault = self.vaults.get(&nft_id)?;
 

@@ -1,5 +1,8 @@
 use anyhow::{Context, Result};
-use near_sdk::{json_types::U128, serde_json::json};
+use near_sdk::{
+    json_types::U128,
+    serde_json::{json, to_vec},
+};
 use tokio::fs::read;
 use workspaces::{
     network::Sandbox,
@@ -91,18 +94,12 @@ impl Environment {
         Ok(())
     }
 
-    pub async fn deposit_to_vault(
-        &self, // issuer: &Account,
-               // token_contract_id: &Contract,
-               // vault: &Contract,
-    ) -> Result<()> {
-        let args = json!(
-            {
-                "receiver_id": self.vault.id(),
-                "amount": U128(NEAR),
-                "msg": NFT_TOKEN_ID
-            }
-        );
+    pub async fn deposit_to_vault(&self) -> Result<()> {
+        let args = json!({
+            "receiver_id": self.vault.id(),
+            "amount": U128(NEAR),
+            "msg": NFT_TOKEN_ID
+        });
 
         let res = self
             .issuer
@@ -119,11 +116,9 @@ impl Environment {
     }
 
     pub async fn balance_of(&self) -> Result<Balance> {
-        let args = json!({
+        let args = to_vec(&json!({
             "nft_id": NFT_TOKEN_ID,
-        })
-        .to_string()
-        .into_bytes();
+        }))?;
         let res = self
             .sandbox
             .view(self.vault.id(), VAULT_BALANCE_OF_CALL, args)
