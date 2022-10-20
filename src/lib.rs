@@ -27,7 +27,7 @@ impl Contract {
     pub fn new() -> Self {
         assert!(!env::state_exists(), "Already initialized");
         Self {
-            vaults: UnorderedMap::new(b"v"),
+            vaults: UnorderedMap::new(b"a"),
         }
     }
 
