@@ -10,15 +10,20 @@ use crate::asset::Asset;
 /// Stores map with different FT assets.
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Vault {
-    pub key: TokenId,
+    pub nft_id: TokenId,
+    pub nft_contract_id: AccountId,
     pub assets: UnorderedMap<AccountId, Asset>,
 }
 
 impl Vault {
     /// Creates new vault.
-    pub fn new(key: TokenId) -> Self {
+    pub fn new(nft_id: TokenId, nft_contract_id: AccountId) -> Self {
         let assets = UnorderedMap::new(b"b");
-        Self { key, assets }
+        Self {
+            nft_id,
+            nft_contract_id,
+            assets,
+        }
     }
 
     /// Increases balance of the FT by provided amount.

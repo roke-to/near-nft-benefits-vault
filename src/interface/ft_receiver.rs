@@ -1,7 +1,7 @@
 use near_contract_standards::fungible_token::receiver::FungibleTokenReceiver;
 use near_sdk::{env, json_types::U128, log, near_bindgen, AccountId, PromiseOrValue};
 
-use crate::{Contract, ContractExt};
+use crate::{interface::request::Request, Contract, ContractExt};
 
 #[near_bindgen]
 impl FungibleTokenReceiver for Contract {
@@ -13,17 +13,24 @@ impl FungibleTokenReceiver for Contract {
     ) -> PromiseOrValue<U128> {
         let ft_account_id = env::predecessor_account_id();
         let amount = amount.0;
-        let token_id = &msg; // @TODO token id validation.
 
-        log!(
-            "{} transferred {} of {} to vault {}",
-            sender_id,
-            amount,
-            ft_account_id,
-            token_id
-        );
+        let request = Request::from_json(&msg).expect("request deserialization failed");
+        match request {
+            Request::TopUp {
+                nft_id,
+                nft_contract_id,
+            } => {
+                log!(
+                    "{} transferred {} of {} to vault {}",
+                    sender_id,
+                    amount,
+                    ft_account_id,
+                    nft_id
+                );
 
-        self.store(token_id.clone(), ft_account_id, amount);
+                self.store(nft_id, nft_contract_id, ft_account_id, amount);
+            }
+        }
 
         PromiseOrValue::Value(U128(0))
     }
