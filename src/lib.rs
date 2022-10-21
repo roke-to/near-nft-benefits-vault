@@ -10,13 +10,19 @@ mod tests;
 mod vault;
 mod views;
 
-use near_contract_standards::non_fungible_token::TokenId;
+use interface::nft::nft;
+use near_contract_standards::non_fungible_token::{Token, TokenId};
 use near_sdk::{
+    assert_one_yocto,
     borsh::{self, BorshDeserialize, BorshSerialize},
     collections::UnorderedMap,
-    env, near_bindgen, AccountId,
+    env,
+    json_types::U128,
+    near_bindgen, require, AccountId, Promise,
 };
 use vault::Vault;
+
+use crate::interface::ft::ft;
 
 /// Core structure of the smart contract.
 #[near_bindgen]
@@ -37,26 +43,72 @@ impl Contract {
         }
     }
 
-    /// Public function to withdraw tokens with access by NFT `TokenId`.
+    /// Public function to withdraw all FTs in the Vault.
     #[payable]
-    pub fn withdraw(token_id: TokenId) {
+    pub fn withdraw_all(&mut self, nft_id: TokenId) {
+        // 1 yoctoNEAR should attached to this call to prevent abuse.
+        assert_one_yocto();
+
+        let vault = self.get_vault(&nft_id);
+
+        let nft_info_promise = nft::ext(vault.nft_contract_id).nft_token(vault.nft_id.clone());
+
+        nft_info_promise
+            .then(Self::ext(env::current_account_id()).withdraw_all_callback(vault.nft_id));
+
+        todo!()
+    }
+
+    #[private]
+    pub fn withdraw_all_callback(
+        &mut self,
+        #[callback_result] nft_info: Option<Token>,
+        nft_id: TokenId,
+    ) {
+        let nft_info = nft_info.expect("NFT info query returned nothing");
+        let nft_owner = nft_info.owner_id;
+        require!(
+            nft_owner == env::predecessor_account_id(),
+            "vault access denied"
+        );
+
+        let vault = self.get_vault(&nft_id);
+
+        for (ft_account_id, asset) in vault.assets.iter() {
+            let memo = Some("Nft Benefits transfer".to_string());
+            let ft_transfer_promise =
+                ft::ext(ft_account_id).ft_transfer(nft_owner.clone(), U128(asset.balance), memo);
+        }
+
         todo!()
     }
 }
 
 impl Contract {
     /// Adds provided amount of tokens to the vault specified by NFT `token_id`.
-    pub fn store(&mut self, token_id: TokenId, ft_account_id: AccountId, amount: u128) {
-        let mut vault = if let Some(vault) = self.vaults.get(&token_id) {
+    pub fn store(
+        &mut self,
+        nft_id: TokenId,
+        nft_contract_id: AccountId,
+        ft_account_id: AccountId,
+        amount: u128,
+    ) {
+        let mut vault = if let Some(vault) = self.vaults.get(&nft_id) {
             vault
         } else {
-            let mut vault = Vault::new(token_id.clone());
+            let mut vault = Vault::new(nft_id.clone(), nft_contract_id);
             vault.add_asset(ft_account_id.clone(), amount);
             vault
         };
         vault.store(ft_account_id, amount);
 
-        self.vaults.insert(&token_id, &vault);
+        self.vaults.insert(&nft_id, &vault);
+    }
+
+    pub fn get_vault(&self, nft_id: &TokenId) -> Vault {
+        self.vaults
+            .get(nft_id)
+            .expect("vault is not created for the given nft_id")
     }
 }
 
