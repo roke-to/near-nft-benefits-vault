@@ -1,0 +1,19 @@
+[package]
+name = "tests-integration"
+version = "0.0.0"
+authors = ["Pavel Iakushin <piakushin@roke.to>"]
+edition = "2021"
+
+
+[dependencies]
+near-sdk = "4.0"
+near-contract-standards = "4.0"
+serde = "1.0"
+tokio = { version = "1.21", features = ["macros", "rt"] }
+anyhow = "1.0"
+workspaces = "0.6"
+
+nft-benefits-vault = { path = "../vault" }
+
+[[bin]]
+name = "view_balance_of"
