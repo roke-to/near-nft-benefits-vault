@@ -1,11 +1,8 @@
 use anyhow::{Context, Result};
+use tests_integration::{Environment, NEAR};
 
-use crate::tests::NEAR;
-
-use super::environment::Environment;
-
-#[tokio::test]
-pub async fn test_view_balance_of() -> Result<()> {
+#[tokio::main]
+pub async fn main() -> Result<()> {
     let env = Environment::new().await?;
 
     env.issue_nft().await?;

@@ -5,10 +5,8 @@ NFT Benefits Vault.
 mod asset;
 mod interface;
 
-#[cfg(test)]
-mod tests;
 mod vault;
-mod views;
+pub mod views;
 
 use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::{

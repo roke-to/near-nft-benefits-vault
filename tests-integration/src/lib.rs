@@ -1,6 +1,7 @@
 mod environment;
 mod integration;
-mod view_balance_of;
+
+pub use environment::Environment;
 
 // Precompiled smart contracts locations.
 const WASMS_LOCATION: &str = "dist";
@@ -8,7 +9,7 @@ const WRAP_NEAR_WASM: &str = "wrap.wasm";
 const NFT_WASM: &str = "non_fungible_token.wasm";
 
 // NEAR is 10^24 yoctoNEAR.
-const NEAR: u128 = 10u128.pow(24);
+pub const NEAR: u128 = 10u128.pow(24);
 
 // Constants related to the wrap NEAR FT contract.
 const WRAP_NEAR_TESTNET_ACCOUNT_ID: &str = "wrap.testnet";

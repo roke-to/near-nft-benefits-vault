@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use crate::tests::{environment::Environment, NEAR};
+use crate::{environment::Environment, NEAR};
 
 #[tokio::test]
 async fn test_contract() -> Result<()> {
