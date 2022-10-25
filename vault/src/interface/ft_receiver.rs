@@ -23,8 +23,9 @@ impl FungibleTokenReceiver for Contract {
             token_id
         );
 
-        self.store(token_id.clone(), ft_account_id, amount);
+        // self.store(token_id.clone(), ft_account_id, amount);
+        // PromiseOrValue::Value(U128(0))
 
-        PromiseOrValue::Value(U128(0))
+        todo!()
     }
 }
