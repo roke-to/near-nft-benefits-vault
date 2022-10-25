@@ -16,6 +16,10 @@ use near_sdk::{
 };
 use vault::Vault;
 
+type VaultId = AccountId;
+type NftId = TokenId;
+type NftContractId = AccountId;
+
 /// Core structure of the smart contract.
 #[near_bindgen]
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
@@ -30,15 +34,26 @@ impl Contract {
     #[private]
     pub fn new() -> Self {
         assert!(!env::state_exists(), "Already initialized");
-        Self {
-            vaults: UnorderedMap::new(b"a"),
-        }
+        todo!("store vault smart contract to storage");
+        // Self {
+        //     vaults: UnorderedMap::new(b"a"),
+        // }
     }
 
-    /// Public function to withdraw tokens with access by NFT `TokenId`.
-    #[payable]
-    pub fn withdraw(token_id: TokenId) {
-        todo!()
+    pub fn create_vault(&mut self, nft_id: NftId, nft_contract: NftContractId) -> VaultId {
+        todo!("deploy vault contract and return it's account Id")
+    }
+
+    pub fn close_vault(&mut self, nft_id: NftId, nft_contract: NftContractId) {
+        todo!("delete vault contract and transfer all remaining assets to onwer or issuer");
+    }
+
+    pub fn update_internal_vault_code(&mut self, code: Vec<u8>) {
+        todo!("update internal vault contract code");
+    }
+
+    pub fn update_vault_code(&mut self, vault: VaultId) {
+        todo!("update specified vault contract code");
     }
 }
 

@@ -5,7 +5,7 @@ use near_sdk::{
     AccountId,
 };
 
-use crate::{Contract, ContractExt};
+use crate::{Contract, ContractExt, VaultId};
 
 /// Complete list of tokens in the Vault.
 #[derive(Debug, Serialize, Deserialize)]
@@ -25,19 +25,7 @@ pub struct Token {
 
 #[near_bindgen]
 impl Contract {
-    /// Function to view the content of the vault.
-    pub fn balance_of(&self, nft_id: TokenId) -> Option<Balance> {
-        let vault = self.vaults.get(&nft_id)?;
-
-        let tokens: Vec<_> = vault
-            .assets
-            .iter()
-            .map(|(account_id, asset)| Token {
-                account_id,
-                amount: asset.balance,
-            })
-            .collect();
-
-        Some(Balance { nft_id, tokens })
+    pub fn get_vault_address(&self, nft_id: TokenId, nft_contract: AccountId) -> Option<VaultId> {
+        todo!("return vault contract id associated with the given pair");
     }
 }
