@@ -11,6 +11,8 @@ use crate::tests::{
 
 use super::format_helpers::format_execution_result;
 
+/// Prepares w-near contract for the Sandbox.
+/// Either imports it from testnet or uses local wasm binary.
 pub async fn prepare_wrap_near_contract(sandbox: &Worker<Sandbox>) -> Result<Contract> {
     let id = WRAP_NEAR_TESTNET_ACCOUNT_ID.parse()?;
     let contract = match testnet().await {

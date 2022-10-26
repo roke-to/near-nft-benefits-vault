@@ -10,6 +10,7 @@ use crate::asset::Asset;
 /// Stores map with different FT assets.
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Vault {
+    /// NFT TokenId which provides access to this vault.
     pub nft_id: TokenId,
     pub nft_contract_id: AccountId,
     pub assets: UnorderedMap<AccountId, Asset>,

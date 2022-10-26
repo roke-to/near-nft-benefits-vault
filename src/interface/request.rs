@@ -5,6 +5,8 @@ use near_sdk::{
     AccountId,
 };
 
+/// This enum is used to expand the functionality of the Contract,
+/// when receiving fungible tokens.
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Request {
     TopUp {

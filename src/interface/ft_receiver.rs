@@ -12,6 +12,9 @@ impl FungibleTokenReceiver for Contract {
         msg: String,
     ) -> PromiseOrValue<U128> {
         let amount = amount.0;
+
+        // This callback is called by the FT contract,
+        // so predecessor account IS the FT contract.
         let ft_account_id = env::predecessor_account_id();
 
         log!("received {} tokens from {}", amount, sender_id);

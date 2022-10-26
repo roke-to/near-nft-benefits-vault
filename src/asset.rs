@@ -15,6 +15,7 @@ impl Asset {
         Self { balance }
     }
 
+    /// Subtracts provided amount from inner balance with overflow check.
     pub fn reduce_balance(&mut self, amount: Balance) {
         self.balance = self
             .balance

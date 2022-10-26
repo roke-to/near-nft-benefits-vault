@@ -26,6 +26,7 @@ use super::{
     WRAP_NEAR_FT_BALANCE_OF,
 };
 
+/// Struct contains a bunch of useful contracts and accounts, frequently used in test cases.
 pub struct Environment {
     pub sandbox: Worker<Sandbox>,
     pub wrap_near: Contract,
