@@ -5,12 +5,16 @@ NFT Benefits Vault.
 mod asset;
 mod interface;
 
+mod nft_id;
 #[cfg(test)]
 mod tests;
 mod vault;
 mod views;
 
-use interface::nft::nft;
+use interface::{ft::ft, nft::nft};
+use nft_id::NftId;
+use vault::Vault;
+
 use near_contract_standards::non_fungible_token::{Token, TokenId};
 use near_sdk::{
     assert_one_yocto,
@@ -20,16 +24,13 @@ use near_sdk::{
     json_types::U128,
     log, near_bindgen, require, AccountId, Promise, PromiseError,
 };
-use vault::Vault;
-
-use crate::interface::ft::ft;
 
 /// Core structure of the smart contract.
 #[near_bindgen]
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Contract {
     /// Map of users Vaults with NFT TokenIds as their keys.
-    vaults: UnorderedMap<TokenId, Vault>,
+    vaults: UnorderedMap<NftId, Vault>,
 }
 
 #[near_bindgen]
@@ -46,27 +47,26 @@ impl Contract {
 
     /// Public function to withdraw all FTs in the Vault.
     #[payable]
-    pub fn withdraw_all(&mut self, nft_id: TokenId) -> Promise {
+    pub fn withdraw_all(&mut self, nft_contract_id: AccountId, nft_id: TokenId) -> Promise {
         let caller = env::predecessor_account_id();
         log!("withdraw_all call by {}", caller);
         log!("check attached deposit: 1 yocto");
         // 1 yoctoNEAR should attached to this call to prevent abuse.
         assert_one_yocto();
 
-        log!("open vault: {}", nft_id);
-        let vault = self.get_vault(&nft_id);
+        let nft_id = NftId::new(nft_contract_id, nft_id);
 
-        let nft_info_promise = nft::ext(vault.nft_contract_id).nft_token(vault.nft_id.clone());
+        let nft_info_promise =
+            nft::ext(nft_id.contract_id().to_owned()).nft_token(nft_id.token_id().to_owned());
 
-        nft_info_promise
-            .then(Self::ext(env::current_account_id()).withdraw_all_callback(vault.nft_id))
+        nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_all_callback(nft_id))
     }
 
     #[private]
     pub fn withdraw_all_callback(
         &mut self,
         #[callback_result] nft_info: Result<Option<Token>, PromiseError>,
-        nft_id: TokenId,
+        nft_id: NftId,
     ) -> Option<Promise> {
         let signer = env::signer_account_id();
         log!("withdraw_all_callback called by signer: {}", signer);
@@ -111,7 +111,7 @@ impl Contract {
     pub fn adjust_balance(
         &mut self,
         #[callback_result] res: Result<(), PromiseError>,
-        nft_id: TokenId,
+        nft_id: NftId,
         ft_account_id: AccountId,
         amount: u128,
     ) {
@@ -124,7 +124,7 @@ impl Contract {
             vault.reduce_balance(ft_account_id.clone(), amount);
             self.vaults.insert(&nft_id, &vault);
             log!(
-                "withdrawal success, nft: {}, ft: {}, amount: {}",
+                "withdrawal success, nft: {:?}, ft: {}, amount: {}",
                 nft_id,
                 ft_account_id,
                 amount
@@ -137,28 +137,22 @@ impl Contract {
 
 impl Contract {
     /// Adds provided amount of tokens to the vault specified by NFT `token_id`.
-    pub fn store(
-        &mut self,
-        nft_id: TokenId,
-        nft_contract_id: AccountId,
-        ft_account_id: AccountId,
-        amount: u128,
-    ) {
+    pub fn store(&mut self, nft_id: NftId, ft_account_id: AccountId, amount: u128) {
         let mut vault = if let Some(vault) = self.vaults.get(&nft_id) {
             log!("current balance of {}: {}", ft_account_id, amount);
             vault
         } else {
-            let mut vault = Vault::new(nft_id.clone(), nft_contract_id);
+            let mut vault = Vault::new();
             vault.add_asset(ft_account_id.clone(), 0);
             vault
         };
         vault.store(ft_account_id, amount);
 
-        log!("vault created for: {}", nft_id);
+        log!("vault created for: {:?}", nft_id);
         self.vaults.insert(&nft_id, &vault);
     }
 
-    pub fn get_vault(&self, nft_id: &TokenId) -> Vault {
+    pub fn get_vault(&self, nft_id: &NftId) -> Vault {
         self.vaults
             .get(nft_id)
             .expect("vault is not created for the given nft_id")
