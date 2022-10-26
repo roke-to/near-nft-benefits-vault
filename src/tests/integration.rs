@@ -16,6 +16,7 @@ async fn test_contract() -> Result<()> {
 }
 
 async fn check_vault_state(env: &Environment) -> Result<()> {
+    println!("nft_contract_id: {}", env.nft.id());
     let balance = env.vault_balance_of().await?.unwrap();
     assert_eq!(
         balance
