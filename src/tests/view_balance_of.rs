@@ -13,21 +13,21 @@ pub async fn test_view_balance_of() -> Result<()> {
     env.deposit_to_vault().await?;
 
     let balance = env
-        .balance_of()
+        .vault_balance_of()
         .await
-        .with_context(|| "failed to check balance of")?;
+        .with_context(|| "failed to check balance of")?
+        .unwrap();
 
     println!("balance: {balance:#?}");
 
-    assert_eq!(
-        balance
-            .tokens
-            .iter()
-            .find(|token| token.account_id.as_str() == env.wrap_near.id().as_str())
-            .expect("wrap near is not registered in vault")
-            .amount,
-        2 * NEAR
-    );
+    let wrap_near_amount = balance
+        .tokens
+        .iter()
+        .find(|token| token.account_id.as_str() == env.wrap_near.id().as_str())
+        .expect("wrap near is not registered in vault")
+        .amount;
+
+    assert_eq!(wrap_near_amount, NEAR);
 
     Ok(())
 }

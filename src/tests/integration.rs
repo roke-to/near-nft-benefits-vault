@@ -16,7 +16,7 @@ async fn test_contract() -> Result<()> {
 }
 
 async fn check_vault_state(env: &Environment) -> Result<()> {
-    let balance = env.balance_of().await?;
+    let balance = env.vault_balance_of().await?.unwrap();
     assert_eq!(
         balance
             .tokens
@@ -24,7 +24,7 @@ async fn check_vault_state(env: &Environment) -> Result<()> {
             .find(|t| t.account_id.as_str() == env.wrap_near.id().as_str())
             .expect("wrap near is not registered in the vault")
             .amount,
-        2 * NEAR
+        NEAR
     );
     Ok(())
 }
