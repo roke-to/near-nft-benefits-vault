@@ -18,7 +18,7 @@ use near_sdk::{
     collections::UnorderedMap,
     env,
     json_types::U128,
-    near_bindgen, require, AccountId, Promise,
+    near_bindgen, require, AccountId, Promise, PromiseResult,
 };
 use vault::Vault;
 
@@ -45,7 +45,7 @@ impl Contract {
 
     /// Public function to withdraw all FTs in the Vault.
     #[payable]
-    pub fn withdraw_all(&mut self, nft_id: TokenId) {
+    pub fn withdraw_all(&mut self, nft_id: TokenId) -> Promise {
         // 1 yoctoNEAR should attached to this call to prevent abuse.
         assert_one_yocto();
 
@@ -53,10 +53,10 @@ impl Contract {
 
         let nft_info_promise = nft::ext(vault.nft_contract_id).nft_token(vault.nft_id.clone());
 
-        nft_info_promise
+        let transfer_promise = nft_info_promise
             .then(Self::ext(env::current_account_id()).withdraw_all_callback(vault.nft_id));
 
-        todo!()
+        transfer_promise.then(Self::ext(env::current_account_id()).check_transfers())
     }
 
     #[private]
@@ -64,7 +64,7 @@ impl Contract {
         &mut self,
         #[callback_result] nft_info: Option<Token>,
         nft_id: TokenId,
-    ) {
+    ) -> Option<Promise> {
         let nft_info = nft_info.expect("NFT info query returned nothing");
         let nft_owner = nft_info.owner_id;
         require!(
@@ -74,13 +74,26 @@ impl Contract {
 
         let vault = self.get_vault(&nft_id);
 
+        let mut transfer_promise: Option<Promise> = None;
         for (ft_account_id, asset) in vault.assets.iter() {
             let memo = Some("Nft Benefits transfer".to_string());
             let ft_transfer_promise =
                 ft::ext(ft_account_id).ft_transfer(nft_owner.clone(), U128(asset.balance), memo);
-        }
 
-        todo!()
+            if let Some(promise) = transfer_promise {
+                transfer_promise = Some(promise.then(ft_transfer_promise)); // @TODO can be joined with `.and()`
+            } else {
+                transfer_promise = Some(ft_transfer_promise);
+            }
+        }
+        transfer_promise
+    }
+
+    #[private]
+    pub fn check_transfers(&mut self, #[callback_result] res: PromiseResult) {
+        if let PromiseResult::Successful(_) = res {
+            todo!("reduce balances");
+        }
     }
 }
 
