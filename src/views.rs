@@ -23,6 +23,7 @@ pub struct Token {
     pub amount: u128,
 }
 
+/// Info about vault.
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct VaultView {

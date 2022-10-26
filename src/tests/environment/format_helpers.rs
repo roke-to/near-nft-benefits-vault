@@ -1,5 +1,6 @@
 use workspaces::result::{ExecutionFinalResult, ExecutionOutcome};
 
+// Simple helper to customize print of the ExecutionFinalResult.
 pub fn format_execution_result(res: &ExecutionFinalResult) -> String {
     if res.is_success() {
         format!(
@@ -15,6 +16,7 @@ is success: {:#?}",
     }
 }
 
+// Simple helper to customize print of multiple `ExecutionOutcome`s.
 fn format_receipt_outcomes(outcomes: &[ExecutionOutcome]) -> String {
     outcomes
         .iter()
@@ -22,6 +24,7 @@ fn format_receipt_outcomes(outcomes: &[ExecutionOutcome]) -> String {
         .collect()
 }
 
+// Simple helper to customize print of the ExecutionOutcome.
 fn format_execution_outcome(outcome: &ExecutionOutcome) -> String {
     let logs = if outcome.logs.is_empty() {
         String::new()

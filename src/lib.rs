@@ -28,6 +28,7 @@ use crate::interface::ft::ft;
 #[near_bindgen]
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Contract {
+    /// Map of users Vaults with NFT TokenIds as their keys.
     vaults: UnorderedMap<TokenId, Vault>,
 }
 

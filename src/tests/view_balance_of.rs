@@ -4,6 +4,7 @@ use crate::tests::NEAR;
 
 use super::environment::Environment;
 
+// Tests `balance_of` veiw method of the Contract.
 #[tokio::test]
 pub async fn test_view_balance_of() -> Result<()> {
     let env = Environment::new().await?;
