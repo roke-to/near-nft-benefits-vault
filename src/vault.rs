@@ -46,4 +46,10 @@ impl Vault {
         let asset = Asset::new(initial_balance);
         self.assets.insert(&ft_account_id, &asset);
     }
+
+    pub fn reduce_balance(&mut self, ft_account_id: AccountId, amount: u128) {
+        let mut asset = self.assets.get(&ft_account_id).expect("unknown asset");
+        asset.reduce_balance(amount);
+        self.assets.insert(&ft_account_id, &asset);
+    }
 }

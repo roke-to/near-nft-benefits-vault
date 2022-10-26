@@ -14,4 +14,11 @@ impl Asset {
     pub fn new(balance: Balance) -> Self {
         Self { balance }
     }
+
+    pub fn reduce_balance(&mut self, amount: Balance) {
+        self.balance = self
+            .balance
+            .checked_sub(amount)
+            .expect("subtraction with overflow");
+    }
 }
