@@ -11,8 +11,10 @@ impl FungibleTokenReceiver for Contract {
         amount: U128,
         msg: String,
     ) -> PromiseOrValue<U128> {
-        let ft_account_id = env::predecessor_account_id();
         let amount = amount.0;
+        let ft_account_id = env::predecessor_account_id();
+
+        log!("received {} tokens from {}", amount, sender_id);
 
         let request = Request::from_json(&msg).expect("request deserialization failed");
         match request {
@@ -21,7 +23,7 @@ impl FungibleTokenReceiver for Contract {
                 nft_contract_id,
             } => {
                 log!(
-                    "{} transferred {} of {} to vault {}",
+                    "{} transferred {} of {} to vault #{}",
                     sender_id,
                     amount,
                     ft_account_id,
