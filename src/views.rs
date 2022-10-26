@@ -5,13 +5,13 @@ use near_sdk::{
     AccountId,
 };
 
-use crate::{Contract, ContractExt};
+use crate::{nft_id::NftId, Contract, ContractExt};
 
 /// Complete list of tokens in the Vault.
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct BalanceView {
-    pub nft_id: TokenId,
+    pub nft_id: NftId,
     pub tokens: Vec<Token>,
 }
 
@@ -27,15 +27,15 @@ pub struct Token {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct VaultView {
-    pub nft_id: TokenId,
-    pub nft_contract_id: AccountId,
+    pub nft_id: NftId,
     pub assets_count: u64,
 }
 
 #[near_bindgen]
 impl Contract {
     /// Function to view the content of the vault.
-    pub fn balance_of(&self, nft_id: TokenId) -> Option<BalanceView> {
+    pub fn balance_of(&self, nft_contract_id: AccountId, nft_id: TokenId) -> Option<BalanceView> {
+        let nft_id = NftId::new(nft_contract_id, nft_id);
         let vault = self.vaults.get(&nft_id)?;
 
         let tokens: Vec<_> = vault
@@ -50,11 +50,11 @@ impl Contract {
         Some(BalanceView { nft_id, tokens })
     }
 
-    pub fn vault(&self, nft_id: TokenId) -> Option<VaultView> {
+    pub fn vault(&self, nft_contract_id: AccountId, nft_id: TokenId) -> Option<VaultView> {
+        let nft_id = NftId::new(nft_contract_id, nft_id);
         let vault = self.get_vault(&nft_id);
         Some(VaultView {
-            nft_id: vault.nft_id,
-            nft_contract_id: vault.nft_contract_id,
+            nft_id,
             assets_count: vault.assets.len(),
         })
     }

@@ -1,4 +1,3 @@
-use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
     collections::UnorderedMap,
@@ -10,21 +9,14 @@ use crate::asset::Asset;
 /// Stores map with different FT assets.
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Vault {
-    /// NFT TokenId which provides access to this vault.
-    pub nft_id: TokenId,
-    pub nft_contract_id: AccountId,
     pub assets: UnorderedMap<AccountId, Asset>,
 }
 
 impl Vault {
     /// Creates new vault.
-    pub fn new(nft_id: TokenId, nft_contract_id: AccountId) -> Self {
+    pub fn new() -> Self {
         let assets = UnorderedMap::new(b"b");
-        Self {
-            nft_id,
-            nft_contract_id,
-            assets,
-        }
+        Self { assets }
     }
 
     /// Increases balance of the FT by provided amount.
@@ -52,5 +44,11 @@ impl Vault {
         let mut asset = self.assets.get(&ft_account_id).expect("unknown asset");
         asset.reduce_balance(amount);
         self.assets.insert(&ft_account_id, &asset);
+    }
+}
+
+impl Default for Vault {
+    fn default() -> Self {
+        Self::new()
     }
 }

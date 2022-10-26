@@ -1,7 +1,7 @@
 use near_contract_standards::fungible_token::receiver::FungibleTokenReceiver;
 use near_sdk::{env, json_types::U128, log, near_bindgen, AccountId, PromiseOrValue};
 
-use crate::{interface::request::Request, Contract, ContractExt};
+use crate::{interface::request::Request, nft_id::NftId, Contract, ContractExt};
 
 #[near_bindgen]
 impl FungibleTokenReceiver for Contract {
@@ -33,7 +33,9 @@ impl FungibleTokenReceiver for Contract {
                     nft_id
                 );
 
-                self.store(nft_id, nft_contract_id, ft_account_id, amount);
+                let nft_id = NftId::new(nft_contract_id, nft_id);
+
+                self.store(nft_id, ft_account_id, amount);
             }
         }
 
