@@ -146,6 +146,7 @@ impl Environment {
 
     pub async fn check_deposit_to_vault(&self) -> Result<()> {
         let args = to_vec(&json!({
+            "nft_contract_id": self.nft.id(),
             "nft_id": NFT_TOKEN_ID,
         }))?;
         let res = self.vault.view(VAULT_VIEW_CALL, args).await?;
@@ -156,6 +157,7 @@ impl Environment {
 
     pub async fn vault_balance_of(&self) -> Result<Option<BalanceView>> {
         let args = to_vec(&json!({
+            "nft_contract_id": self.nft.id(),
             "nft_id": NFT_TOKEN_ID,
         }))?;
         let res = self
@@ -169,6 +171,7 @@ impl Environment {
 
     pub async fn withdraw_all(&self) -> Result<()> {
         let args = json!({
+            "nft_contract_id": self.nft.id(),
             "nft_id": NFT_TOKEN_ID,
         });
         let res = self

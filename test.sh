@@ -1,1 +1,1 @@
-./build.sh && cargo test -- --nocapture
+./build.sh && cargo test -- $1
