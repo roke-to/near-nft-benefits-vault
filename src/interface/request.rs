@@ -5,10 +5,10 @@ use near_sdk::{
     AccountId,
 };
 
-/// This enum is used to expand the functionality of the Contract,
-/// when receiving fungible tokens.
+/// This enum is used to expand the functionality of the Contract when receiving fungible tokens.
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Request {
+    /// On ft transfer with this variant as a msg the Contract will increase balance of the corresponding Vault.
     TopUp {
         nft_id: TokenId,
         nft_contract_id: AccountId,

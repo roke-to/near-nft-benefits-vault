@@ -12,8 +12,7 @@ use crate::tests::{
 
 use super::format_helpers::format_execution_result;
 
-/// Prepares w-near contract for the Sandbox.
-/// Either imports it from testnet or uses local wasm binary.
+/// Prepares w-near contract for the Sandbox. Either imports it from testnet or uses local wasm binary.
 pub async fn prepare_wrap_near_contract(sandbox: Worker<Sandbox>) -> Result<Contract> {
     let id = WRAP_NEAR_TESTNET_ACCOUNT_ID.parse()?;
     let contract = match testnet().await {
@@ -40,6 +39,7 @@ pub async fn prepare_wrap_near_contract(sandbox: Worker<Sandbox>) -> Result<Cont
     Ok(contract)
 }
 
+/// Prepares custom fungible token contract from NEAR examples.
 pub async fn prepare_custom_ft(sandbox: Worker<Sandbox>) -> Result<Contract> {
     let path = format!("{WASMS_LOCATION}/{FUNGIBLE_TOKEN_WASM}");
     let wasm = read(path).await?;
@@ -85,17 +85,17 @@ async fn register_account_impl(account: &Account, token: &AccountId) -> Result<(
     Ok(())
 }
 
+/// Registeres an account in NEP-141 compatible FT contract.
 pub async fn register_account(
     account: &Account,
     tokens: impl Iterator<Item = &AccountId>,
 ) -> Result<()> {
-    for token in tokens {
-        register_account_impl(account, token).await?;
-        println!("{} registered in {}", account.id(), token);
-    }
+    let tasks: FuturesUnordered<_> = tokens.map(|t| register_account_impl(account, t)).collect();
+    tasks.try_collect().await?;
     Ok(())
 }
 
+/// Deposits [`WRAP_NEAR_DEPOSIT`] amount of NEAR tokens to the wrapNEAR contract.
 pub async fn replenish_account_wrap_near(account: &Account, wrap_near: &AccountId) -> Result<()> {
     let res = account
         .call(wrap_near, WRAP_NEAR_DEPOSIT_CALL)
@@ -110,7 +110,8 @@ pub async fn replenish_account_wrap_near(account: &Account, wrap_near: &AccountI
     Ok(())
 }
 
-async fn replenish_account_custom_ft(account: &Account, token: &Contract) -> Result<()> {
+/// Transfers `1*10^precision` tokens to the `account`.
+pub async fn replenish_account_custom_ft(account: &Account, token: &Contract) -> Result<()> {
     let amount = NEAR;
     let args = json!({
         "receiver_id": account.id(),

@@ -1,5 +1,9 @@
 use near_contract_standards::fungible_token::receiver::FungibleTokenReceiver;
-use near_sdk::{env, json_types::U128, log, near_bindgen, AccountId, PromiseOrValue};
+use near_sdk::{
+    env::{self, panic_str},
+    json_types::U128,
+    log, near_bindgen, AccountId, PromiseOrValue,
+};
 
 use crate::{interface::request::Request, nft_id::NftId, Contract, ContractExt};
 
@@ -19,7 +23,10 @@ impl FungibleTokenReceiver for Contract {
 
         log!("received {} tokens from {}", amount, sender_id);
 
-        let request = Request::from_json(&msg).expect("request deserialization failed");
+        let request = match Request::from_json(&msg) {
+            Ok(req) => req,
+            Err(e) => panic_str(&format!("request deserialization failed due to error: {e}")),
+        };
         match request {
             Request::TopUp {
                 nft_id,

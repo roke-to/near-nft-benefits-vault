@@ -26,16 +26,16 @@ fn format_receipt_outcomes(outcomes: &[ExecutionOutcome]) -> String {
 
 // Simple helper to customize print of the ExecutionOutcome.
 fn format_execution_outcome(outcome: &ExecutionOutcome) -> String {
-    let logs = if outcome.logs.is_empty() {
+    if outcome.logs.is_empty() {
         String::new()
     } else {
         let logs = format!(",\nlogs: {:#?}", outcome.logs);
-        logs.lines().map(|l| "    ".to_owned() + l + "\n").collect()
-    };
-    format!(
-        "
+        let logs: String = logs.lines().map(|l| "    ".to_owned() + l + "\n").collect();
+        format!(
+            "
     executor_id: {}
     gas_burnt: {}{}",
-        outcome.executor_id, outcome.gas_burnt, logs,
-    )
+            outcome.executor_id, outcome.gas_burnt, logs,
+        )
+    }
 }
