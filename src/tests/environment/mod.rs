@@ -18,6 +18,7 @@ use workspaces::{network::Sandbox, sandbox, Account, AccountId, Contract, Worker
 
 use crate::{
     interface::request::Request,
+    tests::VAULT_WITHDRAW_CALL,
     views::{BalanceView, VaultView},
 };
 
@@ -198,6 +199,25 @@ impl Environment {
             .transact()
             .await?;
         println!("withdraw all: {}", format_execution_result(&res));
+
+        Ok(())
+    }
+
+    pub async fn withdraw(&self, ft_contract_id: &AccountId) -> Result<()> {
+        let args = json!({
+            "nft_contract_id": self.nft.id(),
+            "nft_id": NFT_TOKEN_ID,
+            "ft_contract_id": ft_contract_id,
+        });
+        let res = self
+            .nft_owner
+            .call(self.vault.id(), VAULT_WITHDRAW_CALL)
+            .args_json(args)
+            .deposit(1)
+            .max_gas()
+            .transact()
+            .await?;
+        println!("withdraw: {}", format_execution_result(&res));
 
         Ok(())
     }

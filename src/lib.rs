@@ -133,7 +133,7 @@ impl Contract {
     ) -> Promise {
         assert_self();
         let signer = env::signer_account_id();
-        log!("withdraw_all_callback called by signer: {}", signer);
+        log!("withdraw_callback called by signer: {}", signer);
 
         let nft_info = nft_info
             .expect("failed to get nft info")
