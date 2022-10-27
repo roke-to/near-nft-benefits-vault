@@ -3,6 +3,7 @@ mod environment;
 
 mod integration;
 mod view_balance_of;
+mod withdraw;
 mod withdraw_all;
 
 // Precompiled smart contracts locations.
@@ -29,6 +30,7 @@ const NFT_TRANSFER_CALL: &str = "nft_transfer";
 // Constants related to the nft-benefits-vault contract.
 const VAULT_BALANCE_OF_CALL: &str = "balance_of";
 const VAULT_WITHDRAW_ALL_CALL: &str = "withdraw_all";
+const VAULT_WITHDRAW_CALL: &str = "withdraw";
 const VAULT_VIEW_CALL: &str = "vault";
 const VAULT_TEST_DEPOSIT: u128 = NEAR;
 

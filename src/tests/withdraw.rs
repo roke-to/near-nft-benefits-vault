@@ -2,9 +2,8 @@ use anyhow::Result;
 
 use crate::tests::{environment::Environment, VAULT_TEST_DEPOSIT};
 
-// Tests withdrawal of all available tokens in the vault.
 #[tokio::test]
-async fn test_withdraw_all() -> Result<()> {
+async fn test_withdraw_single_ft() -> Result<()> {
     let env = Environment::new().await?;
     println!("\n<--- test environment initialized --->\n");
 
@@ -23,22 +22,32 @@ async fn test_withdraw_all() -> Result<()> {
     }
     println!("\n<--- deposited to vault --->\n");
 
-    env.withdraw_all().await?;
+    env.withdraw(env.fungible_tokens[1].id()).await?;
     println!("\n<--- gathered all benefits --->\n");
 
     let nft_owner_final_balances = env.all_ft_balances_of(env.nft_owner.id()).await?;
     println!("\n<--- nft owner final balances: {nft_owner_final_balances:?} --->\n");
 
-    for (token, initial_balance) in nft_owner_initial_balances.iter() {
-        let final_balance = nft_owner_final_balances
-            .get(token)
-            .expect("token not found");
-        assert_eq!(
-            *initial_balance + VAULT_TEST_DEPOSIT,
-            *final_balance,
-            "NFT owner balance should increase by standard test deposit amount"
-        );
-    }
+    assert_eq!(
+        nft_owner_initial_balances
+            .get(env.fungible_tokens[0].id())
+            .unwrap(),
+        nft_owner_final_balances
+            .get(env.fungible_tokens[0].id())
+            .unwrap(),
+        "wrap near balances should remain the same"
+    );
+
+    assert_eq!(
+        *nft_owner_initial_balances
+            .get(env.fungible_tokens[1].id())
+            .unwrap()
+            + VAULT_TEST_DEPOSIT,
+        *nft_owner_final_balances
+            .get(env.fungible_tokens[1].id())
+            .unwrap(),
+        "NFT owner balance of custom FT should increase by standard test deposit amount"
+    );
     println!("\n<--- nft owner balance checked, test passed --->\n");
 
     Ok(())
