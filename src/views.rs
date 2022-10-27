@@ -11,7 +11,9 @@ use crate::{nft_id::NftId, Contract, ContractExt};
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct BalanceView {
+    /// Unique identifier of the NFT.
     pub nft_id: NftId,
+    /// List of FTs.
     pub tokens: Vec<Token>,
 }
 

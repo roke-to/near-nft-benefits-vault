@@ -28,11 +28,17 @@ use super::{
 
 /// Struct contains a bunch of useful contracts and accounts, frequently used in test cases.
 pub struct Environment {
+    /// Sandboxed network worker.
     pub sandbox: Worker<Sandbox>,
+    /// Various fungible tokens contracts. The #0 contract is w-near.
     pub fungible_tokens: Vec<Contract>,
+    /// The account that issues NFT and pays benefits.
     pub issuer: Account,
+    /// The account that owns NFT and receives benefits.
     pub nft_owner: Account,
+    /// The Vault contract.
     pub vault: Contract,
+    /// A simple NFT contract.
     pub nft: Contract,
 }
 

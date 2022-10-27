@@ -17,7 +17,7 @@ use vault::Vault;
 
 use near_contract_standards::non_fungible_token::{Token, TokenId};
 use near_sdk::{
-    assert_one_yocto,
+    assert_one_yocto, assert_self,
     borsh::{self, BorshDeserialize, BorshSerialize},
     collections::UnorderedMap,
     env,
@@ -29,13 +29,14 @@ use near_sdk::{
 #[near_bindgen]
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Contract {
-    /// Map of users Vaults with NFT TokenIds as their keys.
+    /// Map of users' Vaults with NFT TokenIds as their keys.
     vaults: UnorderedMap<NftId, Vault>,
 }
 
 #[near_bindgen]
 impl Contract {
     /// Trivial init function.
+    /// Panics if the contract is already initialized.
     #[init]
     #[private]
     pub fn new() -> Self {
@@ -45,7 +46,8 @@ impl Contract {
         }
     }
 
-    /// Public function to withdraw all FTs in the Vault.
+    /// Public function to withdraw all FTs from the Vault.
+    /// Exactly 1 yoctoNEAR must be attached.
     #[payable]
     pub fn withdraw_all(&mut self, nft_contract_id: AccountId, nft_id: TokenId) -> Promise {
         let caller = env::predecessor_account_id();
@@ -62,12 +64,15 @@ impl Contract {
         nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_all_callback(nft_id))
     }
 
+    /// Callback invokes after request to the NFT contract to check ownership and grant access to the vault.
+    /// Private: can be called only by this contract.
     #[private]
     pub fn withdraw_all_callback(
         &mut self,
         #[callback_result] nft_info: Result<Option<Token>, PromiseError>,
         nft_id: NftId,
     ) -> Option<Promise> {
+        assert_self();
         let signer = env::signer_account_id();
         log!("withdraw_all_callback called by signer: {}", signer);
 
@@ -107,6 +112,8 @@ impl Contract {
         transfer_promise
     }
 
+    /// Callback invokes after each FT transfer call from this contract in withdrawal process.
+    /// If transfer was success, internal balance will be reduced by the amount transferred.
     #[private]
     pub fn adjust_balance(
         &mut self,
@@ -115,6 +122,7 @@ impl Contract {
         ft_account_id: AccountId,
         amount: u128,
     ) {
+        assert_self();
         log!(
             "check transfers called by signer: {}",
             env::signer_account_id()
@@ -137,6 +145,7 @@ impl Contract {
 
 impl Contract {
     /// Adds provided amount of tokens to the vault specified by NFT `token_id`.
+    /// If there is not vault for the provided [`NftId`] then it will create the new one.
     pub fn store(&mut self, nft_id: NftId, ft_account_id: AccountId, amount: u128) {
         let mut vault = if let Some(vault) = self.vaults.get(&nft_id) {
             log!("current balance of {}: {}", ft_account_id, amount);
@@ -152,6 +161,8 @@ impl Contract {
         self.vaults.insert(&nft_id, &vault);
     }
 
+    /// Shortcut to get vault from internal storage.
+    /// Panics if there is no vault associated with the given [`NftId`].
     pub fn get_vault(&self, nft_id: &NftId) -> Vault {
         self.vaults
             .get(nft_id)
