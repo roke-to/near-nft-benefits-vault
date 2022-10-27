@@ -1,19 +1,20 @@
 use anyhow::Result;
-use near_sdk::serde_json::json;
+use futures::{stream::FuturesUnordered, TryStreamExt};
+use near_sdk::{json_types::U128, serde_json::json};
 use tokio::fs::read;
 use workspaces::{network::Sandbox, testnet, Account, AccountId, Contract, Worker};
 
 use crate::tests::{
+    FT_STORAGE_DEPOSIT, FT_STORAGE_DEPOSIT_CALL, FT_TRANSFER_CALL, FUNGIBLE_TOKEN_WASM, NEAR,
     NFT_NEW_DEFAULT_META_CALL, NFT_WASM, WASMS_LOCATION, WRAP_NEAR_DEPOSIT, WRAP_NEAR_DEPOSIT_CALL,
-    WRAP_NEAR_STORAGE_DEPOSIT, WRAP_NEAR_STORAGE_DEPOSIT_CALL, WRAP_NEAR_TESTNET_ACCOUNT_ID,
-    WRAP_NEAR_WASM,
+    WRAP_NEAR_TESTNET_ACCOUNT_ID, WRAP_NEAR_WASM,
 };
 
 use super::format_helpers::format_execution_result;
 
 /// Prepares w-near contract for the Sandbox.
 /// Either imports it from testnet or uses local wasm binary.
-pub async fn prepare_wrap_near_contract(sandbox: &Worker<Sandbox>) -> Result<Contract> {
+pub async fn prepare_wrap_near_contract(sandbox: Worker<Sandbox>) -> Result<Contract> {
     let id = WRAP_NEAR_TESTNET_ACCOUNT_ID.parse()?;
     let contract = match testnet().await {
         Ok(testnet) => {
@@ -39,61 +40,134 @@ pub async fn prepare_wrap_near_contract(sandbox: &Worker<Sandbox>) -> Result<Con
     Ok(contract)
 }
 
-pub async fn register_account(account: &Account, wrap_near: &AccountId) -> Result<()> {
+pub async fn prepare_custom_ft(sandbox: Worker<Sandbox>) -> Result<Contract> {
+    let path = format!("{WASMS_LOCATION}/{FUNGIBLE_TOKEN_WASM}");
+    let wasm = read(path).await?;
+    let contract = sandbox.dev_deploy(&wasm).await?;
+
+    let args = json!({
+        "owner_id": contract.id(),
+        "total_supply": U128(100 * NEAR),
+        "metadata": {
+            "spec": "ft-1.0.0",
+            "name": "Example Token Name",
+            "symbol": "EXLT",
+            "decimals": 24
+        }
+    });
+
+    let res = contract.call("new").args_json(args).transact().await?;
+    println!(
+        "\ncustom fungible token initializatin: {}\n",
+        format_execution_result(&res)
+    );
+
+    Ok(contract)
+}
+
+async fn register_account_impl(account: &Account, token: &AccountId) -> Result<()> {
     let args = json!(
         {
-            "account_id": wrap_near,
+            "account_id": account.id(),
         }
     );
 
     let res = account
-        .call(wrap_near, WRAP_NEAR_STORAGE_DEPOSIT_CALL)
+        .call(token, FT_STORAGE_DEPOSIT_CALL)
         .args_json(args)
-        .deposit(WRAP_NEAR_STORAGE_DEPOSIT)
+        .deposit(FT_STORAGE_DEPOSIT)
         .transact()
         .await?;
     println!(
-        "account storage deposit in wrap near contract outcome: {}",
+        "account storage deposit on {token} contract outcome: {}",
         format_execution_result(&res)
     );
+    Ok(())
+}
 
+pub async fn register_account(
+    account: &Account,
+    tokens: impl Iterator<Item = &AccountId>,
+) -> Result<()> {
+    for token in tokens {
+        register_account_impl(account, token).await?;
+        println!("{} registered in {}", account.id(), token);
+    }
+    Ok(())
+}
+
+pub async fn replenish_account_wrap_near(account: &Account, wrap_near: &AccountId) -> Result<()> {
     let res = account
         .call(wrap_near, WRAP_NEAR_DEPOSIT_CALL)
         .deposit(WRAP_NEAR_DEPOSIT)
         .transact()
         .await?;
     println!(
-        "account registration in wrap near contract outcome: {}",
+        "deposit {WRAP_NEAR_DEPOSIT} of {wrap_near} to {}: {}",
+        account.id(),
         format_execution_result(&res)
     );
     Ok(())
 }
 
+async fn replenish_account_custom_ft(account: &Account, token: &Contract) -> Result<()> {
+    let amount = NEAR;
+    let args = json!({
+        "receiver_id": account.id(),
+        "amount": U128(amount),
+    });
+    let res = token
+        .call(FT_TRANSFER_CALL)
+        .args_json(args)
+        .deposit(1)
+        .transact()
+        .await?;
+
+    println!(
+        "deposit {amount} of {} to {}: {}",
+        token.id(),
+        account.id(),
+        format_execution_result(&res)
+    );
+
+    Ok(())
+}
+
 pub async fn prepare_issuer_account(
     sandbox: Worker<Sandbox>,
-    wrap_near: AccountId,
+    tokens: Vec<Contract>,
 ) -> Result<Account> {
     let issuer = sandbox.dev_create_account().await?;
 
-    register_account(&issuer, &wrap_near).await?;
+    register_account(&issuer, tokens.iter().map(|t| t.id())).await?;
+
+    replenish_account_wrap_near(&issuer, tokens[0].id()).await?;
+
+    let tasks: FuturesUnordered<_> = tokens
+        .iter()
+        .skip(1)
+        .map(|t| replenish_account_custom_ft(&issuer, t))
+        .collect();
+
+    tasks.try_collect().await?;
 
     Ok(issuer)
 }
 
 pub async fn prepare_nft_owner_account(
     sandbox: Worker<Sandbox>,
-    wrap_near: AccountId,
+    tokens: Vec<Contract>,
 ) -> Result<Account> {
     let owner = sandbox.dev_create_account().await?;
 
-    register_account(&owner, &wrap_near).await?;
+    register_account(&owner, tokens.iter().map(|t| t.id())).await?;
 
     Ok(owner)
 }
 
 pub async fn prepare_vault_contract(
     sandbox: Worker<Sandbox>,
-    wrap_near: AccountId,
+    tokens: Vec<Contract>,
 ) -> Result<Contract> {
     let name = env!("CARGO_PKG_NAME").replace('-', "_");
 
@@ -106,7 +180,7 @@ pub async fn prepare_vault_contract(
     let contract = sandbox.dev_deploy(&wasm).await?;
     println!("vault WASM code deployed");
 
-    register_account(contract.as_account(), &wrap_near).await?;
+    register_account(contract.as_account(), tokens.iter().map(|t| t.id())).await?;
 
     Ok(contract)
 }

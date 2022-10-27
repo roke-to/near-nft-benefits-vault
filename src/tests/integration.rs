@@ -6,8 +6,10 @@ use crate::tests::{environment::Environment, NEAR};
 async fn test_contract() -> Result<()> {
     let env = Environment::new().await?;
 
-    env.deposit_to_vault().await?;
-    println!("deposit to vault: OK");
+    for contract_id in env.fungible_tokens.iter().map(|c| c.id()) {
+        env.deposit_to_vault(contract_id).await?;
+        println!("deposit to vault {}: OK", contract_id);
+    }
 
     check_vault_state(&env).await?;
     println!("check vault state: OK");
@@ -22,7 +24,7 @@ async fn check_vault_state(env: &Environment) -> Result<()> {
         balance
             .tokens
             .iter()
-            .find(|t| t.account_id.as_str() == env.wrap_near.id().as_str())
+            .find(|t| t.account_id.as_str() == env.fungible_tokens[0].id().as_str())
             .expect("wrap near is not registered in the vault")
             .amount,
         NEAR

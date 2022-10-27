@@ -11,7 +11,10 @@ pub async fn test_view_balance_of() -> Result<()> {
 
     env.issue_nft().await?;
 
-    env.deposit_to_vault().await?;
+    for contract_id in env.fungible_tokens.iter().map(|c| c.id()) {
+        env.deposit_to_vault(contract_id).await?;
+        println!("successful deposit to vault of {}", contract_id);
+    }
 
     let balance = env
         .vault_balance_of()
@@ -24,7 +27,7 @@ pub async fn test_view_balance_of() -> Result<()> {
     let wrap_near_amount = balance
         .tokens
         .iter()
-        .find(|token| token.account_id.as_str() == env.wrap_near.id().as_str())
+        .find(|token| token.account_id.as_str() == env.fungible_tokens[0].id().as_str())
         .expect("wrap near is not registered in vault")
         .amount;
 
