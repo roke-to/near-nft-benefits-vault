@@ -2,8 +2,9 @@ mod format_helpers;
 mod setup;
 
 use format_helpers::format_execution_result;
+use futures::{stream::FuturesUnordered, TryStreamExt};
 use setup::{
-    prepare_issuer_account, prepare_nft_contract, prepare_nft_owner_account,
+    prepare_custom_ft, prepare_issuer_account, prepare_nft_contract, prepare_nft_owner_account,
     prepare_vault_contract, prepare_wrap_near_contract,
 };
 
@@ -12,7 +13,7 @@ use near_sdk::{
     json_types::U128,
     serde_json::{json, to_vec},
 };
-use std::str::FromStr;
+use std::{collections::HashMap, str::FromStr};
 use workspaces::{network::Sandbox, sandbox, Account, AccountId, Contract, Worker};
 
 use crate::{
@@ -21,15 +22,14 @@ use crate::{
 };
 
 use super::{
-    NFT_MINT_CALL, NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID, NFT_TRANSFER_CALL,
+    FT_BALANCE_OF_CALL, NFT_MINT_CALL, NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID, NFT_TRANSFER_CALL,
     VAULT_BALANCE_OF_CALL, VAULT_TEST_DEPOSIT, VAULT_VIEW_CALL, VAULT_WITHDRAW_ALL_CALL,
-    WRAP_NEAR_FT_BALANCE_OF,
 };
 
 /// Struct contains a bunch of useful contracts and accounts, frequently used in test cases.
 pub struct Environment {
     pub sandbox: Worker<Sandbox>,
-    pub wrap_near: Contract,
+    pub fungible_tokens: Vec<Contract>,
     pub issuer: Account,
     pub nft_owner: Account,
     pub vault: Contract,
@@ -41,20 +41,26 @@ impl Environment {
         let sandbox = sandbox().await?;
         println!("sandbox initialized");
 
-        let wrap_near = prepare_wrap_near_contract(&sandbox).await?;
+        let wrap_near = tokio::spawn(prepare_wrap_near_contract(sandbox.clone()));
+        let custom_ft = tokio::spawn(prepare_custom_ft(sandbox.clone()));
+
+        let wrap_near = wrap_near.await??;
+        let custom_ft = custom_ft.await??;
         println!("wrap NEAR token account ready on: {}\n", wrap_near.id());
+        println!("custom fungible token ready on: {}\n", custom_ft.id());
+        let fungible_tokens = vec![wrap_near, custom_ft];
 
         let issuer = tokio::spawn(prepare_issuer_account(
             sandbox.clone(),
-            wrap_near.id().clone(),
+            fungible_tokens.clone(),
         ));
         let nft_owner = tokio::spawn(prepare_nft_owner_account(
             sandbox.clone(),
-            wrap_near.id().clone(),
+            fungible_tokens.clone(),
         ));
         let vault = tokio::spawn(prepare_vault_contract(
             sandbox.clone(),
-            wrap_near.id().clone(),
+            fungible_tokens.clone(),
         ));
         let nft = tokio::spawn(prepare_nft_contract(sandbox.clone()));
 
@@ -69,7 +75,7 @@ impl Environment {
 
         Ok(Environment {
             sandbox,
-            wrap_near,
+            fungible_tokens,
             issuer,
             nft_owner,
             vault,
@@ -116,7 +122,7 @@ impl Environment {
         Ok(())
     }
 
-    pub async fn deposit_to_vault(&self) -> Result<()> {
+    pub async fn deposit_to_vault(&self, token_contract_id: &AccountId) -> Result<()> {
         let nft_contract_id = near_sdk::AccountId::from_str(self.nft.id().as_str()).unwrap();
         let nft_id = NFT_TOKEN_ID.to_owned();
         let req = Request::TopUp {
@@ -132,14 +138,17 @@ impl Environment {
 
         let res = self
             .issuer
-            .call(self.wrap_near.id(), "ft_transfer_call")
+            .call(token_contract_id, "ft_transfer_call")
             .args_json(args)
             .deposit(1)
             .max_gas()
             .transact()
             .await?;
 
-        println!("deposit to vault: {}", format_execution_result(&res));
+        println!(
+            "deposit {token_contract_id} tokens to vault: {}",
+            format_execution_result(&res)
+        );
 
         self.check_deposit_to_vault().await
     }
@@ -187,12 +196,27 @@ impl Environment {
         Ok(())
     }
 
-    pub async fn wrap_near_ft_balance_of(&self, account_id: &AccountId) -> Result<u128> {
+    pub async fn ft_balance_of(
+        account_id: AccountId,
+        token: Contract,
+    ) -> Result<(AccountId, u128)> {
         let args = to_vec(&json!({
             "account_id": account_id,
         }))?;
-        let res = self.wrap_near.view(WRAP_NEAR_FT_BALANCE_OF, args).await?;
+        let res = token.view(FT_BALANCE_OF_CALL, args).await?;
         let balance: U128 = res.json()?;
-        Ok(balance.0)
+        Ok((token.id().clone(), balance.0))
+    }
+
+    pub async fn all_ft_balances_of(
+        &self,
+        account_id: &AccountId,
+    ) -> Result<HashMap<AccountId, u128>> {
+        let calls: FuturesUnordered<_> = self
+            .fungible_tokens
+            .iter()
+            .map(|t| Self::ft_balance_of(account_id.clone(), t.clone()))
+            .collect();
+        calls.try_collect().await
     }
 }
