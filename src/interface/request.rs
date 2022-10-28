@@ -10,12 +10,15 @@ use near_sdk::{
 pub enum Request {
     /// On ft transfer with this variant as a msg the Contract will increase balance of the corresponding Vault.
     TopUp {
+        /// Id of the NFT unique only within one NFT contract.
         nft_id: TokenId,
+        /// NFT contract account id.
         nft_contract_id: AccountId,
     },
 }
 
 impl Request {
+    /// Tryies to deserialize self from the provided json.
     pub fn from_json(s: &str) -> Result<Self, Error> {
         from_str(s)
     }

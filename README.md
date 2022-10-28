@@ -11,3 +11,13 @@ Compiled binary will be put in the `dist` directory:
 ```
 ./dist/nft_benefits_vault.wasm
 ```
+
+## Testing this contract
+To test just run:
+```sh
+./test.sh
+```
+To do it manualy, build and place the contract WASM file to the `dist` dir. Then:
+```
+cargo test [OPTIONS] [TESTNAME] [-- [args]...]
+```

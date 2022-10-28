@@ -4,5 +4,7 @@ pub mod ft;
 /// Interface for this contract to make XCC to the NEP-171 compatible contracts.
 pub mod nft;
 
-mod ft_receiver;
+/// This common request can be passed to certain methods in arguments.
 pub mod request;
+
+mod ft_receiver;
