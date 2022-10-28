@@ -1,6 +1,4 @@
-/*!
-NFT Benefits Vault.
-*/
+#![doc = include_str!("../README.md")]
 
 mod asset;
 mod interface;
@@ -47,6 +45,8 @@ impl Contract {
     }
 
     /// Public function to withdraw all FTs from the Vault.
+    /// The contract will check ownership of the NFT spectified by the arguments.
+    /// After that it will try to find the vault with access via provided contract/id pair.
     /// Exactly 1 yoctoNEAR must be attached.
     #[payable]
     pub fn withdraw_all(&mut self, nft_contract_id: AccountId, nft_id: TokenId) -> Promise {
@@ -64,6 +64,11 @@ impl Contract {
         nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_all_callback(nft_id))
     }
 
+    /// Public function to withdraw a single type of FTs from the Vault.
+    /// The contract will check ownership of the NFT spectified by the arguments.
+    /// After that it will try to find the vault with access via provided contract/id pair.
+    /// And it makes `ft_transfer` with all available tokens on the provided `ft_contract_id`.
+    /// Exactly 1 yoctoNEAR must be attached.
     #[payable]
     pub fn withdraw(
         &mut self,
@@ -88,6 +93,13 @@ impl Contract {
 
     /// Callback invokes after request to the NFT contract to check ownership and grant access to the vault.
     /// Private: can be called only by this contract.
+    ///
+    /// Panics if:
+    /// - called NOT by itself,
+    /// - previous Promise failed,
+    /// - there is no NFT with provided id on the NFT contract,
+    /// - signer is NOT an NFT owner,
+    /// - there is no Vault with access via given [`NftId`].
     #[private]
     pub fn withdraw_all_callback(
         &mut self,
@@ -116,6 +128,7 @@ impl Contract {
         }
     }
 
+    /// Callback makes transfer of a single FT type to the signer if all requirements are met.
     #[private]
     pub fn withdraw_callback(
         &mut self,
@@ -141,6 +154,7 @@ impl Contract {
 
     /// Callback invokes after each FT transfer call from this contract in withdrawal process.
     /// If transfer was success, internal balance will be reduced by the amount transferred.
+    /// Private: can be called only by this contract.
     #[private]
     pub fn adjust_balance(
         &mut self,
@@ -171,15 +185,15 @@ impl Contract {
 }
 
 impl Contract {
-    /// Adds provided amount of tokens to the vault specified by NFT `token_id`.
-    /// If there is not vault for the provided [`NftId`] then it will create the new one.
+    /// Adds provided amount of tokens to the vault specified by [`NftId`].
+    /// If there is no vault for the provided [`NftId`] then it will create a new one.
     pub fn store(&mut self, nft_id: NftId, ft_contract_id: AccountId, amount: u128) {
         let mut vault = if let Some(vault) = self.vaults.get(&nft_id) {
             log!("current balance of {}: {}", ft_contract_id, amount);
             vault
         } else {
             let mut vault = Vault::new();
-            vault.add_asset(ft_contract_id.clone(), 0);
+            vault.add_asset(ft_contract_id.clone());
             vault
         };
         vault.store(ft_contract_id, amount);
@@ -196,6 +210,7 @@ impl Contract {
             .expect("vault is not created for the given nft_id")
     }
 
+    /// Returns Promise chained pair with FT transfer and balance adjustment.
     pub fn transfer_and_adjust_balance(
         nft_id: NftId,
         ft_contract_id: AccountId,
