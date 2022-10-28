@@ -5,7 +5,7 @@ use near_sdk::{
     AccountId,
 };
 
-/// Unique identifier of the NFT.
+/// Unique identifier of the NFT to be used as the Key to the Vault.
 /// Only [`TokenId`] is insufficient because there can be multiple NFT contracts containing the same [`TokenId`].
 #[derive(Debug, BorshSerialize, BorshDeserialize, Serialize, Deserialize, Clone)]
 #[serde(crate = "near_sdk::serde")]
@@ -16,6 +16,8 @@ pub struct NftId {
 
 impl NftId {
     /// Creates new insance.
+    /// `contract_id`: NFT contract account id where this NFT exists.
+    /// `token_id`: identifier of the NFT.
     pub fn new(contract_id: AccountId, token_id: TokenId) -> Self {
         Self {
             contract_id,

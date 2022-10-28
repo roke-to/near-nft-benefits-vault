@@ -32,7 +32,7 @@ pub async fn test_view_balance_of() -> Result<()> {
     let wrap_near_amount = balance
         .tokens
         .iter()
-        .find(|token| token.account_id.as_str() == env.fungible_tokens[0].id().as_str())
+        .find(|token| token.contract_id.as_str() == env.fungible_tokens[0].id().as_str())
         .expect("wrap near is not registered in vault")
         .amount;
 

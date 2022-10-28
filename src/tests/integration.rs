@@ -24,7 +24,7 @@ async fn check_vault_state(env: &Environment) -> Result<()> {
         balance
             .tokens
             .iter()
-            .find(|t| t.account_id.as_str() == env.fungible_tokens[0].id().as_str())
+            .find(|t| t.contract_id.as_str() == env.fungible_tokens[0].id().as_str())
             .expect("wrap near is not registered in the vault")
             .amount,
         NEAR
