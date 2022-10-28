@@ -18,13 +18,15 @@ use workspaces::{network::Sandbox, sandbox, Account, AccountId, Contract, Worker
 
 use crate::{
     interface::request::Request,
-    tests::VAULT_WITHDRAW_CALL,
+    vault::Replenisher,
     views::{BalanceView, VaultView},
 };
 
 use super::{
     FT_BALANCE_OF_CALL, NFT_MINT_CALL, NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID, NFT_TRANSFER_CALL,
-    VAULT_BALANCE_OF_CALL, VAULT_TEST_DEPOSIT, VAULT_VIEW_CALL, VAULT_WITHDRAW_ALL_CALL,
+    VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_BALANCE_OF_CALL, VAULT_REPLENISH_ARGS,
+    VAULT_REPLENISH_CALLBACK, VAULT_TEST_DEPOSIT, VAULT_VIEW_CALL, VAULT_VIEW_REPLENISHERS_CALL,
+    VAULT_WITHDRAW_ALL_CALL, VAULT_WITHDRAW_CALL,
 };
 
 /// Struct contains a bunch of useful contracts and accounts, frequently used in test cases.
@@ -244,5 +246,42 @@ impl Environment {
             .map(|t| Self::ft_balance_of(account_id.clone(), t.clone()))
             .collect();
         calls.try_collect().await
+    }
+
+    pub async fn add_replenisher(&self) -> Result<()> {
+        let args = json!({
+            "nft_contract_id": self.nft.id(),
+            "nft_id": NFT_TOKEN_ID,
+            "callback": VAULT_REPLENISH_CALLBACK,
+            "args": VAULT_REPLENISH_ARGS,
+        });
+        let res = self
+            .issuer
+            .call(self.vault.id(), VAULT_ADD_REPLENISHMENT_CALLBACK_CALL)
+            .args_json(args)
+            .deposit(1)
+            .transact()
+            .await?;
+
+        println!("add replenisher: {}", format_execution_result(&res));
+
+        Ok(())
+    }
+
+    pub async fn view_replenishers(&self) -> Result<Option<Vec<Replenisher>>> {
+        let args = to_vec(&json!({
+            "nft_contract_id": self.nft.id(),
+            "nft_id": NFT_TOKEN_ID,
+        }))?;
+        let res = self
+            .issuer
+            .view(self.vault.id(), VAULT_VIEW_REPLENISHERS_CALL, args)
+            .await?;
+
+        println!("view replenishers logs: {:?}", res.logs);
+
+        let replenishers = res.json()?;
+
+        Ok(replenishers)
     }
 }

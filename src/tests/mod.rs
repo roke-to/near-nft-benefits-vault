@@ -1,6 +1,7 @@
 /// Different tools for testing.
 mod environment;
 
+mod add_replenisher;
 mod integration;
 mod view_balance_of;
 mod withdraw;
@@ -32,7 +33,11 @@ const VAULT_BALANCE_OF_CALL: &str = "balance_of";
 const VAULT_WITHDRAW_ALL_CALL: &str = "withdraw_all";
 const VAULT_WITHDRAW_CALL: &str = "withdraw";
 const VAULT_VIEW_CALL: &str = "vault";
+const VAULT_ADD_REPLENISHMENT_CALLBACK_CALL: &str = "add_replenishment_callback";
+const VAULT_VIEW_REPLENISHERS_CALL: &str = "replenishers";
 const VAULT_TEST_DEPOSIT: u128 = NEAR;
+const VAULT_REPLENISH_CALLBACK: &str = "request_ft";
+const VAULT_REPLENISH_ARGS: &str = "{arg: \"some value\"}";
 
 // Constants related to the NEP-141 standard.
 const FT_BALANCE_OF_CALL: &str = "ft_balance_of";
