@@ -7,7 +7,7 @@ pub fn format_execution_result(res: &ExecutionFinalResult) -> String {
             "\ntransaction: {}
 receipts: {}
 is success: {:#?}",
-            format_execution_outcome(res.outcome()),
+            format_execution_outcome(res.outcome()).unwrap_or_else(|| "None".to_owned()),
             format_receipt_outcomes(res.receipt_outcomes()),
             res.is_success()
         )
@@ -20,22 +20,23 @@ is success: {:#?}",
 fn format_receipt_outcomes(outcomes: &[ExecutionOutcome]) -> String {
     outcomes
         .iter()
-        .map(|outcome| format_execution_outcome(outcome) + "\n")
+        .filter_map(|outcome| format_execution_outcome(outcome).map(|s| s + "\n"))
         .collect()
 }
 
 // Simple helper to customize print of the ExecutionOutcome.
-fn format_execution_outcome(outcome: &ExecutionOutcome) -> String {
+fn format_execution_outcome(outcome: &ExecutionOutcome) -> Option<String> {
     if outcome.logs.is_empty() {
-        String::new()
+        None
     } else {
         let logs = format!(",\nlogs: {:#?}", outcome.logs);
         let logs: String = logs.lines().map(|l| "    ".to_owned() + l + "\n").collect();
-        format!(
+        let msg = format!(
             "
     executor_id: {}
     gas_burnt: {}{}",
             outcome.executor_id, outcome.gas_burnt, logs,
-        )
+        );
+        Some(msg)
     }
 }
