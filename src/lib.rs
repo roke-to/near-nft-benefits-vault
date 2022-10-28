@@ -93,7 +93,7 @@ impl Contract {
         &mut self,
         #[callback_result] nft_info: Result<Option<Token>, PromiseError>,
         nft_id: NftId,
-    ) -> Option<Promise> {
+    ) {
         assert_self();
         let signer = env::signer_account_id();
         log!("withdraw_all_callback called by signer: {}", signer);
@@ -106,22 +106,14 @@ impl Contract {
 
         let vault = self.get_vault(&nft_id);
 
-        let mut transfer_promises: Option<Promise> = None;
         for (ft_contract_id, asset) in vault.assets.iter() {
-            let transfer_and_adjust_promise = Self::transfer_and_adjust_balance(
+            Self::transfer_and_adjust_balance(
                 nft_id.clone(),
                 ft_contract_id,
                 nft_owner.clone(),
                 asset.balance,
             );
-            let promise = if let Some(promise) = transfer_promises {
-                promise.then(transfer_and_adjust_promise)
-            } else {
-                transfer_and_adjust_promise
-            };
-            transfer_promises = Some(promise);
         }
-        transfer_promises
     }
 
     #[private]
@@ -217,10 +209,13 @@ impl Contract {
             amount
         );
         let memo = Some("Nft Benefits transfer".to_string());
+
+        log!("ft transfer: {}", ft_contract_id);
         let ft_transfer_promise = ft::ext(ft_contract_id.clone())
             .with_attached_deposit(1)
             .ft_transfer(nft_owner, U128(amount), memo);
 
+        log!("adjust balance: {}", ft_contract_id);
         let adjust_balance =
             Self::ext(env::current_account_id()).adjust_balance(nft_id, ft_contract_id, amount);
         ft_transfer_promise.then(adjust_balance)
