@@ -1,7 +1,7 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
-    collections::UnorderedMap,
-    AccountId,
+    collections::{UnorderedMap, UnorderedSet},
+    require, AccountId,
 };
 
 use crate::asset::Asset;
@@ -11,13 +11,24 @@ use crate::asset::Asset;
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Vault {
     pub assets: UnorderedMap<AccountId, Asset>,
+    replenishers: UnorderedSet<Replenisher>,
+}
+
+#[derive(Debug, BorshSerialize, BorshDeserialize)]
+pub struct Replenisher {
+    call: String,
+    args: String,
 }
 
 impl Vault {
     /// Creates new vault.
     pub fn new() -> Self {
         let assets = UnorderedMap::new(b"b");
-        Self { assets }
+        let replenishers = UnorderedSet::new(b"c");
+        Self {
+            assets,
+            replenishers,
+        }
     }
 
     /// Increases balance of the FT by provided amount.
@@ -48,6 +59,15 @@ impl Vault {
         let mut asset = self.assets.get(&ft_contract_id).expect("unknown asset");
         asset.reduce_balance(amount);
         self.assets.insert(&ft_contract_id, &asset);
+    }
+
+    pub fn add_replenisher(&mut self, call: String, args: String) {
+        let replenisher = Replenisher { call, args };
+        require!(
+            !self.replenishers.contains(&replenisher),
+            "replenisher is already registered"
+        );
+        self.replenishers.insert(&replenisher);
     }
 }
 
