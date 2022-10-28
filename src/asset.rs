@@ -11,8 +11,8 @@ pub struct Asset {
 
 impl Asset {
     /// Creates new `Asset` instance.
-    pub fn new(balance: Balance) -> Self {
-        Self { balance }
+    pub fn new() -> Self {
+        Self { balance: 0 }
     }
 
     /// Subtracts provided amount from inner balance with overflow check.
@@ -22,5 +22,11 @@ impl Asset {
             .balance
             .checked_sub(amount)
             .expect("subtraction with overflow");
+    }
+}
+
+impl Default for Asset {
+    fn default() -> Self {
+        Self::new()
     }
 }

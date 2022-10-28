@@ -21,34 +21,33 @@ impl Vault {
     }
 
     /// Increases balance of the FT by provided amount.
-    /// If there is no Asset with `ft_account_id` it will create a new one.
-    pub fn store(&mut self, ft_account_id: AccountId, amount: u128) {
-        let asset = if let Some(mut asset) = self.assets.get(&ft_account_id) {
-            asset.balance += amount;
-            asset
-        } else {
-            Asset::new(amount)
-        };
-        self.assets.insert(&ft_account_id, &asset);
+    /// If there is no Asset with `ft_contract_id` it will create a new one.
+    /// `ft_contract_id`: account id of the contract with FT asset.
+    /// `amount`: amount of tokens to be stored.
+    pub fn store(&mut self, ft_contract_id: AccountId, amount: u128) {
+        let mut asset = self.assets.get(&ft_contract_id).unwrap_or_else(Asset::new);
+        asset.balance += amount;
+        self.assets.insert(&ft_contract_id, &asset);
     }
 
     /// Adds FT asset to the inner map.
     /// Panics if asset already exists.
-    pub fn add_asset(&mut self, ft_account_id: AccountId, initial_balance: u128) {
+    /// `ft_contract_id`: account id of the contract with FT asset.
+    pub fn add_asset(&mut self, ft_contract_id: AccountId) {
         assert!(
-            self.assets.get(&ft_account_id).is_none(),
+            self.assets.get(&ft_contract_id).is_none(),
             "Asset already exists"
         );
-        let asset = Asset::new(initial_balance);
-        self.assets.insert(&ft_account_id, &asset);
+        let asset = Asset::new();
+        self.assets.insert(&ft_contract_id, &asset);
     }
 
     /// Reduces balance of the given asset.
-    /// Panics if there is no asset associated with the `ft_account_id`.
-    pub fn reduce_balance(&mut self, ft_account_id: AccountId, amount: u128) {
-        let mut asset = self.assets.get(&ft_account_id).expect("unknown asset");
+    /// Panics if there is no asset associated with the `ft_contract_id`.
+    pub fn reduce_balance(&mut self, ft_contract_id: AccountId, amount: u128) {
+        let mut asset = self.assets.get(&ft_contract_id).expect("unknown asset");
         asset.reduce_balance(amount);
-        self.assets.insert(&ft_account_id, &asset);
+        self.assets.insert(&ft_contract_id, &asset);
     }
 }
 
