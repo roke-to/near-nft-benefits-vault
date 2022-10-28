@@ -1,7 +1,9 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
     collections::{UnorderedMap, UnorderedSet},
-    require, AccountId,
+    require,
+    serde::{Deserialize, Serialize},
+    AccountId,
 };
 
 use crate::asset::Asset;
@@ -14,9 +16,11 @@ pub struct Vault {
     replenishers: UnorderedSet<Replenisher>,
 }
 
-#[derive(Debug, BorshSerialize, BorshDeserialize)]
+#[derive(Debug, BorshSerialize, BorshDeserialize, Serialize, Deserialize)]
+#[serde(crate = "near_sdk::serde")]
 pub struct Replenisher {
-    call: String,
+    contract_id: AccountId,
+    callback: String,
     args: String,
 }
 
@@ -61,18 +65,40 @@ impl Vault {
         self.assets.insert(&ft_contract_id, &asset);
     }
 
-    pub fn add_replenisher(&mut self, call: String, args: String) {
-        let replenisher = Replenisher { call, args };
+    pub fn add_replenisher(&mut self, contract_id: AccountId, callback: String, args: String) {
+        let replenisher = Replenisher {
+            contract_id,
+            callback,
+            args,
+        };
         require!(
             !self.replenishers.contains(&replenisher),
             "replenisher is already registered"
         );
         self.replenishers.insert(&replenisher);
     }
+
+    pub fn replenishers(&self) -> &UnorderedSet<Replenisher> {
+        &self.replenishers
+    }
 }
 
 impl Default for Vault {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl Replenisher {
+    pub fn contract_id(&self) -> &AccountId {
+        &self.contract_id
+    }
+
+    pub fn callback(&self) -> &str {
+        self.callback.as_ref()
+    }
+
+    pub fn args(&self) -> &str {
+        self.args.as_ref()
     }
 }
