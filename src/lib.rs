@@ -91,13 +91,14 @@ impl Contract {
             .then(Self::ext(env::current_account_id()).withdraw_callback(nft_id, ft_contract_id))
     }
 
+    // @TODO think about other variants to name FT sources.
     #[payable]
-    pub fn add_replenisher(
+    pub fn add_replenishment_callback(
         &mut self,
         nft_contract_id: AccountId,
         nft_id: TokenId,
-        replenish_callback: String,
-        replenish_args: String,
+        callback: String,
+        args: String,
     ) {
         assert_one_yocto();
 
@@ -105,7 +106,9 @@ impl Contract {
 
         let mut vault = self.get_vault_or_create(&nft_id);
 
-        vault.add_replenisher(replenish_callback, replenish_args);
+        let contract_id = env::signer_account_id();
+
+        vault.add_replenisher(contract_id, callback, args);
 
         self.vaults.insert(&nft_id, &vault);
     }

@@ -5,7 +5,7 @@ use near_sdk::{
     AccountId,
 };
 
-use crate::{nft_id::NftId, Contract, ContractExt};
+use crate::{nft_id::NftId, vault::Replenisher, Contract, ContractExt};
 
 /// Complete list of tokens in the Vault.
 #[derive(Debug, Serialize, Deserialize)]
@@ -64,5 +64,17 @@ impl Contract {
             nft_id,
             assets_count: vault.assets.len(),
         })
+    }
+
+    /// Function to view the replenishers of the vault.
+    pub fn replenishers(
+        &self,
+        nft_contract_id: AccountId,
+        nft_id: TokenId,
+    ) -> Option<Vec<Replenisher>> {
+        let nft_id = NftId::new(nft_contract_id, nft_id);
+        let vault = self.vaults.get(&nft_id)?;
+        let replenishers = vault.replenishers().as_vector().to_vec();
+        Some(replenishers)
     }
 }
