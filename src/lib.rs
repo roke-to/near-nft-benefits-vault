@@ -91,6 +91,25 @@ impl Contract {
             .then(Self::ext(env::current_account_id()).withdraw_callback(nft_id, ft_contract_id))
     }
 
+    #[payable]
+    pub fn add_replenisher(
+        &mut self,
+        nft_contract_id: AccountId,
+        nft_id: TokenId,
+        replenish_callback: String,
+        replenish_args: String,
+    ) {
+        assert_one_yocto();
+
+        let nft_id = NftId::new(nft_contract_id, nft_id);
+
+        let mut vault = self.get_vault_or_create(&nft_id);
+
+        vault.add_replenisher(replenish_callback, replenish_args);
+
+        self.vaults.insert(&nft_id, &vault);
+    }
+
     /// Callback invokes after request to the NFT contract to check ownership and grant access to the vault.
     /// Private: can be called only by this contract.
     ///
@@ -208,6 +227,13 @@ impl Contract {
         self.vaults
             .get(nft_id)
             .expect("vault is not created for the given nft_id")
+    }
+
+    pub fn get_vault_or_create(&self, nft_id: &NftId) -> Vault {
+        self.vaults.get(nft_id).unwrap_or_else(|| {
+            log!("new vault created: {:?}", nft_id);
+            Vault::new()
+        })
     }
 
     /// Returns Promise chained pair with FT transfer and balance adjustment.
