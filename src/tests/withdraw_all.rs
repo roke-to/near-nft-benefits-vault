@@ -1,4 +1,5 @@
 use anyhow::Result;
+use workspaces::Contract;
 
 use crate::tests::{environment::Environment, VAULT_TEST_DEPOSIT};
 
@@ -17,9 +18,9 @@ async fn test_withdraw_all() -> Result<()> {
     let nft_owner_initial_balances = env.all_ft_balances_of(env.nft_owner.id()).await?;
     println!("\n<--- nft owner initial balances: {nft_owner_initial_balances:?} --->\n");
 
-    for contract_id in env.fungible_tokens.iter().map(|c| c.id()) {
+    for contract_id in env.fungible_tokens.iter().map(Contract::id) {
         env.deposit_to_vault(contract_id).await?;
-        println!("\ndeposit to vault of {}", contract_id);
+        println!("\ndeposit to vault of {contract_id}");
     }
     println!("\n<--- deposited to vault --->\n");
 
@@ -29,7 +30,7 @@ async fn test_withdraw_all() -> Result<()> {
     let nft_owner_final_balances = env.all_ft_balances_of(env.nft_owner.id()).await?;
     println!("\n<--- nft owner final balances: {nft_owner_final_balances:?} --->\n");
 
-    for (token, initial_balance) in nft_owner_initial_balances.iter() {
+    for (token, initial_balance) in &nft_owner_initial_balances {
         let final_balance = nft_owner_final_balances
             .get(token)
             .expect("token not found");

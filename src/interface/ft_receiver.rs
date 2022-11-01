@@ -23,7 +23,7 @@ impl FungibleTokenReceiver for Contract {
 
         // This callback is called by the FT contract,
         // so predecessor account IS the FT contract.
-        let ft_contract_id = env::predecessor_account_id();
+        let fungible_token = env::predecessor_account_id();
 
         log!("received {} tokens from {}", amount, sender_id);
 
@@ -40,21 +40,21 @@ impl FungibleTokenReceiver for Contract {
                     "{} transferred {} of {} to vault {:?}",
                     sender_id,
                     amount,
-                    ft_contract_id,
+                    fungible_token,
                     nft_id
                 );
 
-                self.store(nft_id, ft_contract_id, amount);
+                self.store(&nft_id, &fungible_token, amount);
             }
             Kind::Transfer => {
                 let mut vault = self.get_vault_or_create(&nft_id);
-                vault.store(ft_contract_id.clone(), amount);
+                vault.store(&fungible_token, amount);
                 self.vaults.insert(&nft_id, &vault);
                 Self::ext(env::current_account_id()).withdraw_amount(
                     nft_contract_id,
                     token_id,
-                    ft_contract_id,
-                    amount,
+                    fungible_token,
+                    U128(amount),
                 );
             }
         }

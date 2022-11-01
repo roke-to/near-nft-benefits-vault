@@ -95,7 +95,7 @@ pub async fn register_account(
     Ok(())
 }
 
-/// Deposits [`WRAP_NEAR_DEPOSIT`] amount of NEAR tokens to the wrapNEAR contract.
+/// Deposits [`WRAP_NEAR_DEPOSIT`] amount of NEAR tokens to the w-NEAR contract.
 pub async fn replenish_account_wrap_near(account: &Account, wrap_near: &AccountId) -> Result<()> {
     let res = account
         .call(wrap_near, WRAP_NEAR_DEPOSIT_CALL)
@@ -140,7 +140,7 @@ pub async fn prepare_issuer_account(
 ) -> Result<Account> {
     let issuer = sandbox.dev_create_account().await?;
 
-    register_account(&issuer, tokens.iter().map(|t| t.id())).await?;
+    register_account(&issuer, tokens.iter().map(Contract::id)).await?;
 
     replenish_account_wrap_near(&issuer, tokens[0].id()).await?;
 
@@ -161,7 +161,7 @@ pub async fn prepare_nft_owner_account(
 ) -> Result<Account> {
     let owner = sandbox.dev_create_account().await?;
 
-    register_account(&owner, tokens.iter().map(|t| t.id())).await?;
+    register_account(&owner, tokens.iter().map(Contract::id)).await?;
 
     Ok(owner)
 }
@@ -181,7 +181,7 @@ pub async fn prepare_vault_contract(
     let contract = sandbox.dev_deploy(&wasm).await?;
     println!("vault WASM code deployed");
 
-    register_account(contract.as_account(), tokens.iter().map(|t| t.id())).await?;
+    register_account(contract.as_account(), tokens.iter().map(Contract::id)).await?;
 
     Ok(contract)
 }

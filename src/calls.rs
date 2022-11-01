@@ -1,7 +1,7 @@
 use near_contract_standards::non_fungible_token::{Token, TokenId};
 use near_sdk::{
-    assert_one_yocto, assert_self, env, log, near_bindgen, require, AccountId, Promise,
-    PromiseError,
+    assert_one_yocto, assert_self, env, json_types::U128, log, near_bindgen, require, AccountId,
+    Promise, PromiseError,
 };
 
 use crate::{interface::nft::nft, nft_id::NftId, Contract, ContractExt};
@@ -23,7 +23,7 @@ impl Contract {
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
         let nft_info_promise =
-            nft::ext(nft_id.contract_id().to_owned()).nft_token(nft_id.token_id().to_owned());
+            nft::ext(nft_id.contract_id().clone()).nft_token(nft_id.token_id().to_owned());
 
         nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_all_callback(nft_id))
     }
@@ -31,14 +31,14 @@ impl Contract {
     /// Public function to withdraw a single type of FTs from the Vault.
     /// The contract will check ownership of the NFT spectified by the arguments.
     /// After that it will try to find the vault with access via provided contract/id pair.
-    /// And it makes `ft_transfer` with all available tokens on the provided `ft_contract_id`.
+    /// And it makes `ft_transfer` with all available tokens on the provided `fungible_token`.
     /// Exactly 1 yoctoNEAR must be attached.
     #[payable]
     pub fn withdraw(
         &mut self,
         nft_contract_id: AccountId,
         nft_id: TokenId,
-        ft_contract_id: AccountId,
+        fungible_token: AccountId,
     ) {
         let caller = env::predecessor_account_id();
         log!("withdraw call by {}", caller);
@@ -49,11 +49,11 @@ impl Contract {
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
         let nft_info_promise =
-            nft::ext(nft_id.contract_id().to_owned()).nft_token(nft_id.token_id().to_owned());
+            nft::ext(nft_id.contract_id().clone()).nft_token(nft_id.token_id().to_owned());
 
         nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_callback(
             nft_id,
-            ft_contract_id,
+            fungible_token,
             None,
         ));
     }
@@ -63,8 +63,8 @@ impl Contract {
         &mut self,
         nft_contract_id: AccountId,
         nft_id: TokenId,
-        ft_contract_id: AccountId,
-        amount: u128,
+        fungible_token: AccountId,
+        amount: U128,
     ) {
         let caller = env::predecessor_account_id();
         log!("withdraw amount call by {}", caller);
@@ -77,11 +77,11 @@ impl Contract {
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
         let nft_info_promise =
-            nft::ext(nft_id.contract_id().to_owned()).nft_token(nft_id.token_id().to_owned());
+            nft::ext(nft_id.contract_id().clone()).nft_token(nft_id.token_id().to_owned());
 
         nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_callback(
             nft_id,
-            ft_contract_id,
+            fungible_token,
             Some(amount),
         ));
     }
@@ -113,13 +113,13 @@ impl Contract {
 
         let vault = self.get_vault(&nft_id);
 
-        for (ft_contract_id, asset) in vault.assets.iter() {
+        for (fungible_token, asset) in vault.assets.iter() {
             let amount = asset.balance;
-            Self::transfer_to(ft_contract_id.clone(), nft_owner.clone(), amount).then(
+            Self::transfer_to(fungible_token.clone(), nft_owner.clone(), amount).then(
                 Self::ext(env::current_account_id()).adjust_balance(
                     nft_id.clone(),
-                    ft_contract_id,
-                    amount,
+                    fungible_token,
+                    U128(amount),
                 ),
             );
         }
@@ -131,8 +131,8 @@ impl Contract {
         &mut self,
         #[callback_result] nft_info: Result<Option<Token>, PromiseError>,
         nft_id: NftId,
-        ft_contract_id: AccountId,
-        amount: Option<u128>,
+        fungible_token: AccountId,
+        amount: Option<U128>,
     ) -> Promise {
         assert_self();
         let signer = env::signer_account_id();
@@ -146,16 +146,20 @@ impl Contract {
 
         let vault = self.get_vault(&nft_id);
 
-        let asset = vault.assets.get(&ft_contract_id).expect("unknown asset");
+        let asset = vault.assets.get(&fungible_token).expect("unknown asset");
 
         let amount = if let Some(amount) = amount {
-            amount.min(asset.balance)
+            amount.0.min(asset.balance)
         } else {
             asset.balance
         };
 
-        Self::transfer_to(ft_contract_id.clone(), nft_owner, amount).then(
-            Self::ext(env::current_account_id()).adjust_balance(nft_id, ft_contract_id, amount),
+        Self::transfer_to(fungible_token.clone(), nft_owner, amount).then(
+            Self::ext(env::current_account_id()).adjust_balance(
+                nft_id,
+                fungible_token,
+                U128(amount),
+            ),
         )
     }
 
@@ -194,8 +198,8 @@ impl Contract {
         &mut self,
         #[callback_result] res: Result<(), PromiseError>,
         nft_id: NftId,
-        ft_contract_id: AccountId,
-        amount: u128,
+        fungible_token: AccountId,
+        amount: U128,
     ) {
         assert_self();
         log!(
@@ -204,12 +208,13 @@ impl Contract {
         );
         if res.is_ok() {
             let mut vault = self.get_vault(&nft_id);
-            vault.reduce_balance(ft_contract_id.clone(), amount);
+            let amount = amount.0;
+            vault.reduce_balance(&fungible_token, amount);
             self.vaults.insert(&nft_id, &vault);
             log!(
                 "withdrawal success, nft: {:?}, ft: {}, amount: {}",
                 nft_id,
-                ft_contract_id,
+                fungible_token,
                 amount
             );
         } else {

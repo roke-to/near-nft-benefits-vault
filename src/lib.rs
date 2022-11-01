@@ -1,3 +1,4 @@
+#![warn(clippy::all)]
 #![doc = include_str!("../README.md")]
 
 mod asset;
@@ -47,23 +48,17 @@ impl Contract {
 impl Contract {
     /// Adds provided amount of tokens to the vault specified by [`NftId`].
     /// If there is no vault for the provided [`NftId`] then it will create a new one.
-    pub fn store(&mut self, nft_id: NftId, ft_contract_id: AccountId, amount: u128) {
-        let mut vault = if let Some(vault) = self.vaults.get(&nft_id) {
-            log!("current balance of {}: {}", ft_contract_id, amount);
-            vault
-        } else {
-            let mut vault = Vault::new();
-            vault.add_asset(ft_contract_id.clone());
-            vault
-        };
-        vault.store(ft_contract_id, amount);
+    pub fn store(&mut self, nft_id: &NftId, fungible_token: &AccountId, amount: u128) {
+        let mut vault = self.get_vault_or_create(nft_id);
+        vault.store(fungible_token, amount);
 
-        log!("vault created for: {:?}", nft_id);
-        self.vaults.insert(&nft_id, &vault);
+        self.vaults.insert(nft_id, &vault);
+        log!("{} of {} stored in {:?}", amount, fungible_token, nft_id);
     }
 
     /// Shortcut to get vault from internal storage.
     /// Panics if there is no vault associated with the given [`NftId`].
+    #[must_use]
     pub fn get_vault(&self, nft_id: &NftId) -> Vault {
         self.vaults
             .get(nft_id)
@@ -71,6 +66,7 @@ impl Contract {
     }
 
     /// Returns existing or new vault.
+    #[must_use]
     pub fn get_vault_or_create(&self, nft_id: &NftId) -> Vault {
         self.vaults.get(nft_id).unwrap_or_else(|| {
             log!("new vault created: {:?}", nft_id);
@@ -78,17 +74,17 @@ impl Contract {
         })
     }
 
-    pub fn transfer_to(ft_contract_id: AccountId, nft_owner: AccountId, amount: u128) -> Promise {
+    pub fn transfer_to(fungible_token: AccountId, nft_owner: AccountId, amount: u128) -> Promise {
         log!(
             "add transfer ft: {}, receiver: {}, amount: {}",
-            ft_contract_id,
+            fungible_token,
             nft_owner,
             amount
         );
         let memo = Some("Nft Benefits transfer".to_string());
 
-        log!("ft transfer: {}", ft_contract_id);
-        ft::ext(ft_contract_id)
+        log!("ft transfer: {}", fungible_token);
+        ft::ext(fungible_token)
             .with_attached_deposit(1)
             .ft_transfer(nft_owner, U128(amount), memo)
     }
