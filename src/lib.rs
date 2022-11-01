@@ -209,6 +209,11 @@ impl Contract {
             todo!("process promise failed");
         }
     }
+
+    #[private]
+    pub fn check_redirected_transfer(&mut self, #[callback_result] res: Result<(), PromiseError>) {
+        todo!()
+    }
 }
 
 impl Contract {
@@ -269,6 +274,10 @@ impl Contract {
         let adjust_balance =
             Self::ext(env::current_account_id()).adjust_balance(nft_id, ft_contract_id, amount);
         ft_transfer_promise.then(adjust_balance)
+    }
+
+    pub fn redirect_to(&mut self) -> Promise {
+        todo!()
     }
 }
 

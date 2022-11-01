@@ -46,7 +46,12 @@ impl FungibleTokenReceiver for Contract {
 
                 self.store(nft_id, ft_account_id, amount);
             }
-            Kind::Transfer => todo!(),
+            Kind::Transfer => {
+                let transfer_to_promise = self.redirect_to();
+                let check_transfer =
+                    Contract::ext(env::current_account_id()).check_redirected_transfer();
+                transfer_to_promise.then(check_transfer);
+            }
         }
 
         PromiseOrValue::Value(U128(0))
