@@ -75,7 +75,7 @@ impl Contract {
         nft_contract_id: AccountId,
         nft_id: TokenId,
         ft_contract_id: AccountId,
-    ) -> Promise {
+    ) {
         let caller = env::predecessor_account_id();
         log!("withdraw call by {}", caller);
         log!("check attached deposit: 1 yocto");
@@ -87,8 +87,39 @@ impl Contract {
         let nft_info_promise =
             nft::ext(nft_id.contract_id().to_owned()).nft_token(nft_id.token_id().to_owned());
 
-        nft_info_promise
-            .then(Self::ext(env::current_account_id()).withdraw_callback(nft_id, ft_contract_id))
+        nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_callback(
+            nft_id,
+            ft_contract_id,
+            None,
+        ));
+    }
+
+    #[payable]
+    pub fn withdraw_amount(
+        &mut self,
+        nft_contract_id: AccountId,
+        nft_id: TokenId,
+        ft_contract_id: AccountId,
+        amount: u128,
+    ) {
+        let caller = env::predecessor_account_id();
+        log!("withdraw amount call by {}", caller);
+        if caller != env::current_account_id() {
+            log!("check attached deposit: 1 yocto");
+            // 1 yoctoNEAR should attached to this call to prevent abuse.
+            assert_one_yocto();
+        }
+
+        let nft_id = NftId::new(nft_contract_id, nft_id);
+
+        let nft_info_promise =
+            nft::ext(nft_id.contract_id().to_owned()).nft_token(nft_id.token_id().to_owned());
+
+        nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_callback(
+            nft_id,
+            ft_contract_id,
+            Some(amount),
+        ));
     }
 
     // @TODO think about other variants to name FT sources.
@@ -146,11 +177,13 @@ impl Contract {
         let vault = self.get_vault(&nft_id);
 
         for (ft_contract_id, asset) in vault.assets.iter() {
-            Self::transfer_and_adjust_balance(
-                nft_id.clone(),
-                ft_contract_id,
-                nft_owner.clone(),
-                asset.balance,
+            let amount = asset.balance;
+            Self::transfer_to(ft_contract_id.clone(), nft_owner.clone(), amount).then(
+                Self::ext(env::current_account_id()).adjust_balance(
+                    nft_id.clone(),
+                    ft_contract_id,
+                    amount,
+                ),
             );
         }
     }
@@ -162,6 +195,7 @@ impl Contract {
         #[callback_result] nft_info: Result<Option<Token>, PromiseError>,
         nft_id: NftId,
         ft_contract_id: AccountId,
+        amount: Option<u128>,
     ) -> Promise {
         assert_self();
         let signer = env::signer_account_id();
@@ -176,7 +210,16 @@ impl Contract {
         let vault = self.get_vault(&nft_id);
 
         let asset = vault.assets.get(&ft_contract_id).expect("unknown asset");
-        Self::transfer_and_adjust_balance(nft_id, ft_contract_id, nft_owner, asset.balance)
+
+        let amount = if let Some(amount) = amount {
+            amount.min(asset.balance)
+        } else {
+            asset.balance
+        };
+
+        Self::transfer_to(ft_contract_id.clone(), nft_owner, amount).then(
+            Self::ext(env::current_account_id()).adjust_balance(nft_id, ft_contract_id, amount),
+        )
     }
 
     /// Callback invokes after each FT transfer call from this contract in withdrawal process.
@@ -208,11 +251,6 @@ impl Contract {
         } else {
             todo!("process promise failed");
         }
-    }
-
-    #[private]
-    pub fn check_redirected_transfer(&mut self, #[callback_result] res: Result<(), PromiseError>) {
-        todo!()
     }
 }
 
@@ -250,13 +288,7 @@ impl Contract {
         })
     }
 
-    /// Returns Promise chained pair with FT transfer and balance adjustment.
-    pub fn transfer_and_adjust_balance(
-        nft_id: NftId,
-        ft_contract_id: AccountId,
-        nft_owner: AccountId,
-        amount: u128,
-    ) -> Promise {
+    pub fn transfer_to(ft_contract_id: AccountId, nft_owner: AccountId, amount: u128) -> Promise {
         log!(
             "add transfer ft: {}, receiver: {}, amount: {}",
             ft_contract_id,
@@ -266,18 +298,9 @@ impl Contract {
         let memo = Some("Nft Benefits transfer".to_string());
 
         log!("ft transfer: {}", ft_contract_id);
-        let ft_transfer_promise = ft::ext(ft_contract_id.clone())
+        ft::ext(ft_contract_id)
             .with_attached_deposit(1)
-            .ft_transfer(nft_owner, U128(amount), memo);
-
-        log!("adjust balance: {}", ft_contract_id);
-        let adjust_balance =
-            Self::ext(env::current_account_id()).adjust_balance(nft_id, ft_contract_id, amount);
-        ft_transfer_promise.then(adjust_balance)
-    }
-
-    pub fn redirect_to(&mut self) -> Promise {
-        todo!()
+            .ft_transfer(nft_owner, U128(amount), memo)
     }
 }
 
