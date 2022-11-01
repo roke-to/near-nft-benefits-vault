@@ -92,6 +92,11 @@ impl Contract {
     }
 
     // @TODO think about other variants to name FT sources.
+    /// This method is used to add replenishers for the Vault.
+    /// When NFT owner calls withdraw methods the Contract will transfer available tokens from its own balance
+    /// and will request available benefits from registered replenishers.
+    /// This method MUST be called and signed by replenisher himself
+    /// because future replenishment requests will be made to the signer account.
     #[payable]
     pub fn add_replenishment_callback(
         &mut self,
@@ -232,6 +237,7 @@ impl Contract {
             .expect("vault is not created for the given nft_id")
     }
 
+    /// Returns existing or new vault.
     pub fn get_vault_or_create(&self, nft_id: &NftId) -> Vault {
         self.vaults.get(nft_id).unwrap_or_else(|| {
             log!("new vault created: {:?}", nft_id);
