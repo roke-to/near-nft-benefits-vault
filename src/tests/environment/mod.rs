@@ -1,5 +1,5 @@
-mod format_helpers;
-mod setup;
+pub mod format_helpers;
+pub mod setup;
 
 use format_helpers::format_execution_result;
 use futures::{stream::FuturesUnordered, TryStreamExt};
