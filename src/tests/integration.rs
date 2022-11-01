@@ -1,4 +1,5 @@
 use anyhow::Result;
+use workspaces::Contract;
 
 use crate::tests::{environment::Environment, NEAR};
 
@@ -6,9 +7,9 @@ use crate::tests::{environment::Environment, NEAR};
 async fn test_contract() -> Result<()> {
     let env = Environment::new().await?;
 
-    for contract_id in env.fungible_tokens.iter().map(|c| c.id()) {
+    for contract_id in env.fungible_tokens.iter().map(Contract::id) {
         env.deposit_to_vault(contract_id).await?;
-        println!("deposit to vault {}: OK", contract_id);
+        println!("deposit to vault {contract_id}: OK",);
     }
 
     check_vault_state(&env).await?;

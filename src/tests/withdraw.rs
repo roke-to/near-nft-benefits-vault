@@ -1,4 +1,5 @@
 use anyhow::Result;
+use workspaces::Contract;
 
 use crate::tests::{environment::Environment, VAULT_TEST_DEPOSIT};
 
@@ -16,9 +17,9 @@ async fn test_withdraw_single_ft() -> Result<()> {
     let nft_owner_initial_balances = env.all_ft_balances_of(env.nft_owner.id()).await?;
     println!("\n<--- nft owner initial balances: {nft_owner_initial_balances:?} --->\n");
 
-    for contract_id in env.fungible_tokens.iter().map(|c| c.id()) {
+    for contract_id in env.fungible_tokens.iter().map(Contract::id) {
         env.deposit_to_vault(contract_id).await?;
-        println!("\ndeposit to vault of {}", contract_id);
+        println!("\ndeposit to vault of {contract_id}");
     }
     println!("\n<--- deposited to vault --->\n");
 

@@ -134,12 +134,12 @@ impl Environment {
     pub async fn deposit_to_vault(&self, token_contract_id: &AccountId) -> Result<()> {
         let nft_contract_id = near_sdk::AccountId::from_str(self.nft.id().as_str()).unwrap();
         let nft_id = NFT_TOKEN_ID.to_owned();
-        let req = Request::top_up(nft_id, nft_contract_id);
-        let req = near_sdk::serde_json::to_string(&req).unwrap();
+        let request = Request::top_up(nft_id, nft_contract_id);
+        let request = near_sdk::serde_json::to_string(&request).unwrap();
         let args = json!({
             "receiver_id": self.vault.id(),
             "amount": U128(VAULT_TEST_DEPOSIT),
-            "msg": req
+            "msg": request
         });
 
         let res = self
@@ -166,7 +166,7 @@ impl Environment {
         }))?;
         let res = self.vault.view(VAULT_VIEW_CALL, args).await?;
         let vault_view: Option<VaultView> = res.json()?;
-        println!("vault view: {:#?}", vault_view);
+        println!("vault view: {vault_view:#?}");
         Ok(())
     }
 
@@ -202,11 +202,11 @@ impl Environment {
         Ok(())
     }
 
-    pub async fn withdraw(&self, ft_contract_id: &AccountId) -> Result<()> {
+    pub async fn withdraw(&self, fungible_token: &AccountId) -> Result<()> {
         let args = json!({
             "nft_contract_id": self.nft.id(),
             "nft_id": NFT_TOKEN_ID,
-            "ft_contract_id": ft_contract_id,
+            "fungible_token": fungible_token,
         });
         let res = self
             .nft_owner

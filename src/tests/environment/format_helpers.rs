@@ -19,7 +19,7 @@ is success: {:#?}",
             res.is_success()
         )
     } else {
-        format!("{:#?}", res)
+        format!("{res:#?}")
     }
 }
 
@@ -41,8 +41,8 @@ fn format_execution_outcome(outcome: &ExecutionOutcome) -> Option<String> {
         let msg = format!(
             "
     executor_id: {}
-    gas_burnt: {}{}",
-            outcome.executor_id, outcome.gas_burnt, logs,
+    gas_burnt: {}{logs}",
+            outcome.executor_id, outcome.gas_burnt,
         );
         Some(msg)
     }

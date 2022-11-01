@@ -1,4 +1,5 @@
 use anyhow::{Context, Result};
+use workspaces::Contract;
 
 use crate::tests::NEAR;
 
@@ -6,7 +7,7 @@ use super::environment::Environment;
 
 // Tests `balance_of` veiw method of the Contract.
 #[tokio::test]
-pub async fn test_view_balance_of() -> Result<()> {
+pub async fn test_view_balance_of_method() -> Result<()> {
     // Initialize test environment.
     let env = Environment::new().await?;
 
@@ -14,9 +15,9 @@ pub async fn test_view_balance_of() -> Result<()> {
     env.issue_nft().await?;
 
     // Deposit all kinds of existing FTs to the vault.
-    for contract_id in env.fungible_tokens.iter().map(|c| c.id()) {
+    for contract_id in env.fungible_tokens.iter().map(Contract::id) {
         env.deposit_to_vault(contract_id).await?;
-        println!("successful deposit to vault of {}", contract_id);
+        println!("successful deposit to vault of {contract_id}");
     }
 
     // Call view method to get balances in the vault.

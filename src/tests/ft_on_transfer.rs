@@ -59,13 +59,13 @@ async fn test_ft_on_transfer_request_top_up() -> Result<()> {
     let env = Environment::new().await?;
 
     let nft_contract_id = near_sdk::AccountId::from_str(env.nft.id().as_str())?;
-    let req = Request::top_up(NFT_TOKEN_ID.to_owned(), nft_contract_id);
-    let req = to_string(&req)?;
+    let request = Request::top_up(NFT_TOKEN_ID.to_owned(), nft_contract_id);
+    let request = to_string(&request)?;
 
     let args = json!({
         "receiver_id": env.vault.id(),
         "amount": U128(VAULT_TEST_DEPOSIT),
-        "msg": req,
+        "msg": request,
     });
 
     let token_contract_id = env.fungible_tokens[0].id();
@@ -107,13 +107,13 @@ async fn test_ft_on_transfer_request_transfer() -> Result<()> {
     replenish_account_wrap_near(&env.nft_owner, env.fungible_tokens[0].id()).await?;
 
     let nft_contract_id = near_sdk::AccountId::from_str(env.nft.id().as_str())?;
-    let req = Request::transfer(NFT_TOKEN_ID.to_owned(), nft_contract_id);
-    let req = to_string(&req)?;
+    let request = Request::transfer(NFT_TOKEN_ID.to_owned(), nft_contract_id);
+    let request = to_string(&request)?;
 
     let args = json!({
         "receiver_id": env.vault.id(),
         "amount": U128(VAULT_TEST_DEPOSIT),
-        "msg": req,
+        "msg": request,
     });
 
     let token_contract_id = env.fungible_tokens[0].id();
