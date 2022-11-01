@@ -5,7 +5,11 @@ use near_sdk::{
     log, near_bindgen, AccountId, PromiseOrValue,
 };
 
-use crate::{interface::request::Request, nft_id::NftId, Contract, ContractExt};
+use crate::{
+    interface::request::{Kind, Request},
+    nft_id::NftId,
+    Contract, ContractExt,
+};
 
 #[near_bindgen]
 impl FungibleTokenReceiver for Contract {
@@ -27,23 +31,22 @@ impl FungibleTokenReceiver for Contract {
             Ok(req) => req,
             Err(e) => panic_str(&format!("request deserialization failed due to error: {e}")),
         };
-        match request {
-            Request::TopUp {
-                nft_id,
-                nft_contract_id,
-            } => {
+        match request.kind() {
+            Kind::TopUp => {
+                let token_id = request.nft_id().clone();
+                let nft_contract_id = request.nft_contract_id().clone();
+                let nft_id = NftId::new(nft_contract_id, token_id);
                 log!(
-                    "{} transferred {} of {} to vault #{}",
+                    "{} transferred {} of {} to vault {:?}",
                     sender_id,
                     amount,
                     ft_account_id,
                     nft_id
                 );
 
-                let nft_id = NftId::new(nft_contract_id, nft_id);
-
                 self.store(nft_id, ft_account_id, amount);
             }
+            Kind::Transfer => todo!(),
         }
 
         PromiseOrValue::Value(U128(0))
