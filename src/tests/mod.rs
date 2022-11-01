@@ -2,6 +2,7 @@
 mod environment;
 
 mod add_replenisher;
+mod ft_on_transfer;
 mod integration;
 mod view_balance_of;
 mod withdraw;
