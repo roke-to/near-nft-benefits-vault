@@ -29,12 +29,22 @@ impl Request {
     }
 
     #[cfg(test)]
-    pub fn top_up(nft_id: TokenId, nft_contract_id: AccountId) -> Self {
+    pub fn new(nft_id: TokenId, nft_contract_id: AccountId, kind: Kind) -> Self {
         Self {
             nft_id,
             nft_contract_id,
-            kind: Kind::TopUp,
+            kind,
         }
+    }
+
+    #[cfg(test)]
+    pub fn top_up(nft_id: TokenId, nft_contract_id: AccountId) -> Self {
+        Self::new(nft_id, nft_contract_id, Kind::TopUp)
+    }
+
+    #[cfg(test)]
+    pub fn transfer(nft_id: TokenId, nft_contract_id: AccountId) -> Self {
+        Self::new(nft_id, nft_contract_id, Kind::Transfer)
     }
 
     pub fn kind(&self) -> Kind {
