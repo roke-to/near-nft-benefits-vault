@@ -3,12 +3,19 @@ use workspaces::result::{ExecutionFinalResult, ExecutionOutcome};
 // Simple helper to customize print of the ExecutionFinalResult.
 pub fn format_execution_result(res: &ExecutionFinalResult) -> String {
     if res.is_success() {
+        let receipts = if res.outcomes().is_empty() {
+            String::new()
+        } else {
+            format!(
+                "\nreceipts: {}",
+                format_receipt_outcomes(res.receipt_outcomes())
+            )
+        };
         format!(
-            "\ntransaction: {}
-receipts: {}
+            "\ntransaction: {}{}
 is success: {:#?}",
             format_execution_outcome(res.outcome()).unwrap_or_else(|| "None".to_owned()),
-            format_receipt_outcomes(res.receipt_outcomes()),
+            receipts,
             res.is_success()
         )
     } else {
