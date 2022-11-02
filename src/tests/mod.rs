@@ -13,6 +13,7 @@ const WASMS_LOCATION: &str = "dist";
 const WRAP_NEAR_WASM: &str = "wrap.wasm";
 const NFT_WASM: &str = "non_fungible_token.wasm";
 const FUNGIBLE_TOKEN_WASM: &str = "fungible_token.wasm";
+const VAULT_TEST_REPLENISHER_WASM: &str = "vault_test_replenisher.wasm";
 
 // NEAR is 10^24 yoctoNEAR.
 const NEAR: u128 = 10u128.pow(24);
