@@ -14,6 +14,7 @@ use near_sdk::{
     serde_json::{json, to_vec},
 };
 use std::{collections::HashMap, str::FromStr};
+use tokio::fs::read;
 use workspaces::{network::Sandbox, sandbox, Account, AccountId, Contract, Worker};
 
 use crate::{
@@ -23,10 +24,11 @@ use crate::{
 };
 
 use super::{
-    FT_BALANCE_OF_CALL, NFT_MINT_CALL, NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID, NFT_TRANSFER_CALL,
-    VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_BALANCE_OF_CALL, VAULT_REPLENISH_ARGS,
-    VAULT_REPLENISH_CALLBACK, VAULT_TEST_DEPOSIT, VAULT_VIEW_CALL, VAULT_VIEW_REPLENISHERS_CALL,
-    VAULT_WITHDRAW_ALL_CALL, VAULT_WITHDRAW_CALL,
+    FT_BALANCE_OF_CALL, FT_TRANSFER_CALL, NFT_MINT_CALL, NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID,
+    NFT_TRANSFER_CALL, VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_BALANCE_OF_CALL,
+    VAULT_REPLENISH_ARGS, VAULT_REPLENISH_CALLBACK, VAULT_TEST_DEPOSIT,
+    VAULT_TEST_REPLENISHER_WASM, VAULT_VIEW_CALL, VAULT_VIEW_REPLENISHERS_CALL,
+    VAULT_WITHDRAW_ALL_CALL, VAULT_WITHDRAW_CALL, WASMS_LOCATION,
 };
 
 /// Struct contains a bunch of useful contracts and accounts, frequently used in test cases.
@@ -43,6 +45,7 @@ pub struct Environment {
     pub vault: Contract,
     /// A simple NFT contract.
     pub nft: Contract,
+    pub replenisher: Option<Contract>,
 }
 
 impl Environment {
@@ -89,7 +92,21 @@ impl Environment {
             nft_owner,
             vault,
             nft,
+            replenisher: None,
         })
+    }
+
+    pub async fn deploy_replenisher(&mut self) -> Result<()> {
+        let path = format!("{WASMS_LOCATION}/{VAULT_TEST_REPLENISHER_WASM}");
+        let wasm = read(path).await?;
+        let contract = self.sandbox.dev_deploy(&wasm).await?;
+
+        let res = contract.call("new").transact().await?;
+        println!(
+            "\nVault test replenisher contract initialization outcome: {}\n",
+            format_execution_result(&res)
+        );
+        Ok(())
     }
 
     pub async fn issue_nft(&self) -> Result<()> {
@@ -129,6 +146,19 @@ impl Environment {
             .await?;
         println!("NFT transfer: {}", format_execution_result(&res));
         Ok(())
+    }
+
+    pub async fn ft_transfer_call(&self, sender: &Account, token: &AccountId) -> Result<()> {
+        println!("ft_transfer_call: {:?} {}", sender, token);
+        let res = sender
+            .call(token, FT_TRANSFER_CALL)
+            .args_json(args)
+            .deposit(1)
+            .transact()
+            .await?;
+        println!("ft_transfer_call res: {}", format_execution_result(&res));
+
+        todo!()
     }
 
     pub async fn deposit_to_vault(&self, token_contract_id: &AccountId) -> Result<()> {

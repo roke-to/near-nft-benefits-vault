@@ -4,7 +4,7 @@ use workspaces::Contract;
 use crate::tests::{environment::Environment, NEAR};
 
 #[tokio::test]
-async fn test_contract() -> Result<()> {
+pub async fn test_contract() -> Result<()> {
     let env = Environment::new().await?;
 
     for contract_id in env.fungible_tokens.iter().map(Contract::id) {
@@ -31,4 +31,16 @@ async fn check_vault_state(env: &Environment) -> Result<()> {
         NEAR
     );
     Ok(())
+}
+
+#[tokio::test]
+pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
+    let mut env = Environment::new().await?;
+    env.deploy_replenisher().await?;
+    env.issue_nft().await?;
+    env.transfer_nft().await?;
+
+    env.ft_transfer_call(&env.issuer, env.fungible_tokens[0].id())
+        .await?;
+    todo!()
 }
