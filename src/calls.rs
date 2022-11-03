@@ -183,7 +183,7 @@ impl Contract {
 
         let mut vault = self.get_vault_or_create(&nft_id);
 
-        let contract_id = env::signer_account_id();
+        let contract_id = env::predecessor_account_id();
 
         vault.add_replenisher(contract_id, callback, args);
 
