@@ -1,6 +1,6 @@
 use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::{
-    near_bindgen,
+    log, near_bindgen,
     serde::{Deserialize, Serialize},
     AccountId,
 };
@@ -72,9 +72,12 @@ impl Contract {
         nft_contract_id: AccountId,
         nft_id: TokenId,
     ) -> Option<Vec<Replenisher>> {
+        log!("view replenishers: {} {}", nft_contract_id, nft_id);
         let nft_id = NftId::new(nft_contract_id, nft_id);
         let vault = self.vaults.get(&nft_id)?;
+        log!("vault assets count: {}", vault.assets.len());
         let replenishers = vault.replenishers().as_vector().to_vec();
+        log!("replenishers: {:?}", replenishers);
         Some(replenishers)
     }
 }
