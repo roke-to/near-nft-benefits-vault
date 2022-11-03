@@ -40,7 +40,17 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
     env.issue_nft().await?;
     env.transfer_nft().await?;
 
-    env.ft_transfer_call(&env.issuer, env.fungible_tokens[0].id())
-        .await?;
+    env.ft_transfer_call(
+        &env.issuer,
+        env.replenisher.as_ref().unwrap().id(),
+        &env.fungible_tokens[0],
+    )
+    .await?;
+
+    let replenishers = env.view_replenishers().await?.unwrap();
+    assert!(replenishers.len() == 1);
+    assert!(
+        replenishers[0].contract_id().as_str() == env.replenisher.as_ref().unwrap().id().as_str()
+    );
     todo!()
 }

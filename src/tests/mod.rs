@@ -45,4 +45,5 @@ const VAULT_REPLENISH_ARGS: &str = "{arg: \"some value\"}";
 const FT_BALANCE_OF_CALL: &str = "ft_balance_of";
 const FT_STORAGE_DEPOSIT_CALL: &str = "storage_deposit";
 const FT_TRANSFER_CALL: &str = "ft_transfer";
+const FT_TRANSFER_WITH_CALLBACK_CALL: &str = "ft_transfer_call";
 const FT_STORAGE_DEPOSIT: u128 = 12_500_000_000_000_000_000_000;

@@ -1,5 +1,6 @@
 use anyhow::Result;
 use futures::{stream::FuturesUnordered, TryStreamExt};
+use log::{debug, info, warn};
 use near_sdk::{json_types::U128, serde_json::json};
 use tokio::fs::read;
 use workspaces::{network::Sandbox, testnet, Account, AccountId, Contract, Worker};
@@ -18,12 +19,12 @@ pub async fn prepare_wrap_near_contract(sandbox: Worker<Sandbox>) -> Result<Cont
     let contract = match testnet().await {
         Ok(testnet) => {
             let contract = sandbox.import_contract(&id, &testnet).transact().await?;
-            println!("wrap NEAR contract imported from testnet");
+            info!("wrap NEAR contract imported from testnet");
             contract
         }
         Err(e) => {
-            println!("failed to connect to the testnet: {e}");
-            println!("deploying local contract");
+            warn!("failed to connect to the testnet: {e}");
+            info!("deploying local contract");
             let path = format!("{WASMS_LOCATION}/{WRAP_NEAR_WASM}");
             let wasm = read(path).await?;
             sandbox.dev_deploy(&wasm).await?
@@ -31,7 +32,7 @@ pub async fn prepare_wrap_near_contract(sandbox: Worker<Sandbox>) -> Result<Cont
     };
 
     let res = contract.call("new").transact().await?;
-    println!(
+    debug!(
         "\nwrapNEAR contract initialization outcome: {}\n",
         format_execution_result(&res)
     );
@@ -57,8 +58,8 @@ pub async fn prepare_custom_ft(sandbox: Worker<Sandbox>) -> Result<Contract> {
     });
 
     let res = contract.call("new").args_json(args).transact().await?;
-    println!(
-        "\ncustom fungible token initializatin: {}\n",
+    debug!(
+        "\ncustom fungible token initialization: {}\n",
         format_execution_result(&res)
     );
 
