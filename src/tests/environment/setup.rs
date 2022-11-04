@@ -79,7 +79,7 @@ async fn register_account_impl(account: &Account, token: &AccountId) -> Result<(
         .deposit(FT_STORAGE_DEPOSIT)
         .transact()
         .await?;
-    println!(
+    debug!(
         "account storage deposit on {token} contract outcome: {}",
         format_execution_result(&res)
     );
@@ -103,7 +103,7 @@ pub async fn replenish_account_wrap_near(account: &Account, wrap_near: &AccountI
         .deposit(WRAP_NEAR_DEPOSIT)
         .transact()
         .await?;
-    println!(
+    info!(
         "deposit {WRAP_NEAR_DEPOSIT} of {wrap_near} to {}: {}",
         account.id(),
         format_execution_result(&res)
@@ -125,7 +125,7 @@ pub async fn replenish_account_custom_ft(account: &Account, token: &Contract) ->
         .transact()
         .await?;
 
-    println!(
+    info!(
         "deposit {amount} of {} to {}: {}",
         token.id(),
         account.id(),
@@ -174,13 +174,13 @@ pub async fn prepare_vault_contract(
     let name = env!("CARGO_PKG_NAME").replace('-', "_");
 
     let path = format!("{WASMS_LOCATION}/{name}.wasm");
-    println!("read WASM contract code from: {path}");
+    debug!("read WASM contract code from: {path}");
 
     let wasm = read(path).await?;
-    println!("vault WASM code imported");
+    debug!("vault WASM code imported");
 
     let contract = sandbox.dev_deploy(&wasm).await?;
-    println!("vault WASM code deployed");
+    info!("vault WASM code deployed at: {}", contract.id());
 
     register_account(contract.as_account(), tokens.iter().map(Contract::id)).await?;
 
@@ -203,7 +203,7 @@ pub async fn prepare_nft_contract(sandbox: Worker<Sandbox>) -> Result<Contract> 
         .args_json(args)
         .transact()
         .await?;
-    println!(
+    debug!(
         "NFT contract initialization: {}",
         format_execution_result(&res)
     );
