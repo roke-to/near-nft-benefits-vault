@@ -10,34 +10,25 @@ use workspaces::error::ErrorKind;
 use crate::{
     interface::request::Request,
     tests::{
-        environment::{
-            format_helpers::format_execution_result, setup::replenish_account_wrap_near,
-        },
-        FT_BALANCE_OF_CALL, NEAR, NFT_TOKEN_ID,
+        environment::{setup::replenish_account_wrap_near, Environment},
+        FT_BALANCE_OF_CALL, NEAR, NFT_TOKEN_ID, VAULT_TEST_DEPOSIT,
     },
 };
-
-use super::{environment::Environment, VAULT_TEST_DEPOSIT};
 
 #[tokio::test]
 async fn test_ft_on_transfer_invalid_msg() -> Result<()> {
     let env = Environment::new().await?;
 
-    let args = json!({
-        "receiver_id": env.vault.id(),
-        "amount": U128(VAULT_TEST_DEPOSIT),
-        "msg": "invalid msg",
-    });
-
     let token_contract_id = env.fungible_tokens[0].id();
 
     let res = env
-        .issuer
-        .call(token_contract_id, "ft_transfer_call")
-        .args_json(args)
-        .deposit(1)
-        .max_gas()
-        .transact()
+        .ft_transfer_call(
+            &env.issuer,
+            env.vault.id(),
+            token_contract_id,
+            VAULT_TEST_DEPOSIT,
+            "invalid msg",
+        )
         .await?;
 
     let receipts = res.receipt_failures();
@@ -62,23 +53,17 @@ async fn test_ft_on_transfer_request_top_up() -> Result<()> {
     let request = Request::top_up(NFT_TOKEN_ID.to_owned(), nft_contract_id);
     let request = to_string(&request)?;
 
-    let args = json!({
-        "receiver_id": env.vault.id(),
-        "amount": U128(VAULT_TEST_DEPOSIT),
-        "msg": request,
-    });
-
     let token_contract_id = env.fungible_tokens[0].id();
 
-    let res = env
-        .issuer
-        .call(token_contract_id, "ft_transfer_call")
-        .args_json(args)
-        .deposit(1)
-        .max_gas()
-        .transact()
-        .await?;
-    println!("top up res: {}", format_execution_result(&res));
+    env.ft_transfer_call(
+        &env.issuer,
+        env.vault.id(),
+        token_contract_id,
+        VAULT_TEST_DEPOSIT,
+        &request,
+    )
+    .await?
+    .into_result()?;
 
     let balance = env
         .vault_balance_of()
@@ -102,34 +87,28 @@ async fn test_ft_on_transfer_request_top_up() -> Result<()> {
 async fn test_ft_on_transfer_request_transfer() -> Result<()> {
     let env = Environment::new().await?;
 
-    env.issue_nft().await?;
-    env.transfer_nft().await?;
+    env.nft_mint().await?;
+    env.nft_transfer().await?;
     replenish_account_wrap_near(&env.nft_owner, env.fungible_tokens[0].id()).await?;
 
     let nft_contract_id = near_sdk::AccountId::from_str(env.nft.id().as_str())?;
     let request = Request::transfer(NFT_TOKEN_ID.to_owned(), nft_contract_id);
     let request = to_string(&request)?;
 
-    let args = json!({
-        "receiver_id": env.vault.id(),
-        "amount": U128(VAULT_TEST_DEPOSIT),
-        "msg": request,
-    });
-
     let token_contract_id = env.fungible_tokens[0].id();
 
     // In real world this method will be called by an issuer.
     // But for this test it is enough to call just part of the whole XCC chain.
     // So owner signs the transaction because access to the vault needed.
-    let res = env
-        .nft_owner
-        .call(token_contract_id, "ft_transfer_call")
-        .args_json(args)
-        .deposit(1)
-        .max_gas()
-        .transact()
-        .await?;
-    println!("transfer res: {res:#?}");
+    env.ft_transfer_call(
+        &env.nft_owner,
+        env.vault.id(),
+        token_contract_id,
+        VAULT_TEST_DEPOSIT,
+        &request,
+    )
+    .await?
+    .into_result()?;
 
     let args = to_vec(&json!({
         "account_id": env.nft_owner.id(),

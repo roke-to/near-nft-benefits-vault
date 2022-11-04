@@ -8,10 +8,10 @@ async fn test_withdraw_single_ft() -> Result<()> {
     let env = Environment::new().await?;
     println!("\n<--- test environment initialized --->\n");
 
-    env.issue_nft().await?;
+    env.nft_mint().await?;
     println!("\n<--- nft issued --->\n");
 
-    env.transfer_nft().await?;
+    env.nft_transfer().await?;
     println!("\n<--- nft transferred --->\n");
 
     let nft_owner_initial_balances = env.all_ft_balances_of(env.nft_owner.id()).await?;

@@ -1,37 +1,48 @@
+pub mod args;
 pub mod format_helpers;
 pub mod setup;
 
-use format_helpers::format_execution_result;
+use anyhow::{Context, Result};
 use futures::{stream::FuturesUnordered, TryStreamExt};
 use log::{debug, info};
-use setup::{
-    prepare_custom_ft, prepare_issuer_account, prepare_nft_contract, prepare_nft_owner_account,
-    prepare_vault_contract, prepare_wrap_near_contract,
-};
-
-use anyhow::{Context, Result};
 use near_sdk::{
     json_types::U128,
-    serde_json::{json, to_string, to_vec},
+    serde_json::{json, to_vec},
 };
 use std::{collections::HashMap, str::FromStr};
 use tokio::fs::read;
-use workspaces::{network::Sandbox, sandbox, Account, AccountId, Contract, Worker};
+use workspaces::{
+    network::Sandbox, result::ExecutionFinalResult, sandbox, Account, AccountId, Contract, Worker,
+};
 
 use crate::{
     interface::request::Request,
-    tests::{environment::setup::register_account, NEAR},
+    tests::{
+        environment::{
+            args::{
+                ft_transfer_call_json, nft_metadata_json, nft_mint_json, nft_transfer_json,
+                vault_view_bytes, vault_withdraw_all_json, vault_withdraw_json,
+            },
+            format_helpers::format_execution_result,
+            setup::{
+                init_logger, prepare_fungible_tokens, prepare_issuer_account, prepare_nft_contract,
+                prepare_nft_owner_account, prepare_vault_contract, register_account,
+            },
+        },
+        {
+            FT_BALANCE_OF_CALL, FT_TRANSFER_WITH_CALLBACK_CALL, NFT_MINT_CALL,
+            NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID, NFT_TRANSFER_CALL,
+            VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_BALANCE_OF_CALL, VAULT_REPLENISH_ARGS,
+            VAULT_REPLENISH_CALLBACK, VAULT_TEST_DEPOSIT, VAULT_TEST_REPLENISHER_WASM,
+            VAULT_VIEW_CALL, VAULT_VIEW_REPLENISHERS_CALL, VAULT_WITHDRAW_ALL_CALL,
+            VAULT_WITHDRAW_CALL, WASMS_LOCATION,
+        },
+    },
     vault::Replenisher,
     views::{BalanceView, VaultView},
 };
 
-use super::{
-    FT_BALANCE_OF_CALL, FT_TRANSFER_WITH_CALLBACK_CALL, NFT_MINT_CALL, NFT_MINT_STORAGE_DEPOSIT,
-    NFT_TOKEN_ID, NFT_TRANSFER_CALL, VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_BALANCE_OF_CALL,
-    VAULT_REPLENISH_ARGS, VAULT_REPLENISH_CALLBACK, VAULT_TEST_DEPOSIT,
-    VAULT_TEST_REPLENISHER_WASM, VAULT_VIEW_CALL, VAULT_VIEW_REPLENISHERS_CALL,
-    VAULT_WITHDRAW_ALL_CALL, VAULT_WITHDRAW_CALL, WASMS_LOCATION,
-};
+use self::args::{ft_balance_of_bytes, vault_balance_of_bytes};
 
 /// Struct contains a bunch of useful contracts and accounts, frequently used in test cases.
 pub struct Environment {
@@ -52,26 +63,11 @@ pub struct Environment {
 
 impl Environment {
     pub async fn new() -> Result<Self> {
-        if let Err(e) = env_logger::Builder::new()
-            .parse_env("RUST_LOG")
-            .format_timestamp(None)
-            .format_module_path(false)
-            .format_target(false)
-            .try_init()
-        {
-            info!("logger already initialized: {}", e);
-        }
+        init_logger();
         let sandbox = sandbox().await?;
         info!("sandbox initialized");
 
-        let wrap_near = tokio::spawn(prepare_wrap_near_contract(sandbox.clone()));
-        let custom_ft = tokio::spawn(prepare_custom_ft(sandbox.clone()));
-
-        let wrap_near = wrap_near.await??;
-        let custom_ft = custom_ft.await??;
-        info!("wrap NEAR token account ready on: {}\n", wrap_near.id());
-        info!("custom fungible token ready on: {}\n", custom_ft.id());
-        let fungible_tokens = vec![wrap_near, custom_ft];
+        let fungible_tokens = prepare_fungible_tokens(sandbox.clone()).await?;
 
         let issuer = tokio::spawn(prepare_issuer_account(
             sandbox.clone(),
@@ -119,28 +115,17 @@ impl Environment {
             format_execution_result(&res)
         );
 
-        register_account(
-            contract.as_account(),
-            self.fungible_tokens.iter().map(|ft| ft.id()),
-        )
-        .await?;
+        let tokens = self.fungible_tokens.iter().map(|ft| ft.id());
+        register_account(contract.as_account(), tokens).await?;
         debug!("replenisher account registered in all tokens");
+
         self.replenisher = Some(contract);
         Ok(())
     }
 
-    pub async fn issue_nft(&self) -> Result<()> {
-        let token_metadata = json!({
-            "title": "Olympus Mons",
-            "description": "Tallest mountain in charted solar system",
-            "media": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Olympus_Mons_alt.jpg/1024px-Olympus_Mons_alt.jpg",
-            "copies": 1
-        });
-        let args = json!({
-            "token_id": NFT_TOKEN_ID,
-            "receiver_id": self.issuer.id(),
-            "token_metadata": token_metadata
-        });
+    pub async fn nft_mint(&self) -> Result<()> {
+        let token_metadata = nft_metadata_json();
+        let args = nft_mint_json(self.issuer.id(), &token_metadata);
         let res = self
             .nft
             .call(NFT_MINT_CALL)
@@ -152,11 +137,8 @@ impl Environment {
         Ok(())
     }
 
-    pub async fn transfer_nft(&self) -> Result<()> {
-        let args = json!({
-            "receiver_id": self.nft_owner.id(),
-            "token_id": NFT_TOKEN_ID,
-        });
+    pub async fn nft_transfer(&self) -> Result<()> {
+        let args = nft_transfer_json(self.nft_owner.id());
         let res = self
             .issuer
             .call(self.nft.id(), NFT_TRANSFER_CALL)
@@ -172,46 +154,27 @@ impl Environment {
         &self,
         sender: &Account,
         receiver: &AccountId,
-        token: &Contract,
-    ) -> Result<()> {
+        token: &AccountId,
+        amount: u128,
+        msg: &str,
+    ) -> Result<ExecutionFinalResult> {
         info!(
             "ft_transfer_call: \n\tsender: {sender:?} \n\treceiver: {receiver} \n\ttoken: {token:?}"
         );
-        let (token_account, balance) =
-            Self::ft_balance_of(sender.id().clone(), token.clone()).await?;
-        debug!("ft_balance: \n\ttoken: {token_account},\n\tbalance: {balance}");
 
-        let amount = NEAR;
-        let req = Request::transfer(NFT_TOKEN_ID.to_owned(), self.nft.id().as_str().parse()?);
-        let transfer_req = to_string(&req)?;
-        let args = to_string(&json!({
-            "msg": transfer_req,
-        }))?;
-        let args = to_string(&json!({
-            "nft_contract_id": self.nft.id(),
-            "nft_id": NFT_TOKEN_ID,
-            "callback": "withdraw_call",
-            "args": args,
-        }))?;
-        let msg = to_string(&json!({
-            "vault": self.vault.id(),
-            "args": args,
-        }))?;
-        let args = json!({
-            "receiver_id": receiver,
-            "amount": U128(amount),
-            "msg": msg,
-        });
+        let args = ft_transfer_call_json(receiver, U128(amount), msg);
+
         let res = sender
-            .call(token.id(), FT_TRANSFER_WITH_CALLBACK_CALL)
+            .call(token, FT_TRANSFER_WITH_CALLBACK_CALL)
             .args_json(args)
             .deposit(1)
             .max_gas()
             .transact()
             .await?;
-        // debug!("ft_transfer_call res: {}", format_execution_result(&res));
-        debug!("ft_transfer_call res: {res:#?}");
-        Ok(())
+
+        debug!("ft_transfer_call res: {}", format_execution_result(&res));
+
+        Ok(res)
     }
 
     pub async fn deposit_to_vault(&self, token_contract_id: &AccountId) -> Result<()> {
@@ -219,34 +182,22 @@ impl Environment {
         let nft_id = NFT_TOKEN_ID.to_owned();
         let request = Request::top_up(nft_id, nft_contract_id);
         let request = near_sdk::serde_json::to_string(&request).unwrap();
-        let args = json!({
-            "receiver_id": self.vault.id(),
-            "amount": U128(VAULT_TEST_DEPOSIT),
-            "msg": request
-        });
 
-        let res = self
-            .issuer
-            .call(token_contract_id, "ft_transfer_call")
-            .args_json(args)
-            .deposit(1)
-            .max_gas()
-            .transact()
-            .await?;
-
-        println!(
-            "deposit {token_contract_id} tokens to vault: {}",
-            format_execution_result(&res)
-        );
+        self.ft_transfer_call(
+            &self.issuer,
+            self.vault.id(),
+            token_contract_id,
+            VAULT_TEST_DEPOSIT,
+            &request,
+        )
+        .await?
+        .into_result()?;
 
         self.check_deposit_to_vault().await
     }
 
     pub async fn check_deposit_to_vault(&self) -> Result<()> {
-        let args = to_vec(&json!({
-            "nft_contract_id": self.nft.id(),
-            "nft_id": NFT_TOKEN_ID,
-        }))?;
+        let args = vault_view_bytes(self.nft.id())?;
         let res = self.vault.view(VAULT_VIEW_CALL, args).await?;
         let vault_view: Option<VaultView> = res.json()?;
         println!("vault view: {vault_view:#?}");
@@ -254,10 +205,7 @@ impl Environment {
     }
 
     pub async fn vault_balance_of(&self) -> Result<Option<BalanceView>> {
-        let args = to_vec(&json!({
-            "nft_contract_id": self.nft.id(),
-            "nft_id": NFT_TOKEN_ID,
-        }))?;
+        let args = vault_balance_of_bytes(self.nft.id())?;
         let res = self
             .sandbox
             .view(self.vault.id(), VAULT_BALANCE_OF_CALL, args)
@@ -268,10 +216,7 @@ impl Environment {
     }
 
     pub async fn withdraw_all(&self) -> Result<()> {
-        let args = json!({
-            "nft_contract_id": self.nft.id(),
-            "nft_id": NFT_TOKEN_ID,
-        });
+        let args = vault_withdraw_all_json(self.nft.id());
         let res = self
             .nft_owner
             .call(self.vault.id(), VAULT_WITHDRAW_ALL_CALL)
@@ -286,11 +231,7 @@ impl Environment {
     }
 
     pub async fn withdraw(&self, fungible_token: &AccountId) -> Result<()> {
-        let args = json!({
-            "nft_contract_id": self.nft.id(),
-            "nft_id": NFT_TOKEN_ID,
-            "fungible_token": fungible_token,
-        });
+        let args = vault_withdraw_json(self.nft.id(), fungible_token);
         let res = self
             .nft_owner
             .call(self.vault.id(), VAULT_WITHDRAW_CALL)
@@ -309,9 +250,7 @@ impl Environment {
         account_id: AccountId,
         token: Contract,
     ) -> Result<(AccountId, u128)> {
-        let args = to_vec(&json!({
-            "account_id": account_id,
-        }))?;
+        let args = ft_balance_of_bytes(&account_id)?;
         let res = token.view(FT_BALANCE_OF_CALL, args).await?;
         let balance: U128 = res.json()?;
         Ok((token.id().clone(), balance.0))
