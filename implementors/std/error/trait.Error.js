@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["near_sdk"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.64.0/std/error/trait.Error.html\" title=\"trait std::error::Error\">Error</a> for <a class=\"struct\" href=\"near_sdk/struct.ParseAccountIdError.html\" title=\"struct near_sdk::ParseAccountIdError\">ParseAccountIdError</a>","synthetic":false,"types":["near_sdk::types::account_id::ParseAccountIdError"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

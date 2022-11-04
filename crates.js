@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["near_sdk","nft_benefits_vault"];

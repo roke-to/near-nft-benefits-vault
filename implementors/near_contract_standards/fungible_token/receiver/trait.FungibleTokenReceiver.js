@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["nft_benefits_vault"] = [{"text":"impl FungibleTokenReceiver for <a class=\"struct\" href=\"nft_benefits_vault/struct.Contract.html\" title=\"struct nft_benefits_vault::Contract\">Contract</a>","synthetic":false,"types":["nft_benefits_vault::Contract"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

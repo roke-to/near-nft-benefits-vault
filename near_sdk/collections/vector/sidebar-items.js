@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["Iter","An iterator over each element deserialized in the [`Vector`]."],["RawIter","An iterator over raw serialized bytes of each element in the [`Vector`]."],["Vector","An iterable implementation of vector that stores its content on the trie. Uses the following map: index -> element."]]};

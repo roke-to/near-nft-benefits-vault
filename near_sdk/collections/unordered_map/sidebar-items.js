@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["Iter","An iterator over each element deserialized in the [`UnorderedMap`]."],["UnorderedMap","An iterable implementation of a map that stores its content directly on the trie."]]};

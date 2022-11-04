@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["CurveType","PublicKey curve"]],"struct":[["Base58CryptoHash",""],["Base64VecU8","Helper class to serialize/deserialize `Vec<u8>` to base64 string."],["I128",""],["I64",""],["U128",""],["U64",""]],"type":[["Base58PublicKey",""],["ValidAccountId",""]]};

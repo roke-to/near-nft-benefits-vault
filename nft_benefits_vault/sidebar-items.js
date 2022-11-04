@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["Contract","Core structure of the smart contract."],["ContractExt",""]]};
