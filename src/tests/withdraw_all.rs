@@ -24,7 +24,7 @@ async fn test_withdraw_all() -> Result<()> {
     }
     println!("\n<--- deposited to vault --->\n");
 
-    env.withdraw_all().await?;
+    env.vault_withdraw_all().await?;
     println!("\n<--- gathered all benefits --->\n");
 
     let nft_owner_final_balances = env.all_ft_balances_of(env.nft_owner.id()).await?;
