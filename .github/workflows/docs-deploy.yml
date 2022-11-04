@@ -1,0 +1,25 @@
+name: Docs Deploy
+on:
+  push:
+    branches: ["master"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+    - name: Build
+      run: |
+        cargo doc --no-deps -p near-sdk
+        cargo doc --no-deps
+        echo "<meta http-equiv=\"refresh\" content=\"0; url=nft_benefits_vault\">" > target/doc/index.html
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: target/doc
