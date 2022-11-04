@@ -268,7 +268,7 @@ impl Environment {
         calls.try_collect().await
     }
 
-    pub async fn add_replenisher(&self) -> Result<()> {
+    pub async fn vault_add_replenisher(&self) -> Result<()> {
         let args = json!({
             "nft_contract_id": self.nft.id(),
             "nft_id": NFT_TOKEN_ID,
@@ -288,7 +288,7 @@ impl Environment {
         Ok(())
     }
 
-    pub async fn view_replenishers(&self) -> Result<Option<Vec<Replenisher>>> {
+    pub async fn vault_view_replenishers(&self) -> Result<Option<Vec<Replenisher>>> {
         let args = to_vec(&json!({
             "nft_contract_id": self.nft.id(),
             "nft_id": NFT_TOKEN_ID,

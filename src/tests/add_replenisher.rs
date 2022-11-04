@@ -6,10 +6,10 @@ use super::{environment::Environment, VAULT_REPLENISH_ARGS, VAULT_REPLENISH_CALL
 async fn test_add_replenisher() -> Result<()> {
     let env = Environment::new().await?;
 
-    env.add_replenisher().await?;
+    env.vault_add_replenisher().await?;
 
     let replenishers = env
-        .view_replenishers()
+        .vault_view_replenishers()
         .await?
         .expect("must be some, because vault is created");
 
