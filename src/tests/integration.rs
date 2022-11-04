@@ -78,7 +78,7 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
     .await?
     .into_result()?;
 
-    let replenishers = env.view_replenishers().await?.unwrap();
+    let replenishers = env.vault_view_replenishers().await?.unwrap();
     assert!(replenishers.len() == 1);
     assert!(
         replenishers[0].contract_id().as_str() == env.replenisher.as_ref().unwrap().id().as_str()
