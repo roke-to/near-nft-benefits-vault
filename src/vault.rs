@@ -12,7 +12,7 @@ use crate::asset::Asset;
 /// FT contracts' account ids used as keys.
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Vault {
-    pub assets: UnorderedMap<AccountId, Asset>,
+    assets: UnorderedMap<AccountId, Asset>,
     replenishers: UnorderedSet<Replenisher>,
 }
 
@@ -41,7 +41,7 @@ impl Vault {
     /// `amount`: amount of tokens to be stored.
     pub fn store(&mut self, fungible_token: &AccountId, amount: u128) {
         let mut asset = self.assets.get(fungible_token).unwrap_or_else(Asset::new);
-        asset.balance += amount;
+        asset.inc_balance(amount);
         self.assets.insert(fungible_token, &asset);
     }
 
@@ -68,6 +68,18 @@ impl Vault {
 
     pub fn replenishers(&self) -> &UnorderedSet<Replenisher> {
         &self.replenishers
+    }
+
+    pub fn assets(&self) -> &UnorderedMap<AccountId, Asset> {
+        &self.assets
+    }
+
+    pub fn get_asset(&self, fungible_token: &AccountId) -> Option<Asset> {
+        self.assets.get(fungible_token)
+    }
+
+    pub fn assets_count(&self) -> u64 {
+        self.assets.len()
     }
 }
 

@@ -45,11 +45,11 @@ impl Contract {
         let vault = self.vaults.get(&nft_id)?;
 
         let tokens: Vec<_> = vault
-            .assets
+            .assets()
             .iter()
             .map(|(contract_id, asset)| Token {
                 contract_id,
-                amount: asset.balance,
+                amount: asset.balance(),
             })
             .collect();
 
@@ -62,7 +62,7 @@ impl Contract {
         let vault = self.get_vault(&nft_id);
         Some(VaultView {
             nft_id,
-            assets_count: vault.assets.len(),
+            assets_count: vault.assets_count(),
         })
     }
 
@@ -75,7 +75,7 @@ impl Contract {
         log!("view replenishers: {} {}", nft_contract_id, nft_id);
         let nft_id = NftId::new(nft_contract_id, nft_id);
         let vault = self.vaults.get(&nft_id)?;
-        log!("vault assets count: {}", vault.assets.len());
+        log!("vault assets count: {}", vault.assets_count());
         let replenishers = vault.replenishers().as_vector().to_vec();
         log!("replenishers: {:?}", replenishers);
         Some(replenishers)

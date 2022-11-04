@@ -15,17 +15,18 @@ impl Contract {
     #[payable]
     pub fn withdraw_all(&mut self, nft_contract_id: AccountId, nft_id: TokenId) -> Promise {
         let caller = env::predecessor_account_id();
-        log!("withdraw_all call by {}", caller);
-        log!("check attached deposit: 1 yocto");
+        log!("withdraw_all called by {}", caller);
+
         // 1 yoctoNEAR should attached to this call to prevent abuse.
         assert_one_yocto();
 
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
-        let nft_info_promise =
+        let get_nft_info =
             nft::ext(nft_id.contract_id().clone()).nft_token(nft_id.token_id().to_owned());
+        let withdraw_all = Self::ext(env::current_account_id()).withdraw_all_callback(nft_id);
 
-        nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_all_callback(nft_id))
+        get_nft_info.then(withdraw_all)
     }
 
     /// Public function to withdraw a single type of FTs from the Vault.
@@ -40,24 +41,23 @@ impl Contract {
         nft_id: TokenId,
         fungible_token: AccountId,
     ) {
-        log!("prepaid gas: {}", env::prepaid_gas().0);
         let caller = env::predecessor_account_id();
-        log!("withdraw call by {}", caller);
-        log!("check attached deposit: 1 yocto");
+        log!("withdraw called by {}", caller);
+
         // 1 yoctoNEAR should attached to this call to prevent abuse.
         assert_one_yocto();
 
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
-        let nft_info_promise = nft::ext(nft_id.contract_id().clone())
+        let get_nft_info = nft::ext(nft_id.contract_id().clone())
             .with_static_gas(Gas::ONE_TERA * 4)
             .nft_token(nft_id.token_id().to_owned());
 
-        nft_info_promise.then(
-            Self::ext(env::current_account_id())
-                .with_static_gas(Gas::ONE_TERA * 280)
-                .withdraw_callback(nft_id, fungible_token, None, true),
-        );
+        let withdraw_and_replenish = Self::ext(env::current_account_id())
+            .with_static_gas(Gas::ONE_TERA * 280)
+            .withdraw_callback(nft_id, fungible_token, None, true);
+
+        get_nft_info.then(withdraw_and_replenish);
     }
 
     #[payable]
@@ -68,26 +68,25 @@ impl Contract {
         fungible_token: AccountId,
         amount: U128,
     ) {
-        log!("prepaid gas: {}", env::prepaid_gas().0);
         let caller = env::predecessor_account_id();
-        log!("withdraw amount call by {}", caller);
+        log!("withdraw amount called by {}", caller);
+
         if caller != env::current_account_id() {
-            log!("check attached deposit: 1 yocto");
             // 1 yoctoNEAR should attached to this call to prevent abuse.
             assert_one_yocto();
         }
 
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
-        let nft_info_promise = nft::ext(nft_id.contract_id().clone())
+        let get_nft_info = nft::ext(nft_id.contract_id().clone())
             .with_static_gas(Gas::ONE_TERA * 4)
             .nft_token(nft_id.token_id().to_owned());
 
-        nft_info_promise.then(
-            Self::ext(env::current_account_id())
-                .with_static_gas(Gas::ONE_TERA * 210)
-                .withdraw_callback(nft_id, fungible_token, Some(amount), false),
-        );
+        let withdraw_without_replenish = Self::ext(env::current_account_id())
+            .with_static_gas(Gas::ONE_TERA * 210)
+            .withdraw_callback(nft_id, fungible_token, Some(amount), false);
+
+        get_nft_info.then(withdraw_without_replenish);
     }
 
     /// Callback invokes after request to the NFT contract to check ownership and grant access to the vault.
@@ -107,7 +106,7 @@ impl Contract {
     ) {
         assert_self();
         let signer = env::signer_account_id();
-        log!("withdraw_all_callback called by signer: {}", signer);
+        log!("withdraw all callback called by signer: {}", signer);
 
         let nft_info = nft_info
             .expect("failed to get nft info")
@@ -117,15 +116,15 @@ impl Contract {
 
         let vault = self.get_vault(&nft_id);
 
-        for (fungible_token, asset) in vault.assets.iter() {
-            let amount = asset.balance;
-            Self::transfer_to(fungible_token.clone(), nft_owner.clone(), amount).then(
-                Self::ext(env::current_account_id()).adjust_balance(
-                    nft_id.clone(),
-                    fungible_token,
-                    U128(amount),
-                ),
+        for (fungible_token, asset) in vault.assets().iter() {
+            let amount = asset.balance();
+            let transfer = Self::transfer_to(fungible_token.clone(), nft_owner.clone(), amount);
+            let adjust_balance = Self::ext(env::current_account_id()).adjust_balance(
+                nft_id.clone(),
+                fungible_token,
+                U128(amount),
             );
+            transfer.then(adjust_balance);
         }
     }
 
@@ -138,11 +137,10 @@ impl Contract {
         fungible_token: AccountId,
         amount: Option<U128>,
         replenish: bool,
-    ) -> Promise {
-        log!("prepaid gas: {}", env::prepaid_gas().0);
+    ) {
         assert_self();
         let signer = env::signer_account_id();
-        log!("withdraw_callback called by signer: {}", signer);
+        log!("withdraw callback called by signer: {}", signer);
 
         let nft_info = nft_info
             .expect("failed to get nft info")
@@ -155,15 +153,14 @@ impl Contract {
 
         let vault = self.get_vault(&nft_id);
 
-        let asset = vault.assets.get(&fungible_token);
+        let asset = vault.get_asset(&fungible_token);
 
         let mut promise = if let Some(asset) = asset {
             let amount = if let Some(amount) = amount {
-                amount.0.min(asset.balance)
+                amount.0.min(asset.balance())
             } else {
-                asset.balance
+                asset.balance()
             };
-            log!("withdrawal amount: {}", amount);
             log!(
                 "transfer {} of {} tokens to {}",
                 amount,
@@ -171,14 +168,13 @@ impl Contract {
                 nft_owner
             );
 
-            let transfer_to = Self::transfer_to(fungible_token.clone(), nft_owner, amount).then(
-                Self::ext(env::current_account_id()).adjust_balance(
-                    nft_id,
-                    fungible_token,
-                    U128(amount),
-                ),
+            let transfer = Self::transfer_to(fungible_token.clone(), nft_owner, amount);
+            let adjust = Self::ext(env::current_account_id()).adjust_balance(
+                nft_id,
+                fungible_token,
+                U128(amount),
             );
-            Some(transfer_to)
+            Some(transfer.then(adjust))
         } else {
             log!("no {} tokens in the vault", fungible_token);
             None
@@ -205,7 +201,6 @@ impl Contract {
                 });
             }
         }
-        promise.unwrap()
     }
 
     // @TODO think about other variants to name FT sources.
@@ -251,9 +246,9 @@ impl Contract {
             "check transfers called by signer: {}",
             env::signer_account_id()
         );
+        let amount = amount.0;
         if res.is_ok() {
             let mut vault = self.get_vault(&nft_id);
-            let amount = amount.0;
             vault.reduce_balance(&fungible_token, amount);
             self.vaults.insert(&nft_id, &vault);
             log!(
@@ -263,7 +258,7 @@ impl Contract {
                 amount
             );
         } else {
-            todo!("process promise failed");
+            log!("transfer {} if {} tokens failed", amount, fungible_token);
         }
     }
 }

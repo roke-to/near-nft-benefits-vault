@@ -37,7 +37,7 @@ impl FungibleTokenReceiver for Contract {
         match request.kind() {
             Kind::TopUp => {
                 log!(
-                    "{} transferred {} of {} to vault {:?}",
+                    "{} transferred {} of {} tokens to vault {:?}",
                     sender_id,
                     amount,
                     fungible_token,
@@ -47,6 +47,13 @@ impl FungibleTokenReceiver for Contract {
                 self.store(&nft_id, &fungible_token, amount);
             }
             Kind::Transfer => {
+                log!(
+                    "{} sended {} of {} tokens to be transferred to NFT({:?}) owner",
+                    sender_id,
+                    amount,
+                    fungible_token,
+                    nft_id
+                );
                 let mut vault = self.get_vault_or_create(&nft_id);
                 vault.store(&fungible_token, amount);
                 self.vaults.insert(&nft_id, &vault);

@@ -6,13 +6,20 @@ use near_sdk::{
 /// Stores only `Balance` for now.
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct Asset {
-    pub balance: Balance,
+    balance: Balance,
 }
 
 impl Asset {
     /// Creates new `Asset` instance.
     pub fn new() -> Self {
         Self { balance: 0 }
+    }
+
+    pub fn inc_balance(&mut self, amount: Balance) {
+        self.balance = self
+            .balance
+            .checked_add(amount)
+            .expect("addition with overflow");
     }
 
     /// Subtracts provided amount from inner balance with overflow check.
@@ -22,6 +29,10 @@ impl Asset {
             .balance
             .checked_sub(amount)
             .expect("subtraction with overflow");
+    }
+
+    pub fn balance(&self) -> Balance {
+        self.balance
     }
 }
 
