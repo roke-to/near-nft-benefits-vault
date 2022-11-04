@@ -193,10 +193,10 @@ impl Environment {
         .await?
         .into_result()?;
 
-        self.check_deposit_to_vault().await
+        self.vault_view_print().await
     }
 
-    pub async fn check_deposit_to_vault(&self) -> Result<()> {
+    pub async fn vault_view_print(&self) -> Result<()> {
         let args = vault_view_bytes(self.nft.id())?;
         let res = self.vault.view(VAULT_VIEW_CALL, args).await?;
         let vault_view: Option<VaultView> = res.json()?;
@@ -215,7 +215,7 @@ impl Environment {
         Ok(balance)
     }
 
-    pub async fn withdraw_all(&self) -> Result<()> {
+    pub async fn vault_withdraw_all(&self) -> Result<()> {
         let args = vault_withdraw_all_json(self.nft.id());
         let res = self
             .nft_owner
@@ -230,7 +230,7 @@ impl Environment {
         Ok(())
     }
 
-    pub async fn withdraw(&self, fungible_token: &AccountId) -> Result<()> {
+    pub async fn vault_withdraw(&self, fungible_token: &AccountId) -> Result<()> {
         let args = vault_withdraw_json(self.nft.id(), fungible_token);
         let res = self
             .nft_owner

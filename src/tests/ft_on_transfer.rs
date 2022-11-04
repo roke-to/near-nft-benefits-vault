@@ -1,17 +1,14 @@
 use std::str::FromStr;
 
 use anyhow::Result;
-use near_sdk::{
-    json_types::U128,
-    serde_json::{json, to_string, to_vec},
-};
+use near_sdk::serde_json::to_string;
 use workspaces::error::ErrorKind;
 
 use crate::{
     interface::request::Request,
     tests::{
         environment::{setup::replenish_account_wrap_near, Environment},
-        FT_BALANCE_OF_CALL, NEAR, NFT_TOKEN_ID, VAULT_TEST_DEPOSIT,
+        NEAR, NFT_TOKEN_ID, VAULT_TEST_DEPOSIT,
     },
 };
 
@@ -97,16 +94,11 @@ async fn test_ft_on_transfer_request_transfer() -> Result<()> {
     .await?
     .into_result()?;
 
-    let args = to_vec(&json!({
-        "account_id": env.nft_owner.id(),
-    }))?;
-    let token_balance_of: U128 = env.fungible_tokens[0]
-        .view(FT_BALANCE_OF_CALL, args)
-        .await?
-        .json()?;
-
+    let (_, balance) =
+        Environment::ft_balance_of(env.nft_owner.id().clone(), env.fungible_tokens[0].clone())
+            .await?;
     assert_eq!(
-        token_balance_of.0,
+        balance,
         10 * NEAR,
         "all tokens should be transferred back to NFT owner"
     );
