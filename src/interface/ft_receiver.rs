@@ -2,7 +2,7 @@ use near_contract_standards::fungible_token::receiver::FungibleTokenReceiver;
 use near_sdk::{
     env::{self, panic_str},
     json_types::U128,
-    log, near_bindgen, AccountId, PromiseOrValue,
+    log, near_bindgen, AccountId, Gas, PromiseOrValue,
 };
 
 use crate::{
@@ -50,12 +50,9 @@ impl FungibleTokenReceiver for Contract {
                 let mut vault = self.get_vault_or_create(&nft_id);
                 vault.store(&fungible_token, amount);
                 self.vaults.insert(&nft_id, &vault);
-                Self::ext(env::current_account_id()).withdraw_amount(
-                    nft_contract_id,
-                    token_id,
-                    fungible_token,
-                    U128(amount),
-                );
+                Self::ext(env::current_account_id())
+                    .with_static_gas(Gas::ONE_TERA * 10)
+                    .withdraw_amount(nft_contract_id, token_id, fungible_token, U128(amount));
             }
         }
 

@@ -1,7 +1,7 @@
 use near_contract_standards::non_fungible_token::{Token, TokenId};
 use near_sdk::{
     assert_one_yocto, assert_self, env, json_types::U128, log, near_bindgen, require, AccountId,
-    Promise, PromiseError,
+    Gas, Promise, PromiseError,
 };
 
 use crate::{interface::nft::nft, nft_id::NftId, Contract, ContractExt};
@@ -40,6 +40,7 @@ impl Contract {
         nft_id: TokenId,
         fungible_token: AccountId,
     ) {
+        log!("prepaid gas: {}", env::prepaid_gas().0);
         let caller = env::predecessor_account_id();
         log!("withdraw call by {}", caller);
         log!("check attached deposit: 1 yocto");
@@ -48,14 +49,15 @@ impl Contract {
 
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
-        let nft_info_promise =
-            nft::ext(nft_id.contract_id().clone()).nft_token(nft_id.token_id().to_owned());
+        let nft_info_promise = nft::ext(nft_id.contract_id().clone())
+            .with_static_gas(Gas::ONE_TERA * 4)
+            .nft_token(nft_id.token_id().to_owned());
 
-        nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_callback(
-            nft_id,
-            fungible_token,
-            None,
-        ));
+        nft_info_promise.then(
+            Self::ext(env::current_account_id())
+                .with_static_gas(Gas::ONE_TERA * 280)
+                .withdraw_callback(nft_id, fungible_token, None, true),
+        );
     }
 
     #[payable]
@@ -66,6 +68,7 @@ impl Contract {
         fungible_token: AccountId,
         amount: U128,
     ) {
+        log!("prepaid gas: {}", env::prepaid_gas().0);
         let caller = env::predecessor_account_id();
         log!("withdraw amount call by {}", caller);
         if caller != env::current_account_id() {
@@ -76,14 +79,15 @@ impl Contract {
 
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
-        let nft_info_promise =
-            nft::ext(nft_id.contract_id().clone()).nft_token(nft_id.token_id().to_owned());
+        let nft_info_promise = nft::ext(nft_id.contract_id().clone())
+            .with_static_gas(Gas::ONE_TERA * 4)
+            .nft_token(nft_id.token_id().to_owned());
 
-        nft_info_promise.then(Self::ext(env::current_account_id()).withdraw_callback(
-            nft_id,
-            fungible_token,
-            Some(amount),
-        ));
+        nft_info_promise.then(
+            Self::ext(env::current_account_id())
+                .with_static_gas(Gas::ONE_TERA * 210)
+                .withdraw_callback(nft_id, fungible_token, Some(amount), false),
+        );
     }
 
     /// Callback invokes after request to the NFT contract to check ownership and grant access to the vault.
@@ -133,7 +137,9 @@ impl Contract {
         nft_id: NftId,
         fungible_token: AccountId,
         amount: Option<U128>,
+        replenish: bool,
     ) -> Promise {
+        log!("prepaid gas: {}", env::prepaid_gas().0);
         assert_self();
         let signer = env::signer_account_id();
         log!("withdraw_callback called by signer: {}", signer);
@@ -141,26 +147,65 @@ impl Contract {
         let nft_info = nft_info
             .expect("failed to get nft info")
             .expect("NFT info query returned nothing");
+
         let nft_owner = nft_info.owner_id;
         require!(nft_owner == signer, "vault access denied");
 
+        log!("vault access granted");
+
         let vault = self.get_vault(&nft_id);
 
-        let asset = vault.assets.get(&fungible_token).expect("unknown asset");
+        let asset = vault.assets.get(&fungible_token);
 
-        let amount = if let Some(amount) = amount {
-            amount.0.min(asset.balance)
+        let mut promise = if let Some(asset) = asset {
+            let amount = if let Some(amount) = amount {
+                amount.0.min(asset.balance)
+            } else {
+                asset.balance
+            };
+            log!("withdrawal amount: {}", amount);
+            log!(
+                "transfer {} of {} tokens to {}",
+                amount,
+                fungible_token,
+                nft_owner
+            );
+
+            let transfer_to = Self::transfer_to(fungible_token.clone(), nft_owner, amount).then(
+                Self::ext(env::current_account_id()).adjust_balance(
+                    nft_id,
+                    fungible_token,
+                    U128(amount),
+                ),
+            );
+            Some(transfer_to)
         } else {
-            asset.balance
+            log!("no {} tokens in the vault", fungible_token);
+            None
         };
 
-        Self::transfer_to(fungible_token.clone(), nft_owner, amount).then(
-            Self::ext(env::current_account_id()).adjust_balance(
-                nft_id,
-                fungible_token,
-                U128(amount),
-            ),
-        )
+        if replenish {
+            for replenisher in vault.replenishers().iter() {
+                log!(
+                    "calling replenisher: {}.{}({})",
+                    replenisher.contract_id(),
+                    replenisher.callback(),
+                    replenisher.args()
+                );
+                let replenish = Promise::new(replenisher.contract_id().clone()).function_call(
+                    replenisher.callback().to_owned(),
+                    replenisher.args().as_bytes().to_vec(),
+                    0,
+                    Gas::ONE_TERA * 270,
+                );
+                promise = Some(if let Some(p) = promise {
+                    p.then(replenish)
+                } else {
+                    replenish
+                });
+            }
+        }
+        promise.unwrap()
     }
 
     // @TODO think about other variants to name FT sources.
