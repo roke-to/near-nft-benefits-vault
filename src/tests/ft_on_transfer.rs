@@ -49,26 +49,13 @@ async fn test_ft_on_transfer_invalid_msg() -> Result<()> {
 async fn test_ft_on_transfer_request_top_up() -> Result<()> {
     let env = Environment::new().await?;
 
-    let nft_contract_id = near_sdk::AccountId::from_str(env.nft.id().as_str())?;
-    let request = Request::top_up(NFT_TOKEN_ID.to_owned(), nft_contract_id);
-    let request = to_string(&request)?;
-
     let token_contract_id = env.fungible_tokens[0].id();
-
-    env.ft_transfer_call(
-        &env.issuer,
-        env.vault.id(),
-        token_contract_id,
-        VAULT_TEST_DEPOSIT,
-        &request,
-    )
-    .await?
-    .into_result()?;
+    env.vault_deposit(token_contract_id).await?;
 
     let balance = env
         .vault_balance_of()
         .await?
-        .expect("should be some: ft_transfer_call failed");
+        .expect("should be some: vault deposit failed");
     let token = balance
         .tokens
         .iter()

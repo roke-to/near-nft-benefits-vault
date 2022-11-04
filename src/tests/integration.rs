@@ -22,7 +22,7 @@ pub async fn test_contract() -> Result<()> {
     let env = Environment::new().await?;
 
     for contract_id in env.fungible_tokens.iter().map(Contract::id) {
-        env.deposit_to_vault(contract_id).await?;
+        env.vault_deposit(contract_id).await?;
         println!("deposit to vault {contract_id}: OK",);
     }
 

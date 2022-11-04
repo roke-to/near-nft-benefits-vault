@@ -16,7 +16,7 @@ pub async fn test_view_balance_of_method() -> Result<()> {
 
     // Deposit all kinds of existing FTs to the vault.
     for contract_id in env.fungible_tokens.iter().map(Contract::id) {
-        env.deposit_to_vault(contract_id).await?;
+        env.vault_deposit(contract_id).await?;
         println!("successful deposit to vault of {contract_id}");
     }
 

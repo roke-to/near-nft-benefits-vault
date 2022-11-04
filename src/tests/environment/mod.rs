@@ -177,7 +177,7 @@ impl Environment {
         Ok(res)
     }
 
-    pub async fn deposit_to_vault(&self, token_contract_id: &AccountId) -> Result<()> {
+    pub async fn vault_deposit(&self, token_contract_id: &AccountId) -> Result<()> {
         let nft_contract_id = near_sdk::AccountId::from_str(self.nft.id().as_str()).unwrap();
         let nft_id = NFT_TOKEN_ID.to_owned();
         let request = Request::top_up(nft_id, nft_contract_id);
