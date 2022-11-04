@@ -13,8 +13,31 @@ use crate::tests::{
 
 use super::format_helpers::format_execution_result;
 
+pub fn init_logger() {
+    if let Err(e) = env_logger::Builder::new()
+        .parse_env("RUST_LOG")
+        .format_timestamp(None)
+        .format_module_path(false)
+        .format_target(false)
+        .try_init()
+    {
+        info!("logger already initialized: {}", e);
+    }
+}
+
+pub async fn prepare_fungible_tokens(sandbox: Worker<Sandbox>) -> Result<Vec<Contract>> {
+    let wrap_near = tokio::spawn(prepare_wrap_near_contract(sandbox.clone()));
+    let custom_ft = tokio::spawn(prepare_custom_ft(sandbox.clone()));
+
+    let wrap_near = wrap_near.await??;
+    let custom_ft = custom_ft.await??;
+    info!("wrap NEAR token account ready on: {}\n", wrap_near.id());
+    info!("custom fungible token ready on: {}\n", custom_ft.id());
+    Ok(vec![wrap_near, custom_ft])
+}
+
 /// Prepares w-near contract for the Sandbox. Either imports it from testnet or uses local wasm binary.
-pub async fn prepare_wrap_near_contract(sandbox: Worker<Sandbox>) -> Result<Contract> {
+async fn prepare_wrap_near_contract(sandbox: Worker<Sandbox>) -> Result<Contract> {
     let id = WRAP_NEAR_TESTNET_ACCOUNT_ID.parse()?;
     let contract = match testnet().await {
         Ok(testnet) => {
@@ -41,7 +64,7 @@ pub async fn prepare_wrap_near_contract(sandbox: Worker<Sandbox>) -> Result<Cont
 }
 
 /// Prepares custom fungible token contract from NEAR examples.
-pub async fn prepare_custom_ft(sandbox: Worker<Sandbox>) -> Result<Contract> {
+async fn prepare_custom_ft(sandbox: Worker<Sandbox>) -> Result<Contract> {
     let path = format!("{WASMS_LOCATION}/{FUNGIBLE_TOKEN_WASM}");
     let wasm = read(path).await?;
     let contract = sandbox.dev_deploy(&wasm).await?;

@@ -1,8 +1,21 @@
 use anyhow::Result;
-use log::info;
+use log::{debug, info};
+use near_sdk::serde_json::to_string;
 use workspaces::Contract;
 
-use crate::tests::{environment::Environment, NEAR, NFT_TOKEN_ID};
+use crate::{
+    interface::request::Request,
+    tests::{
+        environment::{
+            args::{
+                add_replenishment_callback_str, replenisher_ft_on_transfer_request_str,
+                replenisher_withdraw_str,
+            },
+            Environment,
+        },
+        NEAR, NFT_TOKEN_ID,
+    },
+};
 
 #[tokio::test]
 pub async fn test_contract() -> Result<()> {
@@ -38,15 +51,32 @@ async fn check_vault_state(env: &Environment) -> Result<()> {
 pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
     let mut env = Environment::new().await?;
     env.deploy_replenisher().await?;
-    env.issue_nft().await?;
-    env.transfer_nft().await?;
+    env.nft_mint().await?;
+    env.nft_transfer().await?;
+
+    let (token_account, balance) =
+        Environment::ft_balance_of(env.issuer.id().clone(), env.fungible_tokens[0].clone()).await?;
+    debug!("ft_balance: \n\ttoken: {token_account},\n\tbalance: {balance}");
+
+    let amount = NEAR;
+    let req = Request::transfer(NFT_TOKEN_ID.to_owned(), env.nft.id().as_str().parse()?);
+    let transfer_req = to_string(&req)?;
+
+    let args = replenisher_withdraw_str(&transfer_req)?;
+
+    let args = add_replenishment_callback_str(env.nft.id(), &args)?;
+
+    let msg = replenisher_ft_on_transfer_request_str(env.vault.id(), &args)?;
 
     env.ft_transfer_call(
         &env.issuer,
         env.replenisher.as_ref().unwrap().id(),
-        &env.fungible_tokens[0],
+        env.fungible_tokens[0].id(),
+        amount,
+        &msg,
     )
-    .await?;
+    .await?
+    .into_result()?;
 
     let replenishers = env.view_replenishers().await?.unwrap();
     assert!(replenishers.len() == 1);

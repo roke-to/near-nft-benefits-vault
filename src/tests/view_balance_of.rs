@@ -12,7 +12,7 @@ pub async fn test_view_balance_of_method() -> Result<()> {
     let env = Environment::new().await?;
 
     // Issue NFT that will be used as the key to the vault.
-    env.issue_nft().await?;
+    env.nft_mint().await?;
 
     // Deposit all kinds of existing FTs to the vault.
     for contract_id in env.fungible_tokens.iter().map(Contract::id) {
