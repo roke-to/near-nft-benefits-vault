@@ -3,7 +3,7 @@ pub mod setup;
 
 use format_helpers::format_execution_result;
 use futures::{stream::FuturesUnordered, TryStreamExt};
-use log::info;
+use log::{debug, info};
 use setup::{
     prepare_custom_ft, prepare_issuer_account, prepare_nft_contract, prepare_nft_owner_account,
     prepare_vault_contract, prepare_wrap_near_contract,
@@ -52,12 +52,15 @@ pub struct Environment {
 
 impl Environment {
     pub async fn new() -> Result<Self> {
-        env_logger::Builder::new()
-            .filter(Some("nft_benefits_vault"), log::LevelFilter::Debug)
+        if let Err(e) = env_logger::Builder::new()
+            .parse_env("RUST_LOG")
             .format_timestamp(None)
             .format_module_path(false)
             .format_target(false)
-            .init();
+            .try_init()
+        {
+            info!("logger already initialized: {}", e);
+        }
         let sandbox = sandbox().await?;
         info!("sandbox initialized");
 
@@ -108,10 +111,10 @@ impl Environment {
         let path = format!("{WASMS_LOCATION}/{VAULT_TEST_REPLENISHER_WASM}");
         let wasm = read(path).await?;
         let contract = self.sandbox.dev_deploy(&wasm).await?;
-        println!("\n\nreplenisher deployed at: {}\n\n", contract.id());
+        info!("replenisher deployed at: {}", contract.id());
 
         let res = contract.call("new").transact().await?;
-        println!(
+        debug!(
             "\nVault test replenisher contract initialization outcome: {}\n",
             format_execution_result(&res)
         );
@@ -121,7 +124,7 @@ impl Environment {
             self.fungible_tokens.iter().map(|ft| ft.id()),
         )
         .await?;
-        println!("replenisher account registered in all tokens");
+        debug!("replenisher account registered in all tokens");
         self.replenisher = Some(contract);
         Ok(())
     }
@@ -145,7 +148,7 @@ impl Environment {
             .deposit(NFT_MINT_STORAGE_DEPOSIT)
             .transact()
             .await?;
-        println!("NFT mint: {}", format_execution_result(&res));
+        debug!("NFT mint: {}", format_execution_result(&res));
         Ok(())
     }
 
@@ -161,7 +164,7 @@ impl Environment {
             .deposit(1)
             .transact()
             .await?;
-        println!("NFT transfer: {}", format_execution_result(&res));
+        debug!("NFT transfer: {}", format_execution_result(&res));
         Ok(())
     }
 
@@ -171,19 +174,24 @@ impl Environment {
         receiver: &AccountId,
         token: &Contract,
     ) -> Result<()> {
-        println!(
+        info!(
             "ft_transfer_call: \n\tsender: {sender:?} \n\treceiver: {receiver} \n\ttoken: {token:?}"
         );
         let (token_account, balance) =
             Self::ft_balance_of(sender.id().clone(), token.clone()).await?;
-        println!("ft_balance: \n\ttoken: {token_account},\n\tbalance: {balance}");
+        debug!("ft_balance: \n\ttoken: {token_account},\n\tbalance: {balance}");
 
         let amount = NEAR;
+        let req = Request::transfer(NFT_TOKEN_ID.to_owned(), self.nft.id().as_str().parse()?);
+        let transfer_req = to_string(&req)?;
+        let args = to_string(&json!({
+            "msg": transfer_req,
+        }))?;
         let args = to_string(&json!({
             "nft_contract_id": self.nft.id(),
             "nft_id": NFT_TOKEN_ID,
-            "callback": "withdraw",
-            "args": "",
+            "callback": "withdraw_call",
+            "args": args,
         }))?;
         let msg = to_string(&json!({
             "vault": self.vault.id(),
@@ -201,7 +209,8 @@ impl Environment {
             .max_gas()
             .transact()
             .await?;
-        println!("ft_transfer_call res: {}", format_execution_result(&res));
+        // debug!("ft_transfer_call res: {}", format_execution_result(&res));
+        debug!("ft_transfer_call res: {res:#?}");
         Ok(())
     }
 
@@ -290,7 +299,8 @@ impl Environment {
             .max_gas()
             .transact()
             .await?;
-        println!("withdraw: {}", format_execution_result(&res));
+        // debug!("withdraw: {}", format_execution_result(&res));
+        debug!("withdraw: {res:#?}");
 
         Ok(())
     }
@@ -334,7 +344,7 @@ impl Environment {
             .transact()
             .await?;
 
-        println!("add replenisher: {}", format_execution_result(&res));
+        debug!("add replenisher: {}", format_execution_result(&res));
 
         Ok(())
     }
@@ -349,7 +359,7 @@ impl Environment {
             .view(self.vault.id(), VAULT_VIEW_REPLENISHERS_CALL, args)
             .await?;
 
-        println!("view replenishers: logs: {:#?}", res.logs);
+        debug!("view replenishers: logs: {:#?}", res.logs);
 
         let replenishers = res.json()?;
 
