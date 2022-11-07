@@ -12,6 +12,7 @@ pub struct Request {
     nft_id: TokenId,
     /// NFT contract account id.
     nft_contract_id: AccountId,
+    /// Request [`Kind`].
     kind: Kind,
 }
 
@@ -19,6 +20,7 @@ pub struct Request {
 pub enum Kind {
     /// On ft transfer with this variant as a msg the Contract will increase balance of the corresponding Vault.
     TopUp,
+    /// If the contract have received FT with this request kind, it will immediately transfer it to the NFT owner.
     Transfer,
 }
 
@@ -28,6 +30,7 @@ impl Request {
         from_str(s)
     }
 
+    /// Creates new instance of [`Request`].
     #[cfg(test)]
     pub fn new(nft_id: TokenId, nft_contract_id: AccountId, kind: Kind) -> Self {
         Self {
@@ -37,24 +40,29 @@ impl Request {
         }
     }
 
+    /// Creates new instance of TopUp [`Request`].
     #[cfg(test)]
     pub fn top_up(nft_id: TokenId, nft_contract_id: AccountId) -> Self {
         Self::new(nft_id, nft_contract_id, Kind::TopUp)
     }
 
+    /// Creates new instance of Transfer [`Request`].
     #[cfg(test)]
     pub fn transfer(nft_id: TokenId, nft_contract_id: AccountId) -> Self {
         Self::new(nft_id, nft_contract_id, Kind::Transfer)
     }
 
+    /// Returns request [`Kind`].
     pub fn kind(&self) -> Kind {
         self.kind
     }
 
+    /// Returns reference to the NFT id.
     pub fn nft_id(&self) -> &TokenId {
         &self.nft_id
     }
 
+    /// Returns reference to the NFT contract id.
     pub fn nft_contract_id(&self) -> &AccountId {
         &self.nft_contract_id
     }
