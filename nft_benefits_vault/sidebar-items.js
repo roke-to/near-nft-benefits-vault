@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Contract","Core structure of the smart contract."],["ContractExt",""]]};
+window.SIDEBAR_ITEMS = {"mod":[["calls",""]],"struct":[["Contract","Core structure of the smart contract."],["ContractExt",""]]};

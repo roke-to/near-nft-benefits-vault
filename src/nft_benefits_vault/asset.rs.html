@@ -30,6 +30,17 @@
 <span id="30">30</span>
 <span id="31">31</span>
 <span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">near_sdk</span>::{
     <span class="ident">borsh</span>::{<span class="self">self</span>, <span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>},
     <span class="ident">Balance</span>,
@@ -38,13 +49,20 @@
 <span class="doccomment">/// Stores only `Balance` for now.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">BorshSerialize</span>, <span class="ident">BorshDeserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Asset</span> {
-    <span class="kw">pub</span> <span class="ident">balance</span>: <span class="ident">Balance</span>,
+    <span class="ident">balance</span>: <span class="ident">Balance</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Asset</span> {
     <span class="doccomment">/// Creates new `Asset` instance.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">balance</span>: <span class="number">0</span> }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">inc_balance</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">amount</span>: <span class="ident">Balance</span>) {
+        <span class="self">self</span>.<span class="ident">balance</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">balance</span>
+            .<span class="ident">checked_add</span>(<span class="ident">amount</span>)
+            .<span class="ident">expect</span>(<span class="string">&quot;addition with overflow&quot;</span>);
     }
 
     <span class="doccomment">/// Subtracts provided amount from inner balance with overflow check.</span>
@@ -54,6 +72,10 @@
             .<span class="ident">balance</span>
             .<span class="ident">checked_sub</span>(<span class="ident">amount</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;subtraction with overflow&quot;</span>);
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">balance</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Balance</span> {
+        <span class="self">self</span>.<span class="ident">balance</span>
     }
 }
 
