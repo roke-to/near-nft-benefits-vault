@@ -8,9 +8,9 @@ use crate::{interface::nft::nft, nft_id::NftId, Contract, ContractExt};
 
 #[near_bindgen]
 impl Contract {
-    /// Public function to withdraw all FTs from the Vault.
-    /// The contract will check ownership of the NFT spectified by the arguments.
-    /// After that it will try to find the vault with access via provided contract/id pair.
+    /// Public call to withdraw all FTs of every type from the Vault.
+    /// The contract will check caller ownership of the NFT specified by the NFT contract Id and NFT Id.
+    /// Then it will try to find the corresponding vault with access via provided contract/id pair.
     /// Exactly 1 yoctoNEAR must be attached.
     #[payable]
     pub fn withdraw_all(&mut self, nft_contract_id: AccountId, nft_id: TokenId) -> Promise {
@@ -29,9 +29,9 @@ impl Contract {
         get_nft_info.then(withdraw_all)
     }
 
-    /// Public function to withdraw a single type of FTs from the Vault.
+    /// Public call to withdraw all tokens of a single type of FT from the Vault.
     /// The contract will check ownership of the NFT spectified by the arguments.
-    /// After that it will try to find the vault with access via provided contract/id pair.
+    /// Than it will try to find the vault with access via provided contract/id pair.
     /// And it makes `ft_transfer` with all available tokens on the provided `fungible_token`.
     /// Exactly 1 yoctoNEAR must be attached.
     #[payable]
@@ -60,6 +60,11 @@ impl Contract {
         get_nft_info.then(withdraw_and_replenish);
     }
 
+    /// Public call to withdraw specified `amount` of tokens of a single type of FT from the Vault.
+    /// The contract will check ownership of the NFT spectified by the arguments.
+    /// Than it will try to find the vault with access via provided contract/id pair.
+    /// And it makes `ft_transfer` with specified amount of tokens on the provided `fungible_token`.
+    /// Exactly 1 yoctoNEAR must be attached.
     #[payable]
     pub fn withdraw_amount(
         &mut self,
@@ -203,7 +208,6 @@ impl Contract {
         }
     }
 
-    // @TODO think about other variants to name FT sources.
     /// This method is used to add replenishers for the Vault.
     /// When NFT owner calls withdraw methods the Contract will transfer available tokens from its own balance
     /// and will request available benefits from registered replenishers.

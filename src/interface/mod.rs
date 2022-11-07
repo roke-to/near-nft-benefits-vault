@@ -7,4 +7,5 @@ pub mod nft;
 /// This common request can be passed to certain methods in arguments.
 pub mod request;
 
+/// Interface for this contract to be called after receiveing FTs.
 mod ft_receiver;

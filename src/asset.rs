@@ -10,11 +10,16 @@ pub struct Asset {
 }
 
 impl Asset {
-    /// Creates new `Asset` instance.
+    /// Creates new [`Asset`] instance with zero balance.
     pub fn new() -> Self {
         Self { balance: 0 }
     }
 
+    /// Increases asset balance by the provided `amount`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if an overflow occured.
     pub fn inc_balance(&mut self, amount: Balance) {
         self.balance = self
             .balance
@@ -22,8 +27,11 @@ impl Asset {
             .expect("addition with overflow");
     }
 
-    /// Subtracts provided amount from inner balance with overflow check.
-    /// Panics if overflow occured.
+    /// Reduces asset balance by the provided `amount`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if an overflow occured.
     pub fn reduce_balance(&mut self, amount: Balance) {
         self.balance = self
             .balance
@@ -31,6 +39,7 @@ impl Asset {
             .expect("subtraction with overflow");
     }
 
+    /// Returns the balance of this [`Asset`].
     pub fn balance(&self) -> Balance {
         self.balance
     }

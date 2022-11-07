@@ -1,15 +1,16 @@
 #![warn(clippy::all)]
 #![doc = include_str!("../README.md")]
 
+pub mod calls;
+
 mod asset;
 mod interface;
-
-pub mod calls;
 mod nft_id;
-#[cfg(test)]
-mod tests;
 mod vault;
 mod views;
+
+#[cfg(test)]
+mod tests;
 
 use interface::ft::ft;
 use nft_id::NftId;
