@@ -39,7 +39,7 @@ pub struct VaultView {
 
 #[near_bindgen]
 impl Contract {
-    /// Function to view the full balance of the vault.
+    /// Function to view balances of all assets in the vault.
     pub fn balance_of(&self, nft_contract_id: AccountId, nft_id: TokenId) -> Option<BalanceView> {
         let nft_id = NftId::new(nft_contract_id, nft_id);
         let vault = self.vaults.get(&nft_id)?;
@@ -57,7 +57,11 @@ impl Contract {
     }
 
     /// Function to view the amount of assets in the Vault.
-    pub fn vault(&self, nft_contract_id: AccountId, nft_id: TokenId) -> Option<VaultView> {
+    pub fn vault_assets_count(
+        &self,
+        nft_contract_id: AccountId,
+        nft_id: TokenId,
+    ) -> Option<VaultView> {
         let nft_id = NftId::new(nft_contract_id, nft_id);
         let vault = self.get_vault(&nft_id);
         Some(VaultView {
