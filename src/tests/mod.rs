@@ -31,10 +31,10 @@ const NFT_TOKEN_ID: &str = "awesome_test_pic_666";
 const NFT_TRANSFER_CALL: &str = "nft_transfer";
 
 // Constants related to the nft-benefits-vault contract.
-const VAULT_BALANCE_OF_CALL: &str = "balance_of";
+const VAULT_BALANCE_OF_VIEW: &str = "balance_of";
 const VAULT_WITHDRAW_ALL_CALL: &str = "withdraw_all";
 const VAULT_WITHDRAW_CALL: &str = "withdraw";
-const VAULT_VIEW_CALL: &str = "vault";
+const VAULT_ASSETS_COUNT_VIEW: &str = "vault_assets_count";
 const VAULT_ADD_REPLENISHMENT_CALLBACK_CALL: &str = "add_replenishment_callback";
 const VAULT_VIEW_REPLENISHERS_CALL: &str = "replenishers";
 const VAULT_TEST_DEPOSIT: u128 = NEAR;

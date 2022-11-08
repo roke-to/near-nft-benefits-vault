@@ -20,8 +20,9 @@ use crate::{
     tests::{
         environment::{
             args::{
-                ft_transfer_call_json, nft_metadata_json, nft_mint_json, nft_transfer_json,
-                vault_view_bytes, vault_withdraw_all_json, vault_withdraw_json,
+                ft_balance_of_bytes, ft_transfer_call_json, nft_metadata_json, nft_mint_json,
+                nft_transfer_json, vault_balance_of_bytes, vault_view_bytes,
+                vault_withdraw_all_json, vault_withdraw_json,
             },
             format_helpers::format_execution_result,
             setup::{
@@ -29,20 +30,19 @@ use crate::{
                 prepare_nft_owner_account, prepare_vault_contract, register_account,
             },
         },
+        VAULT_ASSETS_COUNT_VIEW,
         {
             FT_BALANCE_OF_CALL, FT_TRANSFER_WITH_CALLBACK_CALL, NFT_MINT_CALL,
             NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID, NFT_TRANSFER_CALL,
-            VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_BALANCE_OF_CALL, VAULT_REPLENISH_ARGS,
+            VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_BALANCE_OF_VIEW, VAULT_REPLENISH_ARGS,
             VAULT_REPLENISH_CALLBACK, VAULT_TEST_DEPOSIT, VAULT_TEST_REPLENISHER_WASM,
-            VAULT_VIEW_CALL, VAULT_VIEW_REPLENISHERS_CALL, VAULT_WITHDRAW_ALL_CALL,
-            VAULT_WITHDRAW_CALL, WASMS_LOCATION,
+            VAULT_VIEW_REPLENISHERS_CALL, VAULT_WITHDRAW_ALL_CALL, VAULT_WITHDRAW_CALL,
+            WASMS_LOCATION,
         },
     },
     vault::Replenisher,
     views::{BalanceView, VaultView},
 };
-
-use self::args::{ft_balance_of_bytes, vault_balance_of_bytes};
 
 /// Struct contains a bunch of useful contracts and accounts, frequently used in test cases.
 pub struct Environment {
@@ -198,7 +198,7 @@ impl Environment {
 
     pub async fn vault_view_print(&self) -> Result<()> {
         let args = vault_view_bytes(self.nft.id())?;
-        let res = self.vault.view(VAULT_VIEW_CALL, args).await?;
+        let res = self.vault.view(VAULT_ASSETS_COUNT_VIEW, args).await?;
         let vault_view: Option<VaultView> = res.json()?;
         println!("vault view: {vault_view:#?}");
         Ok(())
@@ -208,7 +208,7 @@ impl Environment {
         let args = vault_balance_of_bytes(self.nft.id())?;
         let res = self
             .sandbox
-            .view(self.vault.id(), VAULT_BALANCE_OF_CALL, args)
+            .view(self.vault.id(), VAULT_BALANCE_OF_VIEW, args)
             .await
             .with_context(|| "failed to call method on contract")?;
         let balance = res.json()?;
