@@ -53,6 +53,11 @@ impl Vault {
         self.assets.insert(fungible_token, &asset);
     }
 
+    /// Adds replenisher to the Vault.
+    ///
+    /// # Panics
+    ///
+    /// Panics if replenisher is already registered.
     pub fn add_replenisher(&mut self, contract_id: AccountId, callback: String, args: String) {
         let replenisher = Replenisher {
             contract_id,
@@ -66,18 +71,22 @@ impl Vault {
         self.replenishers.insert(&replenisher);
     }
 
+    /// Returns a reference to the replenishers of this [`Vault`].
     pub fn replenishers(&self) -> &UnorderedSet<Replenisher> {
         &self.replenishers
     }
 
+    /// Returns a reference to the assets of this [`Vault`].
     pub fn assets(&self) -> &UnorderedMap<AccountId, Asset> {
         &self.assets
     }
 
+    /// Returns asset for the given fungible token contract Id.
     pub fn get_asset(&self, fungible_token: &AccountId) -> Option<Asset> {
         self.assets.get(fungible_token)
     }
 
+    /// Returns the assets count of this [`Vault`].
     pub fn assets_count(&self) -> u64 {
         self.assets.len()
     }
@@ -90,14 +99,17 @@ impl Default for Vault {
 }
 
 impl Replenisher {
+    /// Returns a reference to the contract id of this [`Replenisher`].
     pub fn contract_id(&self) -> &AccountId {
         &self.contract_id
     }
 
+    /// Returns a reference to the callback of this [`Replenisher`].
     pub fn callback(&self) -> &str {
         self.callback.as_ref()
     }
 
+    /// Returns a reference to the args of this [`Replenisher`].
     pub fn args(&self) -> &str {
         self.args.as_ref()
     }
