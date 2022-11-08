@@ -102,6 +102,18 @@
 <span id="102">102</span>
 <span id="103">103</span>
 <span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">near_sdk</span>::{
     <span class="ident">borsh</span>::{<span class="self">self</span>, <span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>},
     <span class="ident">collections</span>::{<span class="ident">UnorderedMap</span>, <span class="ident">UnorderedSet</span>},
@@ -157,6 +169,11 @@
         <span class="self">self</span>.<span class="ident">assets</span>.<span class="ident">insert</span>(<span class="ident">fungible_token</span>, <span class="kw-2">&amp;</span><span class="ident">asset</span>);
     }
 
+    <span class="doccomment">/// Adds replenisher to the Vault.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Panics</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Panics if replenisher is already registered.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_replenisher</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">contract_id</span>: <span class="ident">AccountId</span>, <span class="ident">callback</span>: <span class="ident">String</span>, <span class="ident">args</span>: <span class="ident">String</span>) {
         <span class="kw">let</span> <span class="ident">replenisher</span> <span class="op">=</span> <span class="ident">Replenisher</span> {
             <span class="ident">contract_id</span>,
@@ -170,18 +187,22 @@
         <span class="self">self</span>.<span class="ident">replenishers</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">replenisher</span>);
     }
 
+    <span class="doccomment">/// Returns a reference to the replenishers of this [`Vault`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">replenishers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">UnorderedSet</span><span class="op">&lt;</span><span class="ident">Replenisher</span><span class="op">&gt;</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">replenishers</span>
     }
 
+    <span class="doccomment">/// Returns a reference to the assets of this [`Vault`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">assets</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">UnorderedMap</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">Asset</span><span class="op">&gt;</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">assets</span>
     }
 
+    <span class="doccomment">/// Returns asset for the given fungible token contract Id.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_asset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fungible_token</span>: <span class="kw-2">&amp;</span><span class="ident">AccountId</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Asset</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">assets</span>.<span class="ident">get</span>(<span class="ident">fungible_token</span>)
     }
 
+    <span class="doccomment">/// Returns the assets count of this [`Vault`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">assets_count</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
         <span class="self">self</span>.<span class="ident">assets</span>.<span class="ident">len</span>()
     }
@@ -194,14 +215,17 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Replenisher</span> {
+    <span class="doccomment">/// Returns a reference to the contract id of this [`Replenisher`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contract_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">AccountId</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">contract_id</span>
     }
 
+    <span class="doccomment">/// Returns a reference to the callback of this [`Replenisher`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">callback</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="self">self</span>.<span class="ident">callback</span>.<span class="ident">as_ref</span>()
     }
 
+    <span class="doccomment">/// Returns a reference to the args of this [`Replenisher`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">args</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="self">self</span>.<span class="ident">args</span>.<span class="ident">as_ref</span>()
     }

@@ -81,6 +81,10 @@
 <span id="81">81</span>
 <span id="82">82</span>
 <span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">near_contract_standards::non_fungible_token::TokenId</span>;
 <span class="kw">use</span> <span class="ident">near_sdk</span>::{
     <span class="ident">log</span>, <span class="ident">near_bindgen</span>,
@@ -122,7 +126,7 @@
 
 <span class="attribute">#[<span class="ident">near_bindgen</span>]</span>
 <span class="kw">impl</span> <span class="ident">Contract</span> {
-    <span class="doccomment">/// Function to view the full balance of the vault.</span>
+    <span class="doccomment">/// Function to view balances of all assets in the vault.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">balance_of</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>, <span class="ident">nft_id</span>: <span class="ident">TokenId</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BalanceView</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">nft_id</span> <span class="op">=</span> <span class="ident">NftId::new</span>(<span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
         <span class="kw">let</span> <span class="ident">vault</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">vaults</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>)<span class="question-mark">?</span>;
@@ -140,7 +144,11 @@
     }
 
     <span class="doccomment">/// Function to view the amount of assets in the Vault.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">vault</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>, <span class="ident">nft_id</span>: <span class="ident">TokenId</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">VaultView</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">vault_assets_count</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>,
+        <span class="ident">nft_id</span>: <span class="ident">TokenId</span>,
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">VaultView</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">nft_id</span> <span class="op">=</span> <span class="ident">NftId::new</span>(<span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
         <span class="kw">let</span> <span class="ident">vault</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_vault</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>);
         <span class="prelude-val">Some</span>(<span class="ident">VaultView</span> {

@@ -262,6 +262,10 @@
 <span id="262">262</span>
 <span id="263">263</span>
 <span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">near_contract_standards::non_fungible_token</span>::{<span class="ident">Token</span>, <span class="ident">TokenId</span>};
 <span class="kw">use</span> <span class="ident">near_sdk</span>::{
     <span class="ident">assert_one_yocto</span>, <span class="ident">assert_self</span>, <span class="ident">env</span>, <span class="ident">json_types::U128</span>, <span class="ident">log</span>, <span class="ident">near_bindgen</span>, <span class="ident">require</span>, <span class="ident">AccountId</span>,
@@ -272,9 +276,9 @@
 
 <span class="attribute">#[<span class="ident">near_bindgen</span>]</span>
 <span class="kw">impl</span> <span class="ident">Contract</span> {
-    <span class="doccomment">/// Public function to withdraw all FTs from the Vault.</span>
-    <span class="doccomment">/// The contract will check ownership of the NFT spectified by the arguments.</span>
-    <span class="doccomment">/// After that it will try to find the vault with access via provided contract/id pair.</span>
+    <span class="doccomment">/// Public call to withdraw all FTs of every type from the Vault.</span>
+    <span class="doccomment">/// The contract will check caller ownership of the NFT specified by the NFT contract Id and NFT Id.</span>
+    <span class="doccomment">/// Then it will try to find the corresponding vault with access via provided contract/id pair.</span>
     <span class="doccomment">/// Exactly 1 yoctoNEAR must be attached.</span>
     <span class="attribute">#[<span class="ident">payable</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">withdraw_all</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>, <span class="ident">nft_id</span>: <span class="ident">TokenId</span>) -&gt; <span class="ident">Promise</span> {
@@ -293,9 +297,9 @@
         <span class="ident">get_nft_info</span>.<span class="ident">then</span>(<span class="ident">withdraw_all</span>)
     }
 
-    <span class="doccomment">/// Public function to withdraw a single type of FTs from the Vault.</span>
+    <span class="doccomment">/// Public call to withdraw all tokens of a single type of FT from the Vault.</span>
     <span class="doccomment">/// The contract will check ownership of the NFT spectified by the arguments.</span>
-    <span class="doccomment">/// After that it will try to find the vault with access via provided contract/id pair.</span>
+    <span class="doccomment">/// Than it will try to find the vault with access via provided contract/id pair.</span>
     <span class="doccomment">/// And it makes `ft_transfer` with all available tokens on the provided `fungible_token`.</span>
     <span class="doccomment">/// Exactly 1 yoctoNEAR must be attached.</span>
     <span class="attribute">#[<span class="ident">payable</span>]</span>
@@ -324,6 +328,11 @@
         <span class="ident">get_nft_info</span>.<span class="ident">then</span>(<span class="ident">withdraw_and_replenish</span>);
     }
 
+    <span class="doccomment">/// Public call to withdraw specified `amount` of tokens of a single type of FT from the Vault.</span>
+    <span class="doccomment">/// The contract will check ownership of the NFT spectified by the arguments.</span>
+    <span class="doccomment">/// Than it will try to find the vault with access via provided contract/id pair.</span>
+    <span class="doccomment">/// And it makes `ft_transfer` with specified amount of tokens on the provided `fungible_token`.</span>
+    <span class="doccomment">/// Exactly 1 yoctoNEAR must be attached.</span>
     <span class="attribute">#[<span class="ident">payable</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">withdraw_amount</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
@@ -467,7 +476,6 @@
         }
     }
 
-    <span class="comment">// @TODO think about other variants to name FT sources.</span>
     <span class="doccomment">/// This method is used to add replenishers for the Vault.</span>
     <span class="doccomment">/// When NFT owner calls withdraw methods the Contract will transfer available tokens from its own balance</span>
     <span class="doccomment">/// and will request available benefits from registered replenishers.</span>
