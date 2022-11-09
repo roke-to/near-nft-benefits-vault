@@ -7,6 +7,7 @@ mod integration;
 mod view_balance_of;
 mod withdraw;
 mod withdraw_all;
+mod withdraw_amount;
 
 // Precompiled smart contracts locations.
 const WASMS_LOCATION: &str = "dist";
@@ -34,6 +35,7 @@ const NFT_TRANSFER_CALL: &str = "nft_transfer";
 const VAULT_BALANCE_OF_VIEW: &str = "balance_of";
 const VAULT_WITHDRAW_ALL_CALL: &str = "withdraw_all";
 const VAULT_WITHDRAW_CALL: &str = "withdraw";
+const VAULT_WITHDRAW_AMOUNT_CALL: &str = "withdraw_amount";
 const VAULT_ASSETS_COUNT_VIEW: &str = "vault_assets_count";
 const VAULT_ADD_REPLENISHMENT_CALLBACK_CALL: &str = "add_replenishment_callback";
 const VAULT_VIEW_REPLENISHERS_CALL: &str = "replenishers";
