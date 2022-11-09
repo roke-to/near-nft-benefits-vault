@@ -32,6 +32,11 @@ To do it manualy, build and place the contract WASM file to the `dist` dir. Then
 cargo test [OPTIONS] [TESTNAME] [-- [args]...]
 ```
 
+To turn on logger start with env variable `RUST_LOG`:
+```sh
+RUST_LOG='nft_benefits_vault=debug' cargo test
+```
+
 # Using this contract
 ## Quickest deploy
 Build and deploy this contract to the dev account:
