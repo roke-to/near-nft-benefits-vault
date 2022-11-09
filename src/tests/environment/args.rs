@@ -100,6 +100,19 @@ pub fn vault_withdraw_json(nft_contract_id: &AccountId, fungible_token: &Account
     })
 }
 
+pub fn vault_withdraw_amount_json(
+    nft_contract_id: &AccountId,
+    fungible_token: &AccountId,
+    amount: U128,
+) -> Value {
+    json!({
+        "nft_contract_id": nft_contract_id,
+        "nft_id": NFT_TOKEN_ID,
+        "fungible_token": fungible_token,
+        "amount": amount,
+    })
+}
+
 pub fn ft_balance_of_bytes(account_id: &AccountId) -> Result<Vec<u8>> {
     let args = to_vec(&json!({
         "account_id": account_id,

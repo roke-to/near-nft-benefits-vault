@@ -22,7 +22,7 @@ use crate::{
             args::{
                 ft_balance_of_bytes, ft_transfer_call_json, nft_metadata_json, nft_mint_json,
                 nft_transfer_json, vault_balance_of_bytes, vault_view_bytes,
-                vault_withdraw_all_json, vault_withdraw_json,
+                vault_withdraw_all_json, vault_withdraw_amount_json, vault_withdraw_json,
             },
             format_helpers::format_execution_result,
             setup::{
@@ -30,15 +30,12 @@ use crate::{
                 prepare_nft_owner_account, prepare_vault_contract, register_account,
             },
         },
-        VAULT_ASSETS_COUNT_VIEW,
-        {
-            FT_BALANCE_OF_CALL, FT_TRANSFER_WITH_CALLBACK_CALL, NFT_MINT_CALL,
-            NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID, NFT_TRANSFER_CALL,
-            VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_BALANCE_OF_VIEW, VAULT_REPLENISH_ARGS,
-            VAULT_REPLENISH_CALLBACK, VAULT_TEST_DEPOSIT, VAULT_TEST_REPLENISHER_WASM,
-            VAULT_VIEW_REPLENISHERS_CALL, VAULT_WITHDRAW_ALL_CALL, VAULT_WITHDRAW_CALL,
-            WASMS_LOCATION,
-        },
+        FT_BALANCE_OF_CALL, FT_TRANSFER_WITH_CALLBACK_CALL, NFT_MINT_CALL,
+        NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID, NFT_TRANSFER_CALL,
+        VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_ASSETS_COUNT_VIEW, VAULT_BALANCE_OF_VIEW,
+        VAULT_REPLENISH_ARGS, VAULT_REPLENISH_CALLBACK, VAULT_TEST_DEPOSIT,
+        VAULT_TEST_REPLENISHER_WASM, VAULT_VIEW_REPLENISHERS_CALL, VAULT_WITHDRAW_ALL_CALL,
+        VAULT_WITHDRAW_AMOUNT_CALL, VAULT_WITHDRAW_CALL, WASMS_LOCATION,
     },
     vault::Replenisher,
     views::{BalanceView, VaultView},
@@ -183,15 +180,17 @@ impl Environment {
         let request = Request::top_up(nft_id, nft_contract_id);
         let request = near_sdk::serde_json::to_string(&request).unwrap();
 
-        self.ft_transfer_call(
-            &self.issuer,
-            self.vault.id(),
-            token_contract_id,
-            VAULT_TEST_DEPOSIT,
-            &request,
-        )
-        .await?
-        .into_result()?;
+        let res = self
+            .ft_transfer_call(
+                &self.issuer,
+                self.vault.id(),
+                token_contract_id,
+                VAULT_TEST_DEPOSIT,
+                &request,
+            )
+            .await?
+            .into_result()?;
+        info!("ft transfer call: {:#?}", res);
 
         self.vault_view_print().await
     }
@@ -243,6 +242,24 @@ impl Environment {
         // debug!("withdraw: {}", format_execution_result(&res));
         debug!("withdraw: {res:#?}");
 
+        Ok(())
+    }
+
+    pub async fn vault_withdraw_amount(
+        &self,
+        fungible_token: &AccountId,
+        amount: u128,
+    ) -> Result<()> {
+        let args = vault_withdraw_amount_json(self.nft.id(), fungible_token, U128(amount));
+        let res = self
+            .nft_owner
+            .call(self.vault.id(), VAULT_WITHDRAW_AMOUNT_CALL)
+            .args_json(args)
+            .deposit(1)
+            .max_gas()
+            .transact()
+            .await?;
+        debug!("withdraw amount: {res:#?}");
         Ok(())
     }
 
