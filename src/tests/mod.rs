@@ -7,6 +7,7 @@ mod integration;
 mod view_balance_of;
 mod withdraw;
 mod withdraw_all;
+mod withdraw_all_callback;
 mod withdraw_amount;
 
 // Precompiled smart contracts locations.
