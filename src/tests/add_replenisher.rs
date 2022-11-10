@@ -4,7 +4,7 @@ use super::{environment::Environment, VAULT_REPLENISH_ARGS, VAULT_REPLENISH_CALL
 
 #[tokio::test]
 async fn test_add_replenisher() -> Result<()> {
-    let env = Environment::new().await?;
+    let env = Environment::new(0).await?;
 
     env.vault_add_replenisher().await?;
 

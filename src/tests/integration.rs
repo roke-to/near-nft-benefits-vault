@@ -19,7 +19,7 @@ use crate::{
 
 #[tokio::test]
 pub async fn test_contract() -> Result<()> {
-    let env = Environment::new().await?;
+    let env = Environment::new(0).await?;
 
     for contract_id in env.fungible_tokens.iter().map(Contract::id) {
         env.vault_deposit(contract_id).await?;
@@ -49,7 +49,7 @@ async fn check_vault_state(env: &Environment) -> Result<()> {
 
 #[tokio::test]
 pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
-    let mut env = Environment::new().await?;
+    let mut env = Environment::new(0).await?;
     env.deploy_replenisher().await?;
     env.nft_mint().await?;
     env.nft_transfer().await?;

@@ -5,7 +5,7 @@ use near_sdk::{
 };
 use workspaces::AccountId;
 
-use crate::tests::NFT_TOKEN_ID;
+use crate::tests::{NEAR, NFT_TOKEN_ID};
 
 pub fn nft_metadata_json() -> Value {
     json!({
@@ -119,4 +119,19 @@ pub fn ft_balance_of_bytes(account_id: &AccountId) -> Result<Vec<u8>> {
     }))?;
 
     Ok(args)
+}
+
+pub fn ft_new_json(owner_id: &AccountId, index: usize) -> Value {
+    let name = format!("Token Name #{index}");
+    let symbol = format!("EXLT{index}");
+    json!({
+        "owner_id": owner_id,
+        "total_supply": U128(100 * NEAR),
+        "metadata": {
+            "spec": "ft-1.0.0",
+            "name": name,
+            "symbol": symbol,
+            "decimals": 24
+        }
+    })
 }
