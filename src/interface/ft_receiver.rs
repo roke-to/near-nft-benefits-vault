@@ -2,7 +2,7 @@ use near_contract_standards::fungible_token::receiver::FungibleTokenReceiver;
 use near_sdk::{
     env::{self, panic_str},
     json_types::U128,
-    log, near_bindgen, AccountId, Gas, PromiseOrValue,
+    log, near_bindgen, AccountId, PromiseOrValue,
 };
 
 use crate::{
@@ -13,6 +13,11 @@ use crate::{
 
 #[near_bindgen]
 impl FungibleTokenReceiver for Contract {
+    /// Gas consumption:
+    /// - first TopUp, new vault created: 1.5 TGas
+    /// - second TopUp, existing vault: 1.6 TGas
+    /// - first Transfer, new vault created: 6.4 TGas
+    /// - second Transfer, existing vault: 6.5 TGas
     fn ft_on_transfer(
         &mut self,
         sender_id: AccountId,
@@ -54,15 +59,15 @@ impl FungibleTokenReceiver for Contract {
                     fungible_token,
                     nft_id
                 );
-                let mut vault = self.get_vault_or_create(&nft_id);
-                vault.store(&fungible_token, amount);
-                self.vaults.insert(&nft_id, &vault);
-                Self::ext(env::current_account_id())
-                    .with_static_gas(Gas::ONE_TERA * 10)
-                    .withdraw_amount(nft_contract_id, token_id, fungible_token, U128(amount));
+                self.store(&nft_id, &fungible_token, amount);
+                Self::ext(env::current_account_id()).withdraw_amount(
+                    nft_contract_id,
+                    token_id,
+                    fungible_token,
+                    U128(amount),
+                );
             }
         }
-
         PromiseOrValue::Value(U128(0))
     }
 }

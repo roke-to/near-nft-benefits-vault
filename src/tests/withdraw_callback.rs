@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use crate::tests::environment::Environment;
+use crate::tests::{environment::Environment, NEAR};
 
 #[tokio::test]
 async fn test_withdraw_callback_get_nft_info_failed() -> Result<()> {
@@ -91,14 +91,14 @@ async fn test_withdraw_callback_no_replenishers_ten_assets() -> Result<()> {
     withdraw_callback_with_assets_impl(9).await
 }
 
-#[tokio::test]
-async fn test_withdraw_callback_single_replenisher_single_asset() -> Result<()> {
+async fn withdraw_callback_single_asset_impl(replenishers_count: usize) -> Result<()> {
     let mut env = Environment::new(0).await?;
     env.nft_mint().await?;
     env.nft_transfer().await?;
 
-    env.deploy_replenisher().await?;
-    env.vault_add_replenisher().await?;
+    env.deploy_replenishers(replenishers_count).await?;
+    env.top_up_replenishers(env.fungible_tokens[0].id(), NEAR / 10)
+        .await?;
 
     env.vault_deposit(env.fungible_tokens[0].id()).await?;
 
@@ -110,4 +110,19 @@ async fn test_withdraw_callback_single_replenisher_single_asset() -> Result<()> 
     assert!(res.failures().is_empty(), "should be no failures");
 
     Ok(())
+}
+
+#[tokio::test]
+async fn test_withdraw_callback_single_replenisher_single_asset() -> Result<()> {
+    withdraw_callback_single_asset_impl(1).await
+}
+
+#[tokio::test]
+async fn test_withdraw_callback_two_replenishers_single_asset() -> Result<()> {
+    withdraw_callback_single_asset_impl(2).await
+}
+
+#[tokio::test]
+async fn test_withdraw_callback_ten_replenishers_single_asset() -> Result<()> {
+    withdraw_callback_single_asset_impl(10).await
 }

@@ -12,6 +12,9 @@ impl Contract {
     /// The contract will check caller ownership of the NFT specified by the NFT contract Id and NFT Id.
     /// Then it will try to find the corresponding vault with access via provided contract/id pair.
     /// Exactly 1 yoctoNEAR must be attached.
+    ///
+    /// # Gas consumption
+    /// Without internal XCC: 0.5 TGas - doesn't depend on amount of tokens in the vault.
     #[payable]
     pub fn withdraw_all(&mut self, nft_contract_id: AccountId, nft_id: TokenId) -> Promise {
         let caller = env::predecessor_account_id();
@@ -34,13 +37,16 @@ impl Contract {
     /// Than it will try to find the vault with access via provided contract/id pair.
     /// And it makes `ft_transfer` with all available tokens on the provided `fungible_token`.
     /// Exactly 1 yoctoNEAR must be attached.
+    ///
+    /// # Gas consumption
+    /// Without internal XCC: 11 TGas - doesn't depend on amount of tokens in the vault.
     #[payable]
     pub fn withdraw(
         &mut self,
         nft_contract_id: AccountId,
         nft_id: TokenId,
         fungible_token: AccountId,
-    ) {
+    ) -> Promise {
         let caller = env::predecessor_account_id();
         log!("withdraw called by {}", caller);
 
@@ -50,14 +56,14 @@ impl Contract {
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
         let get_nft_info = nft::ext(nft_id.contract_id().clone())
-            .with_static_gas(Gas::ONE_TERA * 4)
+            // .with_static_gas(Gas::ONE_TERA * 4)
             .nft_token(nft_id.token_id().to_owned());
 
         let withdraw_and_replenish = Self::ext(env::current_account_id())
-            .with_static_gas(Gas::ONE_TERA * 280)
+            // .with_static_gas(Gas::ONE_TERA * 280)
             .withdraw_callback(nft_id, fungible_token, None, true);
 
-        get_nft_info.then(withdraw_and_replenish);
+        get_nft_info.then(withdraw_and_replenish)
     }
 
     /// Public call to withdraw specified `amount` of tokens of a single type of FT from the Vault.
@@ -65,6 +71,9 @@ impl Contract {
     /// Than it will try to find the vault with access via provided contract/id pair.
     /// And it makes `ft_transfer` with specified amount of tokens on the provided `fungible_token`.
     /// Exactly 1 yoctoNEAR must be attached.
+    ///
+    /// # Gas consumption
+    /// Without internal XCC: 10.3 TGas - doesn't depend on amount of tokens in the vault.
     #[payable]
     pub fn withdraw_amount(
         &mut self,
@@ -84,11 +93,11 @@ impl Contract {
         let nft_id = NftId::new(nft_contract_id, nft_id);
 
         let get_nft_info = nft::ext(nft_id.contract_id().clone())
-            .with_static_gas(Gas::ONE_TERA * 4)
+            // .with_static_gas(Gas::ONE_TERA * 4)
             .nft_token(nft_id.token_id().to_owned());
 
         let withdraw_without_replenish = Self::ext(env::current_account_id())
-            .with_static_gas(Gas::ONE_TERA * 210)
+            // .with_static_gas(Gas::ONE_TERA * 210)
             .withdraw_callback(nft_id, fungible_token, Some(amount), false);
 
         get_nft_info.then(withdraw_without_replenish);
@@ -103,6 +112,13 @@ impl Contract {
     /// - there is no NFT with provided id on the NFT contract,
     /// - signer is NOT an NFT owner,
     /// - there is no Vault with access via given [`NftId`].
+    ///
+    /// # Gas consumption
+    /// Without internal XCC:
+    ///     - 0 assets:   3.0 TGas
+    ///     - 1 asset:   11.0 TGas
+    ///     - 2 assets:  14.1 TGas
+    ///     - 10 assets: 56.6 TGas
     #[private]
     pub fn withdraw_all_callback(
         &mut self,
@@ -134,6 +150,17 @@ impl Contract {
     }
 
     /// Callback makes transfer of a single FT type to the signer if all requirements are met.
+    ///
+    /// # Gas consumption
+    /// Without internal XCC:
+    ///     - no replenishers:
+    ///         - 0 assets:  3.0 TGas
+    ///         - 1 asset:   8.7 TGas
+    ///         - 2 assets:  8.8 TGas
+    ///         - 10 assets: 8.8 TGas
+    ///     - 1 replenisher:   11.5 TGas
+    ///     - 2 replenishers:  14.2 TGas
+    ///     - 10 replenishers: 36.1 TGas
     #[private]
     pub fn withdraw_callback(
         &mut self,
@@ -197,7 +224,7 @@ impl Contract {
                     replenisher.callback().to_owned(),
                     replenisher.args().as_bytes().to_vec(),
                     0,
-                    Gas::ONE_TERA * 270,
+                    Gas(1),
                 );
                 promise = Some(if let Some(p) = promise {
                     p.then(replenish)
@@ -206,6 +233,8 @@ impl Contract {
                 });
             }
         }
+        let used_gas = env::used_gas();
+        log!("withdraw callback start gas used: {}", used_gas.0);
     }
 
     /// This method is used to add replenishers for the Vault.
