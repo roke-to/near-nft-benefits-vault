@@ -6,7 +6,7 @@ use crate::tests::{environment::Environment, VAULT_TEST_DEPOSIT};
 // Tests withdrawal of all available tokens in the vault.
 #[tokio::test]
 async fn test_withdraw_all() -> Result<()> {
-    let env = Environment::new(0).await?;
+    let env = Environment::new(2).await?;
     println!("\n<--- test environment initialized --->\n");
 
     env.nft_mint().await?;

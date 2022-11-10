@@ -233,8 +233,6 @@ impl Contract {
                 });
             }
         }
-        let used_gas = env::used_gas();
-        log!("withdraw callback start gas used: {}", used_gas.0);
     }
 
     /// This method is used to add replenishers for the Vault.
@@ -242,6 +240,9 @@ impl Contract {
     /// and will request available benefits from registered replenishers.
     /// This method MUST be called and signed by replenisher himself
     /// because future replenishment requests will be made to the signer account.
+    ///
+    /// # Gas consumption
+    /// 3.6 TGas
     #[payable]
     pub fn add_replenishment_callback(
         &mut self,
@@ -266,6 +267,9 @@ impl Contract {
     /// Callback invokes after each FT transfer call from this contract in withdrawal process.
     /// If transfer was success, internal balance will be reduced by the amount transferred.
     /// Private: can be called only by this contract.
+    ///
+    /// # Gas consumption
+    /// 4.1 TGas
     #[private]
     pub fn adjust_balance(
         &mut self,
@@ -293,5 +297,8 @@ impl Contract {
         } else {
             log!("transfer {} if {} tokens failed", amount, fungible_token);
         }
+
+        let used_gas = env::used_gas();
+        log!("withdraw callback start gas used: {}", used_gas.0);
     }
 }
