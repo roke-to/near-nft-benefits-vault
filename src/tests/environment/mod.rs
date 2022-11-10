@@ -229,7 +229,7 @@ impl Environment {
         Ok(res)
     }
 
-    pub async fn vault_withdraw(&self, fungible_token: &AccountId) -> Result<()> {
+    pub async fn vault_withdraw(&self, fungible_token: &AccountId) -> Result<ExecutionFinalResult> {
         let args = vault_withdraw_json(self.nft.id(), fungible_token);
         let res = self
             .nft_owner
@@ -242,7 +242,7 @@ impl Environment {
         // debug!("withdraw: {}", format_execution_result(&res));
         debug!("withdraw: {res:#?}");
 
-        Ok(())
+        Ok(res)
     }
 
     pub async fn vault_withdraw_amount(
