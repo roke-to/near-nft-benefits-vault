@@ -1,17 +1,19 @@
 use anyhow::Result;
-use futures::{stream::FuturesUnordered, TryStreamExt};
+use futures::{
+    stream::{FuturesOrdered, FuturesUnordered},
+    StreamExt, TryStreamExt,
+};
 use log::{debug, info, warn};
 use near_sdk::{json_types::U128, serde_json::json};
 use tokio::fs::read;
 use workspaces::{network::Sandbox, testnet, Account, AccountId, Contract, Worker};
 
 use crate::tests::{
+    environment::{args::ft_new_json, format_helpers::format_execution_result},
     FT_STORAGE_DEPOSIT, FT_STORAGE_DEPOSIT_CALL, FT_TRANSFER_CALL, FUNGIBLE_TOKEN_WASM, NEAR,
     NFT_NEW_DEFAULT_META_CALL, NFT_WASM, WASMS_LOCATION, WRAP_NEAR_DEPOSIT, WRAP_NEAR_DEPOSIT_CALL,
     WRAP_NEAR_TESTNET_ACCOUNT_ID, WRAP_NEAR_WASM,
 };
-
-use super::format_helpers::format_execution_result;
 
 pub fn init_logger() {
     if let Err(e) = env_logger::Builder::new()
@@ -25,15 +27,24 @@ pub fn init_logger() {
     }
 }
 
-pub async fn prepare_fungible_tokens(sandbox: Worker<Sandbox>) -> Result<Vec<Contract>> {
+pub async fn prepare_fungible_tokens(
+    sandbox: Worker<Sandbox>,
+    custom_ft_count: usize,
+) -> Result<Vec<Contract>> {
     let wrap_near = tokio::spawn(prepare_wrap_near_contract(sandbox.clone()));
-    let custom_ft = tokio::spawn(prepare_custom_ft(sandbox.clone()));
+    let mut handles = FuturesOrdered::new();
+    handles.push_back(wrap_near);
+    for i in 0..custom_ft_count {
+        let custom_ft = tokio::spawn(prepare_custom_ft(sandbox.clone(), i));
+        handles.push_back(custom_ft);
+    }
 
-    let wrap_near = wrap_near.await??;
-    let custom_ft = custom_ft.await??;
-    info!("wrap NEAR token account ready on: {}\n", wrap_near.id());
-    info!("custom fungible token ready on: {}\n", custom_ft.id());
-    Ok(vec![wrap_near, custom_ft])
+    let res: Vec<_> = handles.map(|h| h.unwrap()).try_collect().await?;
+    info!("wrap NEAR token account ready on: {}\n", res[0].id());
+    for contract in res.iter().skip(1) {
+        info!("custom fungible token ready on: {}\n", contract.id());
+    }
+    Ok(res)
 }
 
 /// Prepares w-near contract for the Sandbox. Either imports it from testnet or uses local wasm binary.
@@ -64,21 +75,12 @@ async fn prepare_wrap_near_contract(sandbox: Worker<Sandbox>) -> Result<Contract
 }
 
 /// Prepares custom fungible token contract from NEAR examples.
-async fn prepare_custom_ft(sandbox: Worker<Sandbox>) -> Result<Contract> {
+async fn prepare_custom_ft(sandbox: Worker<Sandbox>, index: usize) -> Result<Contract> {
     let path = format!("{WASMS_LOCATION}/{FUNGIBLE_TOKEN_WASM}");
     let wasm = read(path).await?;
     let contract = sandbox.dev_deploy(&wasm).await?;
 
-    let args = json!({
-        "owner_id": contract.id(),
-        "total_supply": U128(100 * NEAR),
-        "metadata": {
-            "spec": "ft-1.0.0",
-            "name": "Example Token Name",
-            "symbol": "EXLT",
-            "decimals": 24
-        }
-    });
+    let args = ft_new_json(contract.id(), index);
 
     let res = contract.call("new").args_json(args).transact().await?;
     debug!(

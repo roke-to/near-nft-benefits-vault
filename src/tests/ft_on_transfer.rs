@@ -14,7 +14,7 @@ use crate::{
 
 #[tokio::test]
 async fn test_ft_on_transfer_invalid_msg() -> Result<()> {
-    let env = Environment::new().await?;
+    let env = Environment::new(0).await?;
 
     let token_contract_id = env.fungible_tokens[0].id();
 
@@ -44,7 +44,7 @@ async fn test_ft_on_transfer_invalid_msg() -> Result<()> {
 
 #[tokio::test]
 async fn test_ft_on_transfer_request_top_up_new_vault() -> Result<()> {
-    let env = Environment::new().await?;
+    let env = Environment::new(0).await?;
 
     let token_contract_id = env.fungible_tokens[0].id();
     env.vault_deposit(token_contract_id).await?;
@@ -69,7 +69,7 @@ async fn test_ft_on_transfer_request_top_up_new_vault() -> Result<()> {
 
 #[tokio::test]
 async fn test_ft_on_transfer_request_top_up_existing_vault() -> Result<()> {
-    let env = Environment::new().await?;
+    let env = Environment::new(0).await?;
 
     let token_contract_id = env.fungible_tokens[0].id();
     env.vault_deposit(token_contract_id).await?;
@@ -97,7 +97,7 @@ async fn test_ft_on_transfer_request_top_up_existing_vault() -> Result<()> {
 
 #[tokio::test]
 async fn test_ft_on_transfer_request_transfer_new_vault() -> Result<()> {
-    let env = Environment::new().await?;
+    let env = Environment::new(0).await?;
 
     env.nft_mint().await?;
     env.nft_transfer().await?;
@@ -151,7 +151,7 @@ async fn test_ft_on_transfer_request_transfer_new_vault() -> Result<()> {
 
 #[tokio::test]
 async fn test_ft_on_transfer_request_transfer_existing_vault() -> Result<()> {
-    let env = Environment::new().await?;
+    let env = Environment::new(0).await?;
 
     env.nft_mint().await?;
     env.nft_transfer().await?;

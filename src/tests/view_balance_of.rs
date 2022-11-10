@@ -9,7 +9,7 @@ use super::environment::Environment;
 #[tokio::test]
 pub async fn test_view_balance_of_method() -> Result<()> {
     // Initialize test environment.
-    let env = Environment::new().await?;
+    let env = Environment::new(0).await?;
 
     // Issue NFT that will be used as the key to the vault.
     env.nft_mint().await?;

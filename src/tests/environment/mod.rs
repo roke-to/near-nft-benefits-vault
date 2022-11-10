@@ -59,12 +59,12 @@ pub struct Environment {
 }
 
 impl Environment {
-    pub async fn new() -> Result<Self> {
+    pub async fn new(custom_ft_count: usize) -> Result<Self> {
         init_logger();
         let sandbox = sandbox().await?;
         info!("sandbox initialized");
 
-        let fungible_tokens = prepare_fungible_tokens(sandbox.clone()).await?;
+        let fungible_tokens = prepare_fungible_tokens(sandbox.clone(), custom_ft_count).await?;
 
         let issuer = tokio::spawn(prepare_issuer_account(
             sandbox.clone(),

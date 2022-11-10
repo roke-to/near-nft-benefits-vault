@@ -5,7 +5,7 @@ use crate::tests::{environment::Environment, VAULT_TEST_DEPOSIT};
 
 #[tokio::test]
 async fn test_withdraw_single_ft() -> Result<()> {
-    let env = Environment::new().await?;
+    let env = Environment::new(0).await?;
     println!("\n<--- test environment initialized --->\n");
 
     env.nft_mint().await?;
