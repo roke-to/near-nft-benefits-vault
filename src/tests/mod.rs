@@ -9,6 +9,7 @@ mod withdraw;
 mod withdraw_all;
 mod withdraw_all_callback;
 mod withdraw_amount;
+mod withdraw_callback;
 
 // Precompiled smart contracts locations.
 const WASMS_LOCATION: &str = "dist";

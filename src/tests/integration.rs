@@ -102,7 +102,9 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
     );
     assert!(vault_balance.tokens.is_empty(), "vault should be empty");
 
-    env.vault_withdraw(env.fungible_tokens[0].id()).await?;
+    env.vault_withdraw(env.fungible_tokens[0].id())
+        .await?
+        .into_result()?;
 
     let (token_after, balance_after) =
         Environment::ft_balance_of(env.nft_owner.id().clone(), env.fungible_tokens[0].clone())

@@ -23,7 +23,9 @@ async fn test_withdraw_single_ft() -> Result<()> {
     }
     println!("\n<--- deposited to vault --->\n");
 
-    env.vault_withdraw(env.fungible_tokens[1].id()).await?;
+    env.vault_withdraw(env.fungible_tokens[1].id())
+        .await?
+        .into_result()?;
     println!("\n<--- gathered all benefits --->\n");
 
     let nft_owner_final_balances = env.all_ft_balances_of(env.nft_owner.id()).await?;
