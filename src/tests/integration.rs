@@ -50,7 +50,7 @@ async fn check_vault_state(env: &Environment) -> Result<()> {
 #[tokio::test]
 pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
     let mut env = Environment::new(0).await?;
-    env.deploy_replenisher().await?;
+    env.deploy_replenishers(1).await?;
     env.nft_mint().await?;
     env.nft_transfer().await?;
 
@@ -70,7 +70,7 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
 
     env.ft_transfer_call(
         &env.issuer,
-        env.replenisher.as_ref().unwrap().id(),
+        env.replenishers[0].id(),
         env.fungible_tokens[0].id(),
         amount,
         &msg,
@@ -80,9 +80,7 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
 
     let replenishers = env.vault_view_replenishers().await?.unwrap();
     assert!(replenishers.len() == 1);
-    assert!(
-        replenishers[0].contract_id().as_str() == env.replenisher.as_ref().unwrap().id().as_str()
-    );
+    assert!(replenishers[0].contract_id().as_str() == env.replenishers[0].id().as_str());
 
     let (token_before, balance_before) =
         Environment::ft_balance_of(env.nft_owner.id().clone(), env.fungible_tokens[0].clone())

@@ -2,12 +2,15 @@ pub mod args;
 pub mod format_helpers;
 pub mod setup;
 
-use anyhow::{Context, Result};
-use futures::{stream::FuturesUnordered, TryStreamExt};
+use anyhow::{Context, Error, Result};
+use futures::{
+    stream::{FuturesOrdered, FuturesUnordered},
+    TryStreamExt,
+};
 use log::{debug, info};
 use near_sdk::{
     json_types::U128,
-    serde_json::{json, to_vec},
+    serde_json::{json, to_string, to_vec},
 };
 use std::{collections::HashMap, str::FromStr};
 use tokio::fs::read;
@@ -20,9 +23,11 @@ use crate::{
     tests::{
         environment::{
             args::{
-                ft_balance_of_bytes, ft_transfer_call_json, nft_metadata_json, nft_mint_json,
-                nft_transfer_json, vault_balance_of_bytes, vault_view_bytes,
-                vault_withdraw_all_json, vault_withdraw_amount_json, vault_withdraw_json,
+                add_replenishment_callback_str, ft_balance_of_bytes, ft_transfer_call_json,
+                nft_metadata_json, nft_mint_json, nft_transfer_json,
+                replenisher_ft_on_transfer_request_str, replenisher_withdraw_str,
+                vault_balance_of_bytes, vault_view_bytes, vault_withdraw_all_json,
+                vault_withdraw_amount_json, vault_withdraw_json,
             },
             format_helpers::format_execution_result,
             setup::{
@@ -55,7 +60,7 @@ pub struct Environment {
     pub vault: Contract,
     /// A simple NFT contract.
     pub nft: Contract,
-    pub replenisher: Option<Contract>,
+    pub replenishers: Vec<Contract>,
 }
 
 impl Environment {
@@ -96,27 +101,59 @@ impl Environment {
             nft_owner,
             vault,
             nft,
-            replenisher: None,
+            replenishers: Vec::new(),
         })
     }
 
-    pub async fn deploy_replenisher(&mut self) -> Result<()> {
+    pub async fn deploy_replenishers(&mut self, count: usize) -> Result<()> {
         let path = format!("{WASMS_LOCATION}/{VAULT_TEST_REPLENISHER_WASM}");
         let wasm = read(path).await?;
-        let contract = self.sandbox.dev_deploy(&wasm).await?;
-        info!("replenisher deployed at: {}", contract.id());
 
-        let res = contract.call("new").transact().await?;
-        debug!(
-            "\nVault test replenisher contract initialization outcome: {}\n",
-            format_execution_result(&res)
-        );
+        let mut contracts = FuturesOrdered::new();
 
-        let tokens = self.fungible_tokens.iter().map(|ft| ft.id());
-        register_account(contract.as_account(), tokens).await?;
-        debug!("replenisher account registered in all tokens");
+        for i in 0..count {
+            let sandbox = self.sandbox.clone();
+            let tokens: Vec<_> = self
+                .fungible_tokens
+                .iter()
+                .map(|ft| ft.id().clone())
+                .collect();
+            let code = wasm.clone();
+            contracts.push_back(async move {
+                let contract = sandbox.dev_deploy(&code).await?;
+                info!("replenisher #{i} deployed at: {}", contract.id());
+                let res = contract.call("new").transact().await?;
+                debug!(
+                    "\nVault test replenisher contract initialization outcome: {}\n",
+                    format_execution_result(&res)
+                );
+                register_account(contract.as_account(), tokens.iter()).await?;
+                debug!("replenisher account registered in all tokens");
 
-        self.replenisher = Some(contract);
+                Ok::<Contract, Error>(contract)
+            });
+        }
+        self.replenishers = contracts.try_collect().await?;
+
+        Ok(())
+    }
+
+    pub async fn top_up_replenishers(&self, token: &AccountId, amount: u128) -> Result<()> {
+        let req = Request::transfer(NFT_TOKEN_ID.to_owned(), self.nft.id().as_str().parse()?);
+        let transfer_req = to_string(&req)?;
+
+        let args = replenisher_withdraw_str(&transfer_req)?;
+
+        let args = add_replenishment_callback_str(self.nft.id(), &args)?;
+
+        let msg = replenisher_ft_on_transfer_request_str(self.vault.id(), &args)?;
+
+        for replenisher in self.replenishers.iter().map(|r| r.id()) {
+            self.ft_transfer_call(&self.issuer, replenisher, token, amount, &msg)
+                .await?
+                .into_result()?;
+        }
+
         Ok(())
     }
 
@@ -285,7 +322,7 @@ impl Environment {
         calls.try_collect().await
     }
 
-    pub async fn vault_add_replenisher(&self) -> Result<()> {
+    pub async fn vault_add_test_replenisher(&self) -> Result<()> {
         let args = json!({
             "nft_contract_id": self.nft.id(),
             "nft_id": NFT_TOKEN_ID,

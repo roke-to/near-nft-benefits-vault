@@ -48,14 +48,17 @@ pub fn replenisher_withdraw_str(msg: &str) -> Result<String> {
 }
 
 pub fn add_replenishment_callback_str(nft_contract_id: &AccountId, args: &str) -> Result<String> {
-    let args = to_string(&json!({
+    let args = to_string(&add_replenishment_callback_json(nft_contract_id, args))?;
+    Ok(args)
+}
+
+pub fn add_replenishment_callback_json(nft_contract_id: &AccountId, args: &str) -> Value {
+    json!({
         "nft_contract_id": nft_contract_id,
         "nft_id": NFT_TOKEN_ID,
         "callback": "withdraw_call",
         "args": args,
-    }))?;
-
-    Ok(args)
+    })
 }
 
 pub fn replenisher_ft_on_transfer_request_str(vault: &AccountId, args: &str) -> Result<String> {
