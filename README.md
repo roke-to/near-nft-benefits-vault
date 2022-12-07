@@ -55,7 +55,17 @@ near call $CONTRACT_ID new '' --accountId $CONTRACT_ID
 To top up balance in vault you need to make `ft_transfer_call` with specific msg:
 ```sh
 near call $TOKEN_ID ft_transfer_call \
-`{"receiver_id": "<receiver-contract>", "amount": "<amount>", "msg": "{\"nft_id\":\"awesome_test_pic_666\",\"nft_contract_id\":\"dev-20221207113253-32677407921596\",\"kind\":\"TopUp\"}"}`
+'{"receiver_id": "<receiver-contract>", "amount": "<amount>", "msg": "{\"nft_id\":\"awesome_test_pic_666\",\"nft_contract_id\":\"dev-20221207113253-32677407921596\",\"kind\":\"TopUp\"}"}' \
+--accountId $ACCOUNT_ID
+--deposit 1
+```
+
+To withdraw FTs from the Vault NFT owner should make a call:
+```sh
+near call $CONTRACT_ID withdraw \
+'{"nft_contract_id": "<nft-contract>", "nft_id": "<token-id>", "fungible-token": "<ft-contract-id>"}' \
+--accountId $ACCOUNT_ID
+--deposit 1
 ```
 
 ## Standard deploy
