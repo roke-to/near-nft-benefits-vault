@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/collections/unordered_set.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>unordered_set.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/collections/unordered_set.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>unordered_set.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -428,435 +428,435 @@
 <span id="428">428</span>
 <span id="429">429</span>
 <span id="430">430</span>
-</pre><pre class="rust"><code><span class="doccomment">//! A set implemented on a trie. Unlike `std::collections::HashSet` the elements in this set are not</span>
-<span class="doccomment">//! hashed but are instead serialized.</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collections</span>::{<span class="ident">append</span>, <span class="ident">append_slice</span>, <span class="ident">Vector</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">env</span>, <span class="ident">IntoStorageKey</span>};
-<span class="kw">use</span> <span class="ident">borsh</span>::{<span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>};
-<span class="kw">use</span> <span class="ident">std::mem::size_of</span>;
+</pre><pre class="rust"><code><span class="doccomment">//! A set implemented on a trie. Unlike `std::collections::HashSet` the elements in this set are not
+//! hashed but are instead serialized.
+</span><span class="kw">use </span><span class="kw">crate</span>::collections::{append, append_slice, Vector};
+<span class="kw">use crate</span>::{env, IntoStorageKey};
+<span class="kw">use </span>borsh::{BorshDeserialize, BorshSerialize};
+<span class="kw">use </span>std::mem::size_of;
 
-<span class="kw">const</span> <span class="ident">ERR_INCONSISTENT_STATE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;The collection is an inconsistent state. Did previous smart contract execution terminate unexpectedly?&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_ELEMENT_SERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot serialize element with Borsh&quot;</span>;
+<span class="kw">const </span>ERR_INCONSISTENT_STATE: <span class="kw-2">&amp;</span>str = <span class="string">&quot;The collection is an inconsistent state. Did previous smart contract execution terminate unexpectedly?&quot;</span>;
+<span class="kw">const </span>ERR_ELEMENT_SERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot serialize element with Borsh&quot;</span>;
 
-<span class="doccomment">/// An iterable implementation of a set that stores its content directly on the trie.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">BorshSerialize</span>, <span class="ident">BorshDeserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">UnorderedSet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">element_index_prefix</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="ident">elements</span>: <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+<span class="doccomment">/// An iterable implementation of a set that stores its content directly on the trie.
+</span><span class="attribute">#[derive(BorshSerialize, BorshDeserialize)]
+</span><span class="kw">pub struct </span>UnorderedSet&lt;T&gt; {
+    element_index_prefix: Vec&lt;u8&gt;,
+    elements: Vector&lt;T&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">UnorderedSet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Returns the number of elements in the set, also referred to as its size.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedSet;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);</span>
-    <span class="doccomment">/// assert_eq!(set.len(), 0);</span>
-    <span class="doccomment">/// set.insert(&amp;1);</span>
-    <span class="doccomment">/// set.insert(&amp;2);</span>
-    <span class="doccomment">/// assert_eq!(set.len(), 2);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
-        <span class="self">self</span>.<span class="ident">elements</span>.<span class="ident">len</span>()
+<span class="kw">impl</span>&lt;T&gt; UnorderedSet&lt;T&gt; {
+    <span class="doccomment">/// Returns the number of elements in the set, also referred to as its size.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedSet;
+    ///
+    /// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);
+    /// assert_eq!(set.len(), 0);
+    /// set.insert(&amp;1);
+    /// set.insert(&amp;2);
+    /// assert_eq!(set.len(), 2);
+    /// ```
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
+        <span class="self">self</span>.elements.len()
     }
 
-    <span class="doccomment">/// Returns `true` if the set contains no elements.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">elements</span>.<span class="ident">is_empty</span>()
+    <span class="doccomment">/// Returns `true` if the set contains no elements.
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.elements.is_empty()
     }
 
-    <span class="doccomment">/// Create new map with zero elements. Use `id` as a unique identifier.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedSet;</span>
-    <span class="doccomment">/// let mut set: UnorderedSet&lt;u32&gt; = UnorderedSet::new(b&quot;s&quot;);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">prefix</span>: <span class="ident">S</span>) -&gt; <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">IntoStorageKey</span>,
+    <span class="doccomment">/// Create new map with zero elements. Use `id` as a unique identifier.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedSet;
+    /// let mut set: UnorderedSet&lt;u32&gt; = UnorderedSet::new(b&quot;s&quot;);
+    /// ```
+    </span><span class="kw">pub fn </span>new&lt;S&gt;(prefix: S) -&gt; <span class="self">Self
+    </span><span class="kw">where
+        </span>S: IntoStorageKey,
     {
-        <span class="kw">let</span> <span class="ident">prefix</span> <span class="op">=</span> <span class="ident">prefix</span>.<span class="ident">into_storage_key</span>();
-        <span class="kw">let</span> <span class="ident">element_index_prefix</span> <span class="op">=</span> <span class="ident">append</span>(<span class="kw-2">&amp;</span><span class="ident">prefix</span>, <span class="string">b&#39;i&#39;</span>);
-        <span class="kw">let</span> <span class="ident">elements_prefix</span> <span class="op">=</span> <span class="ident">append</span>(<span class="kw-2">&amp;</span><span class="ident">prefix</span>, <span class="string">b&#39;e&#39;</span>);
+        <span class="kw">let </span>prefix = prefix.into_storage_key();
+        <span class="kw">let </span>element_index_prefix = append(<span class="kw-2">&amp;</span>prefix, <span class="string">b&#39;i&#39;</span>);
+        <span class="kw">let </span>elements_prefix = append(<span class="kw-2">&amp;</span>prefix, <span class="string">b&#39;e&#39;</span>);
 
-        <span class="self">Self</span> { <span class="ident">element_index_prefix</span>, <span class="ident">elements</span>: <span class="ident">Vector::new</span>(<span class="ident">elements_prefix</span>) }
+        <span class="self">Self </span>{ element_index_prefix, elements: Vector::new(elements_prefix) }
     }
 
-    <span class="kw">fn</span> <span class="ident">serialize_index</span>(<span class="ident">index</span>: <span class="ident">u64</span>) -&gt; [<span class="ident">u8</span>; <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>()] {
-        <span class="ident">index</span>.<span class="ident">to_le_bytes</span>()
+    <span class="kw">fn </span>serialize_index(index: u64) -&gt; [u8; size_of::&lt;u64&gt;()] {
+        index.to_le_bytes()
     }
 
-    <span class="kw">fn</span> <span class="ident">deserialize_index</span>(<span class="ident">raw_index</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">u64</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="number">0u8</span>; <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>()];
-        <span class="ident">result</span>.<span class="ident">copy_from_slice</span>(<span class="ident">raw_index</span>);
-        <span class="ident">u64::from_le_bytes</span>(<span class="ident">result</span>)
+    <span class="kw">fn </span>deserialize_index(raw_index: <span class="kw-2">&amp;</span>[u8]) -&gt; u64 {
+        <span class="kw">let </span><span class="kw-2">mut </span>result = [<span class="number">0u8</span>; size_of::&lt;u64&gt;()];
+        result.copy_from_slice(raw_index);
+        u64::from_le_bytes(result)
     }
 
-    <span class="kw">fn</span> <span class="ident">raw_element_to_index_lookup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">element_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="ident">append_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">element_index_prefix</span>, <span class="ident">element_raw</span>)
+    <span class="kw">fn </span>raw_element_to_index_lookup(<span class="kw-2">&amp;</span><span class="self">self</span>, element_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; Vec&lt;u8&gt; {
+        append_slice(<span class="kw-2">&amp;</span><span class="self">self</span>.element_index_prefix, element_raw)
     }
 
-    <span class="doccomment">/// Returns true if the set contains a serialized element.</span>
-    <span class="kw">fn</span> <span class="ident">contains_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">element_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> {
-        <span class="kw">let</span> <span class="ident">index_lookup</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_element_to_index_lookup</span>(<span class="ident">element_raw</span>);
-        <span class="ident">env::storage_has_key</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>)
+    <span class="doccomment">/// Returns true if the set contains a serialized element.
+    </span><span class="kw">fn </span>contains_raw(<span class="kw-2">&amp;</span><span class="self">self</span>, element_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; bool {
+        <span class="kw">let </span>index_lookup = <span class="self">self</span>.raw_element_to_index_lookup(element_raw);
+        env::storage_has_key(<span class="kw-2">&amp;</span>index_lookup)
     }
 
-    <span class="doccomment">/// Adds a value to the set.</span>
-    <span class="doccomment">/// If the set did not have this value present, `true` is returned.</span>
-    <span class="doccomment">/// If the set did have this value present, `false` is returned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">element_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> {
-        <span class="kw">let</span> <span class="ident">index_lookup</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_element_to_index_lookup</span>(<span class="ident">element_raw</span>);
-        <span class="kw">match</span> <span class="ident">env::storage_read</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">_index_raw</span>) =&gt; <span class="bool-val">false</span>,
-            <span class="prelude-val">None</span> =&gt; {
-                <span class="comment">// The element does not exist yet.</span>
-                <span class="kw">let</span> <span class="ident">next_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">len</span>();
-                <span class="kw">let</span> <span class="ident">next_index_raw</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::serialize_index</span>(<span class="ident">next_index</span>);
-                <span class="ident">env::storage_write</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>, <span class="kw-2">&amp;</span><span class="ident">next_index_raw</span>);
-                <span class="self">self</span>.<span class="ident">elements</span>.<span class="ident">push_raw</span>(<span class="ident">element_raw</span>);
-                <span class="bool-val">true</span>
-            }
+    <span class="doccomment">/// Adds a value to the set.
+    /// If the set did not have this value present, `true` is returned.
+    /// If the set did have this value present, `false` is returned.
+    </span><span class="kw">pub fn </span>insert_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, element_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; bool {
+        <span class="kw">let </span>index_lookup = <span class="self">self</span>.raw_element_to_index_lookup(element_raw);
+        <span class="kw">match </span>env::storage_read(<span class="kw-2">&amp;</span>index_lookup) {
+            <span class="prelude-val">Some</span>(_index_raw) =&gt; <span class="bool-val">false</span>,
+            <span class="prelude-val">None </span>=&gt; {
+                <span class="comment">// The element does not exist yet.
+                </span><span class="kw">let </span>next_index = <span class="self">self</span>.len();
+                <span class="kw">let </span>next_index_raw = <span class="self">Self</span>::serialize_index(next_index);
+                env::storage_write(<span class="kw-2">&amp;</span>index_lookup, <span class="kw-2">&amp;</span>next_index_raw);
+                <span class="self">self</span>.elements.push_raw(element_raw);
+                <span class="bool-val">true
+            </span>}
         }
     }
 
-    <span class="doccomment">/// Removes a value from the set. Returns whether the value was present in the set.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">element_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> {
-        <span class="kw">let</span> <span class="ident">index_lookup</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_element_to_index_lookup</span>(<span class="ident">element_raw</span>);
-        <span class="kw">match</span> <span class="ident">env::storage_read</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">index_raw</span>) =&gt; {
-                <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::branches_sharing_code</span>)]</span>
-                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> {
-                    <span class="comment">// If there is only one element then swap remove simply removes it without</span>
-                    <span class="comment">// swapping with the last element.</span>
-                    <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>);
-                } <span class="kw">else</span> {
-                    <span class="comment">// If there is more than one element then swap remove swaps it with the last</span>
-                    <span class="comment">// element.</span>
-                    <span class="kw">let</span> <span class="ident">last_element_raw</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">elements</span>.<span class="ident">get_raw</span>(<span class="self">self</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>) {
-                        <span class="prelude-val">Some</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-                        <span class="prelude-val">None</span> =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_INCONSISTENT_STATE</span>),
+    <span class="doccomment">/// Removes a value from the set. Returns whether the value was present in the set.
+    </span><span class="kw">pub fn </span>remove_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, element_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; bool {
+        <span class="kw">let </span>index_lookup = <span class="self">self</span>.raw_element_to_index_lookup(element_raw);
+        <span class="kw">match </span>env::storage_read(<span class="kw-2">&amp;</span>index_lookup) {
+            <span class="prelude-val">Some</span>(index_raw) =&gt; {
+                <span class="attribute">#[allow(clippy::branches_sharing_code)]
+                </span><span class="kw">if </span><span class="self">self</span>.len() == <span class="number">1 </span>{
+                    <span class="comment">// If there is only one element then swap remove simply removes it without
+                    // swapping with the last element.
+                    </span>env::storage_remove(<span class="kw-2">&amp;</span>index_lookup);
+                } <span class="kw">else </span>{
+                    <span class="comment">// If there is more than one element then swap remove swaps it with the last
+                    // element.
+                    </span><span class="kw">let </span>last_element_raw = <span class="kw">match </span><span class="self">self</span>.elements.get_raw(<span class="self">self</span>.len() - <span class="number">1</span>) {
+                        <span class="prelude-val">Some</span>(x) =&gt; x,
+                        <span class="prelude-val">None </span>=&gt; env::panic_str(ERR_INCONSISTENT_STATE),
                     };
-                    <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>);
-                    <span class="comment">// If the removed element was the last element from keys, then we don&#39;t need to</span>
-                    <span class="comment">// reinsert the lookup back.</span>
-                    <span class="kw">if</span> <span class="ident">last_element_raw</span> <span class="op">!</span><span class="op">=</span> <span class="ident">element_raw</span> {
-                        <span class="kw">let</span> <span class="ident">last_lookup_element</span> <span class="op">=</span>
-                            <span class="self">self</span>.<span class="ident">raw_element_to_index_lookup</span>(<span class="kw-2">&amp;</span><span class="ident">last_element_raw</span>);
-                        <span class="ident">env::storage_write</span>(<span class="kw-2">&amp;</span><span class="ident">last_lookup_element</span>, <span class="kw-2">&amp;</span><span class="ident">index_raw</span>);
+                    env::storage_remove(<span class="kw-2">&amp;</span>index_lookup);
+                    <span class="comment">// If the removed element was the last element from keys, then we don&#39;t need to
+                    // reinsert the lookup back.
+                    </span><span class="kw">if </span>last_element_raw != element_raw {
+                        <span class="kw">let </span>last_lookup_element =
+                            <span class="self">self</span>.raw_element_to_index_lookup(<span class="kw-2">&amp;</span>last_element_raw);
+                        env::storage_write(<span class="kw-2">&amp;</span>last_lookup_element, <span class="kw-2">&amp;</span>index_raw);
                     }
                 }
-                <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::deserialize_index</span>(<span class="kw-2">&amp;</span><span class="ident">index_raw</span>);
-                <span class="self">self</span>.<span class="ident">elements</span>.<span class="ident">swap_remove_raw</span>(<span class="ident">index</span>);
-                <span class="bool-val">true</span>
-            }
-            <span class="prelude-val">None</span> =&gt; <span class="bool-val">false</span>,
+                <span class="kw">let </span>index = <span class="self">Self</span>::deserialize_index(<span class="kw-2">&amp;</span>index_raw);
+                <span class="self">self</span>.elements.swap_remove_raw(index);
+                <span class="bool-val">true
+            </span>}
+            <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">UnorderedSet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;T&gt; UnorderedSet&lt;T&gt;
+<span class="kw">where
+    </span>T: BorshSerialize + BorshDeserialize,
 {
-    <span class="kw">fn</span> <span class="ident">serialize_element</span>(<span class="ident">element</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">element</span>.<span class="ident">try_to_vec</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_ELEMENT_SERIALIZATION</span>),
+    <span class="kw">fn </span>serialize_element(element: <span class="kw-2">&amp;</span>T) -&gt; Vec&lt;u8&gt; {
+        <span class="kw">match </span>element.try_to_vec() {
+            <span class="prelude-val">Ok</span>(x) =&gt; x,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; env::panic_str(ERR_ELEMENT_SERIALIZATION),
         }
     }
 
-    <span class="doccomment">/// Returns true if the set contains an element.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedSet;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);</span>
-    <span class="doccomment">/// assert_eq!(set.contains(&amp;1), false);</span>
-    <span class="doccomment">/// set.insert(&amp;1);</span>
-    <span class="doccomment">/// assert_eq!(set.contains(&amp;1), true);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">element</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">contains_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_element</span>(<span class="ident">element</span>))
+    <span class="doccomment">/// Returns true if the set contains an element.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedSet;
+    ///
+    /// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);
+    /// assert_eq!(set.contains(&amp;1), false);
+    /// set.insert(&amp;1);
+    /// assert_eq!(set.contains(&amp;1), true);
+    /// ```
+    </span><span class="kw">pub fn </span>contains(<span class="kw-2">&amp;</span><span class="self">self</span>, element: <span class="kw-2">&amp;</span>T) -&gt; bool {
+        <span class="self">self</span>.contains_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_element(element))
     }
 
-    <span class="doccomment">/// Removes a value from the set. Returns whether the value was present in the set.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedSet;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);</span>
-    <span class="doccomment">/// assert_eq!(set.remove(&amp;1), false);</span>
-    <span class="doccomment">/// set.insert(&amp;1);</span>
-    <span class="doccomment">/// assert_eq!(set.remove(&amp;1), true);</span>
-    <span class="doccomment">/// assert_eq!(set.contains(&amp;1), false);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">element</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">remove_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_element</span>(<span class="ident">element</span>))
+    <span class="doccomment">/// Removes a value from the set. Returns whether the value was present in the set.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedSet;
+    ///
+    /// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);
+    /// assert_eq!(set.remove(&amp;1), false);
+    /// set.insert(&amp;1);
+    /// assert_eq!(set.remove(&amp;1), true);
+    /// assert_eq!(set.contains(&amp;1), false);
+    /// ```
+    </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, element: <span class="kw-2">&amp;</span>T) -&gt; bool {
+        <span class="self">self</span>.remove_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_element(element))
     }
 
-    <span class="doccomment">/// Adds a value to the set.</span>
-    <span class="doccomment">/// If the set did not have this value present, `true` is returned.</span>
-    <span class="doccomment">/// If the set did have this value present, `false` is returned.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedSet;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);</span>
-    <span class="doccomment">/// assert_eq!(set.insert(&amp;1), true);</span>
-    <span class="doccomment">/// assert_eq!(set.insert(&amp;1), false);</span>
-    <span class="doccomment">/// assert_eq!(set.contains(&amp;1), true);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">element</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">insert_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_element</span>(<span class="ident">element</span>))
+    <span class="doccomment">/// Adds a value to the set.
+    /// If the set did not have this value present, `true` is returned.
+    /// If the set did have this value present, `false` is returned.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedSet;
+    ///
+    /// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);
+    /// assert_eq!(set.insert(&amp;1), true);
+    /// assert_eq!(set.insert(&amp;1), false);
+    /// assert_eq!(set.contains(&amp;1), true);
+    /// ```
+    </span><span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, element: <span class="kw-2">&amp;</span>T) -&gt; bool {
+        <span class="self">self</span>.insert_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_element(element))
     }
 
-    <span class="doccomment">/// Clears the map, removing all elements.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedSet;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);</span>
-    <span class="doccomment">/// set.insert(&amp;1);</span>
-    <span class="doccomment">/// set.insert(&amp;2);</span>
-    <span class="doccomment">/// set.clear();</span>
-    <span class="doccomment">/// assert_eq!(set.len(), 0);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">for</span> <span class="ident">raw_element</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">elements</span>.<span class="ident">iter_raw</span>() {
-            <span class="kw">let</span> <span class="ident">index_lookup</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_element_to_index_lookup</span>(<span class="kw-2">&amp;</span><span class="ident">raw_element</span>);
-            <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>);
+    <span class="doccomment">/// Clears the map, removing all elements.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedSet;
+    ///
+    /// let mut set: UnorderedSet&lt;u8&gt; = UnorderedSet::new(b&quot;s&quot;);
+    /// set.insert(&amp;1);
+    /// set.insert(&amp;2);
+    /// set.clear();
+    /// assert_eq!(set.len(), 0);
+    /// ```
+    </span><span class="kw">pub fn </span>clear(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">for </span>raw_element <span class="kw">in </span><span class="self">self</span>.elements.iter_raw() {
+            <span class="kw">let </span>index_lookup = <span class="self">self</span>.raw_element_to_index_lookup(<span class="kw-2">&amp;</span>raw_element);
+            env::storage_remove(<span class="kw-2">&amp;</span>index_lookup);
         }
-        <span class="self">self</span>.<span class="ident">elements</span>.<span class="ident">clear</span>();
+        <span class="self">self</span>.elements.clear();
     }
 
-    <span class="doccomment">/// Copies elements into an `std::vec::Vec`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_vec</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">std::vec::Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">iter</span>().<span class="ident">collect</span>()
+    <span class="doccomment">/// Copies elements into an `std::vec::Vec`.
+    </span><span class="kw">pub fn </span>to_vec(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::vec::Vec&lt;T&gt; {
+        <span class="self">self</span>.iter().collect()
     }
 
-    <span class="doccomment">/// Iterate over deserialized elements.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
-        <span class="self">self</span>.<span class="ident">elements</span>.<span class="ident">iter</span>()
+    <span class="doccomment">/// Iterate over deserialized elements.
+    </span><span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = T&gt; + <span class="lifetime">&#39;_ </span>{
+        <span class="self">self</span>.elements.iter()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extend</span><span class="op">&lt;</span><span class="ident">IT</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">iter</span>: <span class="ident">IT</span>) {
-        <span class="kw">for</span> <span class="ident">el</span> <span class="kw">in</span> <span class="ident">iter</span> {
-            <span class="self">self</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">el</span>);
+    <span class="kw">pub fn </span>extend&lt;IT: IntoIterator&lt;Item = T&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: IT) {
+        <span class="kw">for </span>el <span class="kw">in </span>iter {
+            <span class="self">self</span>.insert(<span class="kw-2">&amp;</span>el);
         }
     }
 
-    <span class="doccomment">/// Returns a view of elements as a vector.</span>
-    <span class="doccomment">/// It&#39;s sometimes useful to have random access to the elements.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_vector</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">elements</span>
+    <span class="doccomment">/// Returns a view of elements as a vector.
+    /// It&#39;s sometimes useful to have random access to the elements.
+    </span><span class="kw">pub fn </span>as_vector(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Vector&lt;T&gt; {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.elements
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">std::fmt::Debug</span> <span class="kw">for</span> <span class="ident">UnorderedSet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">std::fmt::Debug</span> <span class="op">+</span> <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;T&gt; std::fmt::Debug <span class="kw">for </span>UnorderedSet&lt;T&gt;
+<span class="kw">where
+    </span>T: std::fmt::Debug + BorshSerialize + BorshDeserialize,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;UnorderedSet&quot;</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;element_index_prefix&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">element_index_prefix</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;elements&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">elements</span>)
-            .<span class="ident">finish</span>()
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_struct(<span class="string">&quot;UnorderedSet&quot;</span>)
+            .field(<span class="string">&quot;element_index_prefix&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.element_index_prefix)
+            .field(<span class="string">&quot;elements&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.elements)
+            .finish()
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collections::UnorderedSet</span>;
-    <span class="kw">use</span> <span class="ident">rand::seq::SliceRandom</span>;
-    <span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">Rng</span>, <span class="ident">SeedableRng</span>};
-    <span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
-    <span class="kw">use</span> <span class="ident">std::iter::FromIterator</span>;
+<span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use </span><span class="kw">crate</span>::collections::UnorderedSet;
+    <span class="kw">use </span>rand::seq::SliceRandom;
+    <span class="kw">use </span>rand::{Rng, SeedableRng};
+    <span class="kw">use </span>std::collections::HashSet;
+    <span class="kw">use </span>std::iter::FromIterator;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_one</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="macro">assert!</span>(<span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">1</span>));
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">1</span>));
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_one() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedSet::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="macro">assert!</span>(map.insert(<span class="kw-2">&amp;</span><span class="number">1</span>));
+        <span class="macro">assert!</span>(!map.insert(<span class="kw-2">&amp;</span><span class="number">1</span>));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;s&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">0</span>);
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>);
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_remove</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;s&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">1</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">keys</span>.<span class="ident">push</span>(<span class="ident">key</span>);
-            <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>);
-        }
-        <span class="ident">keys</span>.<span class="ident">shuffle</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-        <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="ident">keys</span> {
-            <span class="macro">assert!</span>(<span class="ident">set</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>));
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;s&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">0</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            set.insert(<span class="kw-2">&amp;</span>key);
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_remove_last_reinsert</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;s&quot;</span>);
-        <span class="kw">let</span> <span class="ident">key1</span> <span class="op">=</span> <span class="number">1u64</span>;
-        <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key1</span>);
-        <span class="kw">let</span> <span class="ident">key2</span> <span class="op">=</span> <span class="number">2u64</span>;
-        <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key2</span>);
-
-        <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">set</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key2</span>);
-        <span class="macro">assert!</span>(<span class="ident">actual</span>);
-
-        <span class="kw">let</span> <span class="ident">actual_reinsert</span> <span class="op">=</span> <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key2</span>);
-        <span class="macro">assert!</span>(<span class="ident">actual_reinsert</span>);
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_override_remove</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;s&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">2</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">keys</span>.<span class="ident">push</span>(<span class="ident">key</span>);
-            <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_remove() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;s&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">1</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = <span class="macro">vec!</span>[];
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            keys.push(key);
+            set.insert(<span class="kw-2">&amp;</span>key);
         }
-        <span class="ident">keys</span>.<span class="ident">shuffle</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-        <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">keys</span> {
-            <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">set</span>.<span class="ident">insert</span>(<span class="ident">key</span>));
-        }
-        <span class="ident">keys</span>.<span class="ident">shuffle</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-        <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="ident">keys</span> {
-            <span class="macro">assert!</span>(<span class="ident">set</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>));
+        keys.shuffle(<span class="kw-2">&amp;mut </span>rng);
+        <span class="kw">for </span>key <span class="kw">in </span>keys {
+            <span class="macro">assert!</span>(set.remove(<span class="kw-2">&amp;</span>key));
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_contains_non_existent</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;s&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">3</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set_tmp</span> <span class="op">=</span> <span class="ident">HashSet::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20_000</span>;
-            <span class="ident">set_tmp</span>.<span class="ident">insert</span>(<span class="ident">key</span>);
-            <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_remove_last_reinsert() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;s&quot;</span>);
+        <span class="kw">let </span>key1 = <span class="number">1u64</span>;
+        set.insert(<span class="kw-2">&amp;</span>key1);
+        <span class="kw">let </span>key2 = <span class="number">2u64</span>;
+        set.insert(<span class="kw-2">&amp;</span>key2);
+
+        <span class="kw">let </span>actual = set.remove(<span class="kw-2">&amp;</span>key2);
+        <span class="macro">assert!</span>(actual);
+
+        <span class="kw">let </span>actual_reinsert = set.insert(<span class="kw-2">&amp;</span>key2);
+        <span class="macro">assert!</span>(actual_reinsert);
+    }
+
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_override_remove() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;s&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">2</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = <span class="macro">vec!</span>[];
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            keys.push(key);
+            set.insert(<span class="kw-2">&amp;</span>key);
         }
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20_000</span>;
-            <span class="macro">assert_eq!</span>(<span class="ident">set</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>), <span class="ident">set_tmp</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>));
+        keys.shuffle(<span class="kw-2">&amp;mut </span>rng);
+        <span class="kw">for </span>key <span class="kw">in </span><span class="kw-2">&amp;</span>keys {
+            <span class="macro">assert!</span>(!set.insert(key));
+        }
+        keys.shuffle(<span class="kw-2">&amp;mut </span>rng);
+        <span class="kw">for </span>key <span class="kw">in </span>keys {
+            <span class="macro">assert!</span>(set.remove(<span class="kw-2">&amp;</span>key));
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_to_vec</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;s&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">4</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">HashSet::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">keys</span>.<span class="ident">insert</span>(<span class="ident">key</span>);
-            <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_contains_non_existent() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;s&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">3</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>set_tmp = HashSet::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;() % <span class="number">20_000</span>;
+            set_tmp.insert(key);
+            set.insert(<span class="kw-2">&amp;</span>key);
         }
-        <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">HashSet::from_iter</span>(<span class="ident">set</span>.<span class="ident">to_vec</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">keys</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;() % <span class="number">20_000</span>;
+            <span class="macro">assert_eq!</span>(set.contains(<span class="kw-2">&amp;</span>key), set_tmp.contains(<span class="kw-2">&amp;</span>key));
+        }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_clear</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;s&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">5</span>);
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span>(<span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20</span> <span class="op">+</span> <span class="number">1</span>) {
-                <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_to_vec() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;s&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">4</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = HashSet::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            keys.insert(key);
+            set.insert(<span class="kw-2">&amp;</span>key);
+        }
+        <span class="kw">let </span>actual = HashSet::from_iter(set.to_vec());
+        <span class="macro">assert_eq!</span>(actual, keys);
+    }
+
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_clear() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;s&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">5</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">10 </span>{
+            <span class="kw">for _ in </span><span class="number">0</span>..=(rng.gen::&lt;u64&gt;() % <span class="number">20 </span>+ <span class="number">1</span>) {
+                <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+                set.insert(<span class="kw-2">&amp;</span>key);
             }
-            <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">set</span>.<span class="ident">to_vec</span>().<span class="ident">is_empty</span>());
-            <span class="ident">set</span>.<span class="ident">clear</span>();
-            <span class="macro">assert!</span>(<span class="ident">set</span>.<span class="ident">to_vec</span>().<span class="ident">is_empty</span>());
+            <span class="macro">assert!</span>(!set.to_vec().is_empty());
+            set.clear();
+            <span class="macro">assert!</span>(set.to_vec().is_empty());
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_iter</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;s&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">4</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">HashSet::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">keys</span>.<span class="ident">insert</span>(<span class="ident">key</span>);
-            <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_iter() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;s&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">4</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = HashSet::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            keys.insert(key);
+            set.insert(<span class="kw-2">&amp;</span>key);
         }
-        <span class="kw">let</span> <span class="ident">actual</span>: <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">set</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">keys</span>);
+        <span class="kw">let </span>actual: HashSet&lt;u64&gt; = set.iter().collect();
+        <span class="macro">assert_eq!</span>(actual, keys);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_extend</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;s&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">4</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">HashSet::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">keys</span>.<span class="ident">insert</span>(<span class="ident">key</span>);
-            <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_extend() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;s&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">4</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = HashSet::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            keys.insert(key);
+            set.insert(<span class="kw-2">&amp;</span>key);
         }
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-            <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span>(<span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20</span> <span class="op">+</span> <span class="number">1</span>) {
-                <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="ident">tmp</span>.<span class="ident">push</span>(<span class="ident">key</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">10 </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>tmp = <span class="macro">vec!</span>[];
+            <span class="kw">for _ in </span><span class="number">0</span>..=(rng.gen::&lt;u64&gt;() % <span class="number">20 </span>+ <span class="number">1</span>) {
+                <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+                tmp.push(key);
             }
-            <span class="ident">keys</span>.<span class="ident">extend</span>(<span class="ident">tmp</span>.<span class="ident">iter</span>().<span class="ident">cloned</span>());
-            <span class="ident">set</span>.<span class="ident">extend</span>(<span class="ident">tmp</span>.<span class="ident">iter</span>().<span class="ident">cloned</span>());
+            keys.extend(tmp.iter().cloned());
+            set.extend(tmp.iter().cloned());
         }
 
-        <span class="kw">let</span> <span class="ident">actual</span>: <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">set</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">keys</span>);
+        <span class="kw">let </span>actual: HashSet&lt;u64&gt; = set.iter().collect();
+        <span class="macro">assert_eq!</span>(actual, keys);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_debug</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">UnorderedSet::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">1u64</span>);
-        <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">3u64</span>);
-        <span class="ident">set</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">2u64</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_debug() {
+        <span class="kw">let </span><span class="kw-2">mut </span>set = UnorderedSet::new(<span class="string">b&quot;m&quot;</span>);
+        set.insert(<span class="kw-2">&amp;</span><span class="number">1u64</span>);
+        set.insert(<span class="kw-2">&amp;</span><span class="number">3u64</span>);
+        set.insert(<span class="kw-2">&amp;</span><span class="number">2u64</span>);
 
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;expensive-debug&quot;</span>) {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;expensive-debug&quot;</span>) {
             <span class="macro">assert_eq!</span>(
-                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">set</span>),
-                <span class="string">&quot;UnorderedSet { element_index_prefix: [109, 105], elements: [1, 3, 2] }&quot;</span>
-            );
-        } <span class="kw">else</span> {
+                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, set),
+                <span class="string">&quot;UnorderedSet { element_index_prefix: [109, 105], elements: [1, 3, 2] }&quot;
+            </span>);
+        } <span class="kw">else </span>{
             <span class="macro">assert_eq!</span>(
-                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">set</span>),
-                <span class="string">&quot;UnorderedSet { element_index_prefix: [109, 105], elements: Vector { len: 3, prefix: [109, 101] } }&quot;</span>
-            );
+                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, set),
+                <span class="string">&quot;UnorderedSet { element_index_prefix: [109, 105], elements: Vector { len: 3, prefix: [109, 101] } }&quot;
+            </span>);
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

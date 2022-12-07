@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/calls.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>calls.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../nft_benefits_vault/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/calls.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>calls.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../nft_benefits_vault/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -266,273 +266,345 @@
 <span id="266">266</span>
 <span id="267">267</span>
 <span id="268">268</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">near_contract_standards::non_fungible_token</span>::{<span class="ident">Token</span>, <span class="ident">TokenId</span>};
-<span class="kw">use</span> <span class="ident">near_sdk</span>::{
-    <span class="ident">assert_one_yocto</span>, <span class="ident">assert_self</span>, <span class="ident">env</span>, <span class="ident">json_types::U128</span>, <span class="ident">log</span>, <span class="ident">near_bindgen</span>, <span class="ident">require</span>, <span class="ident">AccountId</span>,
-    <span class="ident">Gas</span>, <span class="ident">Promise</span>, <span class="ident">PromiseError</span>,
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+</pre><pre class="rust"><code><span class="kw">use </span>near_contract_standards::non_fungible_token::{Token, TokenId};
+<span class="kw">use </span>near_sdk::{
+    assert_one_yocto, assert_self, env, json_types::U128, log, near_bindgen, require, AccountId,
+    Gas, Promise, PromiseError,
 };
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">interface::nft::nft</span>, <span class="ident">nft_id::NftId</span>, <span class="ident">Contract</span>, <span class="ident">ContractExt</span>};
+<span class="kw">use crate</span>::{interface::nft::nft, nft_id::NftId, Contract, ContractExt};
 
-<span class="attribute">#[<span class="ident">near_bindgen</span>]</span>
-<span class="kw">impl</span> <span class="ident">Contract</span> {
-    <span class="doccomment">/// Public call to withdraw all FTs of every type from the Vault.</span>
-    <span class="doccomment">/// The contract will check caller ownership of the NFT specified by the NFT contract Id and NFT Id.</span>
-    <span class="doccomment">/// Then it will try to find the corresponding vault with access via provided contract/id pair.</span>
-    <span class="doccomment">/// Exactly 1 yoctoNEAR must be attached.</span>
-    <span class="attribute">#[<span class="ident">payable</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">withdraw_all</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>, <span class="ident">nft_id</span>: <span class="ident">TokenId</span>) -&gt; <span class="ident">Promise</span> {
-        <span class="kw">let</span> <span class="ident">caller</span> <span class="op">=</span> <span class="ident">env::predecessor_account_id</span>();
-        <span class="macro">log!</span>(<span class="string">&quot;withdraw_all called by {}&quot;</span>, <span class="ident">caller</span>);
+<span class="attribute">#[near_bindgen]
+</span><span class="kw">impl </span>Contract {
+    <span class="doccomment">/// Public call to withdraw all FTs of every type from the Vault.
+    /// The contract will check caller ownership of the NFT specified by the NFT contract Id and NFT Id.
+    /// Then it will try to find the corresponding vault with access via provided contract/id pair.
+    /// Exactly 1 yoctoNEAR must be attached.
+    ///
+    /// # Gas consumption
+    /// Without internal XCC: 0.5 TGas - doesn&#39;t depend on amount of tokens in the vault.
+    </span><span class="attribute">#[payable]
+    </span><span class="kw">pub fn </span>withdraw_all(<span class="kw-2">&amp;mut </span><span class="self">self</span>, nft_contract_id: AccountId, nft_id: TokenId) -&gt; Promise {
+        <span class="kw">let </span>caller = env::predecessor_account_id();
+        <span class="macro">log!</span>(<span class="string">&quot;withdraw_all called by {}&quot;</span>, caller);
 
-        <span class="comment">// 1 yoctoNEAR should attached to this call to prevent abuse.</span>
-        <span class="ident">assert_one_yocto</span>();
+        <span class="comment">// 1 yoctoNEAR should attached to this call to prevent abuse.
+        </span>assert_one_yocto();
 
-        <span class="kw">let</span> <span class="ident">nft_id</span> <span class="op">=</span> <span class="ident">NftId::new</span>(<span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
+        <span class="kw">let </span>nft_id = NftId::new(nft_contract_id, nft_id);
 
-        <span class="kw">let</span> <span class="ident">get_nft_info</span> <span class="op">=</span>
-            <span class="ident">nft::ext</span>(<span class="ident">nft_id</span>.<span class="ident">contract_id</span>().<span class="ident">clone</span>()).<span class="ident">nft_token</span>(<span class="ident">nft_id</span>.<span class="ident">token_id</span>().<span class="ident">to_owned</span>());
-        <span class="kw">let</span> <span class="ident">withdraw_all</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ext</span>(<span class="ident">env::current_account_id</span>()).<span class="ident">withdraw_all_callback</span>(<span class="ident">nft_id</span>);
+        <span class="kw">let </span>get_nft_info =
+            nft::ext(nft_id.contract_id().clone()).nft_token(nft_id.token_id().to_owned());
+        <span class="kw">let </span>withdraw_all = <span class="self">Self</span>::ext(env::current_account_id()).withdraw_all_callback(nft_id);
 
-        <span class="ident">get_nft_info</span>.<span class="ident">then</span>(<span class="ident">withdraw_all</span>)
+        get_nft_info.then(withdraw_all)
     }
 
-    <span class="doccomment">/// Public call to withdraw all tokens of a single type of FT from the Vault.</span>
-    <span class="doccomment">/// The contract will check ownership of the NFT spectified by the arguments.</span>
-    <span class="doccomment">/// Than it will try to find the vault with access via provided contract/id pair.</span>
-    <span class="doccomment">/// And it makes `ft_transfer` with all available tokens on the provided `fungible_token`.</span>
-    <span class="doccomment">/// Exactly 1 yoctoNEAR must be attached.</span>
-    <span class="attribute">#[<span class="ident">payable</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">withdraw</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>,
-        <span class="ident">nft_id</span>: <span class="ident">TokenId</span>,
-        <span class="ident">fungible_token</span>: <span class="ident">AccountId</span>,
-    ) {
-        <span class="kw">let</span> <span class="ident">caller</span> <span class="op">=</span> <span class="ident">env::predecessor_account_id</span>();
-        <span class="macro">log!</span>(<span class="string">&quot;withdraw called by {}&quot;</span>, <span class="ident">caller</span>);
+    <span class="doccomment">/// Public call to withdraw all tokens of a single type of FT from the Vault.
+    /// The contract will check ownership of the NFT spectified by the arguments.
+    /// Than it will try to find the vault with access via provided contract/id pair.
+    /// And it makes `ft_transfer` with all available tokens on the provided `fungible_token`.
+    /// Exactly 1 yoctoNEAR must be attached.
+    ///
+    /// # Gas consumption
+    /// Without internal XCC: 11 TGas - doesn&#39;t depend on amount of tokens in the vault.
+    </span><span class="attribute">#[payable]
+    </span><span class="kw">pub fn </span>withdraw(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        nft_contract_id: AccountId,
+        nft_id: TokenId,
+        fungible_token: AccountId,
+    ) -&gt; Promise {
+        <span class="kw">let </span>caller = env::predecessor_account_id();
+        <span class="macro">log!</span>(<span class="string">&quot;withdraw called by {}&quot;</span>, caller);
 
-        <span class="comment">// 1 yoctoNEAR should attached to this call to prevent abuse.</span>
-        <span class="ident">assert_one_yocto</span>();
+        <span class="comment">// 1 yoctoNEAR should attached to this call to prevent abuse.
+        </span>assert_one_yocto();
 
-        <span class="kw">let</span> <span class="ident">nft_id</span> <span class="op">=</span> <span class="ident">NftId::new</span>(<span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
+        <span class="kw">let </span>nft_id = NftId::new(nft_contract_id, nft_id);
 
-        <span class="kw">let</span> <span class="ident">get_nft_info</span> <span class="op">=</span> <span class="ident">nft::ext</span>(<span class="ident">nft_id</span>.<span class="ident">contract_id</span>().<span class="ident">clone</span>())
-            .<span class="ident">with_static_gas</span>(<span class="ident">Gas::ONE_TERA</span> <span class="op">*</span> <span class="number">4</span>)
-            .<span class="ident">nft_token</span>(<span class="ident">nft_id</span>.<span class="ident">token_id</span>().<span class="ident">to_owned</span>());
+        <span class="kw">let </span>get_nft_info = nft::ext(nft_id.contract_id().clone())
+            <span class="comment">// .with_static_gas(Gas::ONE_TERA * 4)
+            </span>.nft_token(nft_id.token_id().to_owned());
 
-        <span class="kw">let</span> <span class="ident">withdraw_and_replenish</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ext</span>(<span class="ident">env::current_account_id</span>())
-            .<span class="ident">with_static_gas</span>(<span class="ident">Gas::ONE_TERA</span> <span class="op">*</span> <span class="number">280</span>)
-            .<span class="ident">withdraw_callback</span>(<span class="ident">nft_id</span>, <span class="ident">fungible_token</span>, <span class="prelude-val">None</span>, <span class="bool-val">true</span>);
+        <span class="kw">let </span>withdraw_and_replenish = <span class="self">Self</span>::ext(env::current_account_id())
+            <span class="comment">// .with_static_gas(Gas::ONE_TERA * 280)
+            </span>.withdraw_callback(nft_id, fungible_token, <span class="prelude-val">None</span>, <span class="bool-val">true</span>);
 
-        <span class="ident">get_nft_info</span>.<span class="ident">then</span>(<span class="ident">withdraw_and_replenish</span>);
+        get_nft_info.then(withdraw_and_replenish)
     }
 
-    <span class="doccomment">/// Public call to withdraw specified `amount` of tokens of a single type of FT from the Vault.</span>
-    <span class="doccomment">/// The contract will check ownership of the NFT spectified by the arguments.</span>
-    <span class="doccomment">/// Than it will try to find the vault with access via provided contract/id pair.</span>
-    <span class="doccomment">/// And it makes `ft_transfer` with specified amount of tokens on the provided `fungible_token`.</span>
-    <span class="doccomment">/// Exactly 1 yoctoNEAR must be attached.</span>
-    <span class="attribute">#[<span class="ident">payable</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">withdraw_amount</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>,
-        <span class="ident">nft_id</span>: <span class="ident">TokenId</span>,
-        <span class="ident">fungible_token</span>: <span class="ident">AccountId</span>,
-        <span class="ident">amount</span>: <span class="ident">U128</span>,
+    <span class="doccomment">/// Public call to withdraw specified `amount` of tokens of a single type of FT from the Vault.
+    /// The contract will check ownership of the NFT spectified by the arguments.
+    /// Than it will try to find the vault with access via provided contract/id pair.
+    /// And it makes `ft_transfer` with specified amount of tokens on the provided `fungible_token`.
+    /// Exactly 1 yoctoNEAR must be attached.
+    ///
+    /// # Gas consumption
+    /// Without internal XCC: 10.3 TGas - doesn&#39;t depend on amount of tokens in the vault.
+    </span><span class="attribute">#[payable]
+    </span><span class="kw">pub fn </span>withdraw_amount(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        nft_contract_id: AccountId,
+        nft_id: TokenId,
+        fungible_token: AccountId,
+        amount: U128,
     ) {
-        <span class="kw">let</span> <span class="ident">caller</span> <span class="op">=</span> <span class="ident">env::predecessor_account_id</span>();
-        <span class="macro">log!</span>(<span class="string">&quot;withdraw amount called by {}&quot;</span>, <span class="ident">caller</span>);
+        <span class="kw">let </span>caller = env::predecessor_account_id();
+        <span class="macro">log!</span>(<span class="string">&quot;withdraw amount called by {}&quot;</span>, caller);
 
-        <span class="kw">if</span> <span class="ident">caller</span> <span class="op">!</span><span class="op">=</span> <span class="ident">env::current_account_id</span>() {
-            <span class="comment">// 1 yoctoNEAR should attached to this call to prevent abuse.</span>
-            <span class="ident">assert_one_yocto</span>();
+        <span class="kw">if </span>caller != env::current_account_id() {
+            <span class="comment">// 1 yoctoNEAR should attached to this call to prevent abuse.
+            </span>assert_one_yocto();
         }
 
-        <span class="kw">let</span> <span class="ident">nft_id</span> <span class="op">=</span> <span class="ident">NftId::new</span>(<span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
+        <span class="kw">let </span>nft_id = NftId::new(nft_contract_id, nft_id);
 
-        <span class="kw">let</span> <span class="ident">get_nft_info</span> <span class="op">=</span> <span class="ident">nft::ext</span>(<span class="ident">nft_id</span>.<span class="ident">contract_id</span>().<span class="ident">clone</span>())
-            .<span class="ident">with_static_gas</span>(<span class="ident">Gas::ONE_TERA</span> <span class="op">*</span> <span class="number">4</span>)
-            .<span class="ident">nft_token</span>(<span class="ident">nft_id</span>.<span class="ident">token_id</span>().<span class="ident">to_owned</span>());
+        <span class="kw">let </span>get_nft_info = nft::ext(nft_id.contract_id().clone())
+            <span class="comment">// .with_static_gas(Gas::ONE_TERA * 4)
+            </span>.nft_token(nft_id.token_id().to_owned());
 
-        <span class="kw">let</span> <span class="ident">withdraw_without_replenish</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ext</span>(<span class="ident">env::current_account_id</span>())
-            .<span class="ident">with_static_gas</span>(<span class="ident">Gas::ONE_TERA</span> <span class="op">*</span> <span class="number">210</span>)
-            .<span class="ident">withdraw_callback</span>(<span class="ident">nft_id</span>, <span class="ident">fungible_token</span>, <span class="prelude-val">Some</span>(<span class="ident">amount</span>), <span class="bool-val">false</span>);
+        <span class="kw">let </span>withdraw_without_replenish = <span class="self">Self</span>::ext(env::current_account_id())
+            <span class="comment">// .with_static_gas(Gas::ONE_TERA * 210)
+            </span>.withdraw_callback(nft_id, fungible_token, <span class="prelude-val">Some</span>(amount), <span class="bool-val">false</span>);
 
-        <span class="ident">get_nft_info</span>.<span class="ident">then</span>(<span class="ident">withdraw_without_replenish</span>);
+        get_nft_info.then(withdraw_without_replenish);
     }
 
-    <span class="doccomment">/// Callback invokes after request to the NFT contract to check ownership and grant access to the vault.</span>
-    <span class="doccomment">/// Private: can be called only by this contract.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Panics if:</span>
-    <span class="doccomment">/// - called NOT by itself,</span>
-    <span class="doccomment">/// - previous Promise failed,</span>
-    <span class="doccomment">/// - there is no NFT with provided id on the NFT contract,</span>
-    <span class="doccomment">/// - signer is NOT an NFT owner,</span>
-    <span class="doccomment">/// - there is no Vault with access via given [`NftId`].</span>
-    <span class="attribute">#[<span class="ident">private</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">withdraw_all_callback</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="attribute">#[<span class="ident">callback_result</span>]</span> <span class="ident">nft_info</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Token</span><span class="op">&gt;</span>, <span class="ident">PromiseError</span><span class="op">&gt;</span>,
-        <span class="ident">nft_id</span>: <span class="ident">NftId</span>,
+    <span class="doccomment">/// Callback invokes after request to the NFT contract to check ownership and grant access to the vault.
+    /// Private: can be called only by this contract.
+    ///
+    /// Panics if:
+    /// - called NOT by itself,
+    /// - previous Promise failed,
+    /// - there is no NFT with provided id on the NFT contract,
+    /// - signer is NOT an NFT owner,
+    /// - there is no Vault with access via given [`NftId`].
+    ///
+    /// # Gas consumption
+    /// Without internal XCC:
+    ///     - 0 assets:   3.0 TGas
+    ///     - 1 asset:   11.0 TGas
+    ///     - 2 assets:  14.1 TGas
+    ///     - 10 assets: 56.6 TGas
+    </span><span class="attribute">#[private]
+    </span><span class="kw">pub fn </span>withdraw_all_callback(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        <span class="attribute">#[callback_result] </span>nft_info: <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Token&gt;, PromiseError&gt;,
+        nft_id: NftId,
     ) {
-        <span class="ident">assert_self</span>();
-        <span class="kw">let</span> <span class="ident">signer</span> <span class="op">=</span> <span class="ident">env::signer_account_id</span>();
-        <span class="macro">log!</span>(<span class="string">&quot;withdraw all callback called by signer: {}&quot;</span>, <span class="ident">signer</span>);
+        assert_self();
+        <span class="kw">let </span>signer = env::signer_account_id();
+        <span class="macro">log!</span>(<span class="string">&quot;withdraw all callback called by signer: {}&quot;</span>, signer);
 
-        <span class="kw">let</span> <span class="ident">nft_info</span> <span class="op">=</span> <span class="ident">nft_info</span>
-            .<span class="ident">expect</span>(<span class="string">&quot;failed to get nft info&quot;</span>)
-            .<span class="ident">expect</span>(<span class="string">&quot;NFT info query returned nothing&quot;</span>);
-        <span class="kw">let</span> <span class="ident">nft_owner</span> <span class="op">=</span> <span class="ident">nft_info</span>.<span class="ident">owner_id</span>;
-        <span class="macro">require!</span>(<span class="ident">nft_owner</span> <span class="op">==</span> <span class="ident">signer</span>, <span class="string">&quot;vault access denied&quot;</span>);
+        <span class="kw">let </span>nft_info = nft_info
+            .expect(<span class="string">&quot;failed to get nft info&quot;</span>)
+            .expect(<span class="string">&quot;NFT info query returned nothing&quot;</span>);
+        <span class="kw">let </span>nft_owner = nft_info.owner_id;
+        <span class="macro">require!</span>(nft_owner == signer, <span class="string">&quot;vault access denied&quot;</span>);
 
-        <span class="kw">let</span> <span class="ident">vault</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_vault</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>);
+        <span class="kw">let </span>vault = <span class="self">self</span>.get_vault(<span class="kw-2">&amp;</span>nft_id);
 
-        <span class="kw">for</span> (<span class="ident">fungible_token</span>, <span class="ident">asset</span>) <span class="kw">in</span> <span class="ident">vault</span>.<span class="ident">assets</span>().<span class="ident">iter</span>() {
-            <span class="kw">let</span> <span class="ident">amount</span> <span class="op">=</span> <span class="ident">asset</span>.<span class="ident">balance</span>();
-            <span class="kw">let</span> <span class="ident">transfer</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::transfer_to</span>(<span class="ident">fungible_token</span>.<span class="ident">clone</span>(), <span class="ident">nft_owner</span>.<span class="ident">clone</span>(), <span class="ident">amount</span>);
-            <span class="kw">let</span> <span class="ident">adjust_balance</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ext</span>(<span class="ident">env::current_account_id</span>()).<span class="ident">adjust_balance</span>(
-                <span class="ident">nft_id</span>.<span class="ident">clone</span>(),
-                <span class="ident">fungible_token</span>,
-                <span class="ident">U128</span>(<span class="ident">amount</span>),
+        <span class="kw">for </span>(fungible_token, asset) <span class="kw">in </span>vault.assets().iter() {
+            <span class="kw">let </span>amount = asset.balance();
+            <span class="kw">let </span>transfer = <span class="self">Self</span>::transfer_to(fungible_token.clone(), nft_owner.clone(), amount);
+            <span class="kw">let </span>adjust_balance = <span class="self">Self</span>::ext(env::current_account_id()).adjust_balance(
+                nft_id.clone(),
+                fungible_token,
+                U128(amount),
             );
-            <span class="ident">transfer</span>.<span class="ident">then</span>(<span class="ident">adjust_balance</span>);
+            transfer.then(adjust_balance);
         }
     }
 
-    <span class="doccomment">/// Callback makes transfer of a single FT type to the signer if all requirements are met.</span>
-    <span class="attribute">#[<span class="ident">private</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">withdraw_callback</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="attribute">#[<span class="ident">callback_result</span>]</span> <span class="ident">nft_info</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Token</span><span class="op">&gt;</span>, <span class="ident">PromiseError</span><span class="op">&gt;</span>,
-        <span class="ident">nft_id</span>: <span class="ident">NftId</span>,
-        <span class="ident">fungible_token</span>: <span class="ident">AccountId</span>,
-        <span class="ident">amount</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U128</span><span class="op">&gt;</span>,
-        <span class="ident">replenish</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Callback makes transfer of a single FT type to the signer if all requirements are met.
+    ///
+    /// # Gas consumption
+    /// Without internal XCC:
+    ///     - no replenishers:
+    ///         - 0 assets:  3.0 TGas
+    ///         - 1 asset:   8.7 TGas
+    ///         - 2 assets:  8.8 TGas
+    ///         - 10 assets: 8.8 TGas
+    ///     - 1 replenisher:   11.5 TGas
+    ///     - 2 replenishers:  14.2 TGas
+    ///     - 10 replenishers: 36.1 TGas
+    </span><span class="attribute">#[private]
+    </span><span class="kw">pub fn </span>withdraw_callback(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        <span class="attribute">#[callback_result] </span>nft_info: <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Token&gt;, PromiseError&gt;,
+        nft_id: NftId,
+        fungible_token: AccountId,
+        amount: <span class="prelude-ty">Option</span>&lt;U128&gt;,
+        replenish: bool,
     ) {
-        <span class="ident">assert_self</span>();
-        <span class="kw">let</span> <span class="ident">signer</span> <span class="op">=</span> <span class="ident">env::signer_account_id</span>();
-        <span class="macro">log!</span>(<span class="string">&quot;withdraw callback called by signer: {}&quot;</span>, <span class="ident">signer</span>);
+        assert_self();
+        <span class="kw">let </span>signer = env::signer_account_id();
+        <span class="macro">log!</span>(<span class="string">&quot;withdraw callback called by signer: {}&quot;</span>, signer);
 
-        <span class="kw">let</span> <span class="ident">nft_info</span> <span class="op">=</span> <span class="ident">nft_info</span>
-            .<span class="ident">expect</span>(<span class="string">&quot;failed to get nft info&quot;</span>)
-            .<span class="ident">expect</span>(<span class="string">&quot;NFT info query returned nothing&quot;</span>);
+        <span class="kw">let </span>nft_info = nft_info
+            .expect(<span class="string">&quot;failed to get nft info&quot;</span>)
+            .expect(<span class="string">&quot;NFT info query returned nothing&quot;</span>);
 
-        <span class="kw">let</span> <span class="ident">nft_owner</span> <span class="op">=</span> <span class="ident">nft_info</span>.<span class="ident">owner_id</span>;
-        <span class="macro">require!</span>(<span class="ident">nft_owner</span> <span class="op">==</span> <span class="ident">signer</span>, <span class="string">&quot;vault access denied&quot;</span>);
+        <span class="kw">let </span>nft_owner = nft_info.owner_id;
+        <span class="macro">require!</span>(nft_owner == signer, <span class="string">&quot;vault access denied&quot;</span>);
 
         <span class="macro">log!</span>(<span class="string">&quot;vault access granted&quot;</span>);
 
-        <span class="kw">let</span> <span class="ident">vault</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_vault</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>);
+        <span class="kw">let </span>vault = <span class="self">self</span>.get_vault(<span class="kw-2">&amp;</span>nft_id);
 
-        <span class="kw">let</span> <span class="ident">asset</span> <span class="op">=</span> <span class="ident">vault</span>.<span class="ident">get_asset</span>(<span class="kw-2">&amp;</span><span class="ident">fungible_token</span>);
+        <span class="kw">let </span>asset = vault.get_asset(<span class="kw-2">&amp;</span>fungible_token);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">promise</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">asset</span>) <span class="op">=</span> <span class="ident">asset</span> {
-            <span class="kw">let</span> <span class="ident">amount</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">amount</span>) <span class="op">=</span> <span class="ident">amount</span> {
-                <span class="ident">amount</span>.<span class="number">0</span>.<span class="ident">min</span>(<span class="ident">asset</span>.<span class="ident">balance</span>())
-            } <span class="kw">else</span> {
-                <span class="ident">asset</span>.<span class="ident">balance</span>()
+        <span class="kw">let </span><span class="kw-2">mut </span>promise = <span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = asset {
+            <span class="kw">let </span>amount = <span class="kw">if let </span><span class="prelude-val">Some</span>(amount) = amount {
+                amount.<span class="number">0</span>.min(asset.balance())
+            } <span class="kw">else </span>{
+                asset.balance()
             };
             <span class="macro">log!</span>(
                 <span class="string">&quot;transfer {} of {} tokens to {}&quot;</span>,
-                <span class="ident">amount</span>,
-                <span class="ident">fungible_token</span>,
-                <span class="ident">nft_owner</span>
+                amount,
+                fungible_token,
+                nft_owner
             );
 
-            <span class="kw">let</span> <span class="ident">transfer</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::transfer_to</span>(<span class="ident">fungible_token</span>.<span class="ident">clone</span>(), <span class="ident">nft_owner</span>, <span class="ident">amount</span>);
-            <span class="kw">let</span> <span class="ident">adjust</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ext</span>(<span class="ident">env::current_account_id</span>()).<span class="ident">adjust_balance</span>(
-                <span class="ident">nft_id</span>,
-                <span class="ident">fungible_token</span>,
-                <span class="ident">U128</span>(<span class="ident">amount</span>),
+            <span class="kw">let </span>transfer = <span class="self">Self</span>::transfer_to(fungible_token.clone(), nft_owner, amount);
+            <span class="kw">let </span>adjust = <span class="self">Self</span>::ext(env::current_account_id()).adjust_balance(
+                nft_id,
+                fungible_token,
+                U128(amount),
             );
-            <span class="prelude-val">Some</span>(<span class="ident">transfer</span>.<span class="ident">then</span>(<span class="ident">adjust</span>))
-        } <span class="kw">else</span> {
-            <span class="macro">log!</span>(<span class="string">&quot;no {} tokens in the vault&quot;</span>, <span class="ident">fungible_token</span>);
-            <span class="prelude-val">None</span>
-        };
+            <span class="prelude-val">Some</span>(transfer.then(adjust))
+        } <span class="kw">else </span>{
+            <span class="macro">log!</span>(<span class="string">&quot;no {} tokens in the vault&quot;</span>, fungible_token);
+            <span class="prelude-val">None
+        </span>};
 
-        <span class="kw">if</span> <span class="ident">replenish</span> {
-            <span class="kw">for</span> <span class="ident">replenisher</span> <span class="kw">in</span> <span class="ident">vault</span>.<span class="ident">replenishers</span>().<span class="ident">iter</span>() {
+        <span class="kw">if </span>replenish {
+            <span class="kw">for </span>replenisher <span class="kw">in </span>vault.replenishers().iter() {
                 <span class="macro">log!</span>(
                     <span class="string">&quot;calling replenisher: {}.{}({})&quot;</span>,
-                    <span class="ident">replenisher</span>.<span class="ident">contract_id</span>(),
-                    <span class="ident">replenisher</span>.<span class="ident">callback</span>(),
-                    <span class="ident">replenisher</span>.<span class="ident">args</span>()
+                    replenisher.contract_id(),
+                    replenisher.callback(),
+                    replenisher.args()
                 );
-                <span class="kw">let</span> <span class="ident">replenish</span> <span class="op">=</span> <span class="ident">Promise::new</span>(<span class="ident">replenisher</span>.<span class="ident">contract_id</span>().<span class="ident">clone</span>()).<span class="ident">function_call</span>(
-                    <span class="ident">replenisher</span>.<span class="ident">callback</span>().<span class="ident">to_owned</span>(),
-                    <span class="ident">replenisher</span>.<span class="ident">args</span>().<span class="ident">as_bytes</span>().<span class="ident">to_vec</span>(),
+                <span class="kw">let </span>replenish = Promise::new(replenisher.contract_id().clone()).function_call(
+                    replenisher.callback().to_owned(),
+                    replenisher.args().as_bytes().to_vec(),
                     <span class="number">0</span>,
-                    <span class="ident">Gas::ONE_TERA</span> <span class="op">*</span> <span class="number">270</span>,
+                    Gas(<span class="number">1</span>),
                 );
-                <span class="ident">promise</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=</span> <span class="ident">promise</span> {
-                    <span class="ident">p</span>.<span class="ident">then</span>(<span class="ident">replenish</span>)
-                } <span class="kw">else</span> {
-                    <span class="ident">replenish</span>
+                promise = <span class="prelude-val">Some</span>(<span class="kw">if let </span><span class="prelude-val">Some</span>(p) = promise {
+                    p.then(replenish)
+                } <span class="kw">else </span>{
+                    replenish
                 });
             }
         }
     }
 
-    <span class="doccomment">/// This method is used to add replenishers for the Vault.</span>
-    <span class="doccomment">/// When NFT owner calls withdraw methods the Contract will transfer available tokens from its own balance</span>
-    <span class="doccomment">/// and will request available benefits from registered replenishers.</span>
-    <span class="doccomment">/// This method MUST be called and signed by replenisher himself</span>
-    <span class="doccomment">/// because future replenishment requests will be made to the signer account.</span>
-    <span class="attribute">#[<span class="ident">payable</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_replenishment_callback</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>,
-        <span class="ident">nft_id</span>: <span class="ident">TokenId</span>,
-        <span class="ident">callback</span>: <span class="ident">String</span>,
-        <span class="ident">args</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// This method is used to add replenishers for the Vault.
+    /// When NFT owner calls withdraw methods the Contract will transfer available tokens from its own balance
+    /// and will request available benefits from registered replenishers.
+    /// This method MUST be called and signed by replenisher himself
+    /// because future replenishment requests will be made to the signer account.
+    ///
+    /// # Gas consumption
+    /// 3.6 TGas
+    </span><span class="attribute">#[payable]
+    </span><span class="kw">pub fn </span>add_replenishment_callback(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        nft_contract_id: AccountId,
+        nft_id: TokenId,
+        callback: String,
+        args: String,
     ) {
-        <span class="ident">assert_one_yocto</span>();
+        assert_one_yocto();
 
-        <span class="kw">let</span> <span class="ident">nft_id</span> <span class="op">=</span> <span class="ident">NftId::new</span>(<span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
+        <span class="kw">let </span>nft_id = NftId::new(nft_contract_id, nft_id);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vault</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_vault_or_create</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>vault = <span class="self">self</span>.get_vault_or_create(<span class="kw-2">&amp;</span>nft_id);
 
-        <span class="kw">let</span> <span class="ident">contract_id</span> <span class="op">=</span> <span class="ident">env::predecessor_account_id</span>();
+        <span class="kw">let </span>contract_id = env::predecessor_account_id();
 
-        <span class="ident">vault</span>.<span class="ident">add_replenisher</span>(<span class="ident">contract_id</span>, <span class="ident">callback</span>, <span class="ident">args</span>);
+        vault.add_replenisher(contract_id, callback, args);
 
-        <span class="self">self</span>.<span class="ident">vaults</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>, <span class="kw-2">&amp;</span><span class="ident">vault</span>);
+        <span class="self">self</span>.vaults.insert(<span class="kw-2">&amp;</span>nft_id, <span class="kw-2">&amp;</span>vault);
     }
 
-    <span class="doccomment">/// Callback invokes after each FT transfer call from this contract in withdrawal process.</span>
-    <span class="doccomment">/// If transfer was success, internal balance will be reduced by the amount transferred.</span>
-    <span class="doccomment">/// Private: can be called only by this contract.</span>
-    <span class="attribute">#[<span class="ident">private</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">adjust_balance</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="attribute">#[<span class="ident">callback_result</span>]</span> <span class="ident">res</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">PromiseError</span><span class="op">&gt;</span>,
-        <span class="ident">nft_id</span>: <span class="ident">NftId</span>,
-        <span class="ident">fungible_token</span>: <span class="ident">AccountId</span>,
-        <span class="ident">amount</span>: <span class="ident">U128</span>,
+    <span class="doccomment">/// Callback invokes after each FT transfer call from this contract in withdrawal process.
+    /// If transfer was success, internal balance will be reduced by the amount transferred.
+    /// Private: can be called only by this contract.
+    ///
+    /// # Gas consumption
+    /// 4.1 TGas
+    </span><span class="attribute">#[private]
+    </span><span class="kw">pub fn </span>adjust_balance(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        <span class="attribute">#[callback_result] </span>res: <span class="prelude-ty">Result</span>&lt;(), PromiseError&gt;,
+        nft_id: NftId,
+        fungible_token: AccountId,
+        amount: U128,
     ) {
-        <span class="ident">assert_self</span>();
+        assert_self();
         <span class="macro">log!</span>(
             <span class="string">&quot;check transfers called by signer: {}&quot;</span>,
-            <span class="ident">env::signer_account_id</span>()
+            env::signer_account_id()
         );
-        <span class="kw">let</span> <span class="ident">amount</span> <span class="op">=</span> <span class="ident">amount</span>.<span class="number">0</span>;
-        <span class="kw">if</span> <span class="ident">res</span>.<span class="ident">is_ok</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vault</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_vault</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>);
-            <span class="ident">vault</span>.<span class="ident">reduce_balance</span>(<span class="kw-2">&amp;</span><span class="ident">fungible_token</span>, <span class="ident">amount</span>);
-            <span class="self">self</span>.<span class="ident">vaults</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>, <span class="kw-2">&amp;</span><span class="ident">vault</span>);
+        <span class="kw">let </span>amount = amount.<span class="number">0</span>;
+        <span class="kw">if </span>res.is_ok() {
+            <span class="kw">let </span><span class="kw-2">mut </span>vault = <span class="self">self</span>.get_vault(<span class="kw-2">&amp;</span>nft_id);
+            vault.reduce_balance(<span class="kw-2">&amp;</span>fungible_token, amount);
+            <span class="self">self</span>.vaults.insert(<span class="kw-2">&amp;</span>nft_id, <span class="kw-2">&amp;</span>vault);
             <span class="macro">log!</span>(
                 <span class="string">&quot;withdrawal success, nft: {:?}, ft: {}, amount: {}&quot;</span>,
-                <span class="ident">nft_id</span>,
-                <span class="ident">fungible_token</span>,
-                <span class="ident">amount</span>
+                nft_id,
+                fungible_token,
+                amount
             );
-        } <span class="kw">else</span> {
-            <span class="macro">log!</span>(<span class="string">&quot;transfer {} if {} tokens failed&quot;</span>, <span class="ident">amount</span>, <span class="ident">fungible_token</span>);
+        } <span class="kw">else </span>{
+            <span class="macro">log!</span>(<span class="string">&quot;transfer {} if {} tokens failed&quot;</span>, amount, fungible_token);
         }
+
+        <span class="kw">let </span>used_gas = env::used_gas();
+        <span class="macro">log!</span>(<span class="string">&quot;withdraw callback start gas used: {}&quot;</span>, used_gas.<span class="number">0</span>);
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="nft_benefits_vault" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="nft_benefits_vault" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

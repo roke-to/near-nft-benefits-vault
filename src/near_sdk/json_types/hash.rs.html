@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/json_types/hash.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>hash.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/json_types/hash.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>hash.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -106,113 +106,143 @@
 <span id="106">106</span>
 <span id="107">107</span>
 <span id="108">108</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::CryptoHash</span>;
-<span class="kw">use</span> <span class="ident">borsh</span>::{<span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>};
-<span class="kw">use</span> <span class="ident">bs58::decode::Error</span> <span class="kw">as</span> <span class="ident">B58Error</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de</span>, <span class="ident">ser</span>, <span class="ident">Deserialize</span>};
-<span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::CryptoHash;
+<span class="kw">use </span>borsh::{BorshDeserialize, BorshSerialize};
+<span class="kw">use </span>bs58::decode::Error <span class="kw">as </span>B58Error;
+<span class="kw">use </span>serde::{de, ser, Deserialize};
+<span class="kw">use </span>std::convert::TryFrom;
 
-<span class="attribute">#[<span class="ident">derive</span>(
-    <span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Eq</span>, <span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>, <span class="ident">Default</span>,
-)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Base58CryptoHash</span>(<span class="ident">CryptoHash</span>);
+<span class="attribute">#[derive(
+    Debug, Copy, Clone, PartialEq, PartialOrd, Ord, Eq, BorshDeserialize, BorshSerialize, Default,
+)]
+</span><span class="kw">pub struct </span>Base58CryptoHash(CryptoHash);
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Base58CryptoHash</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CryptoHash</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">v</span>: <span class="ident">Base58CryptoHash</span>) -&gt; <span class="ident">CryptoHash</span> {
-        <span class="ident">v</span>.<span class="number">0</span>
+<span class="kw">impl </span>From&lt;Base58CryptoHash&gt; <span class="kw">for </span>CryptoHash {
+    <span class="kw">fn </span>from(v: Base58CryptoHash) -&gt; CryptoHash {
+        v.<span class="number">0
+    </span>}
+}
+
+<span class="kw">impl </span>From&lt;CryptoHash&gt; <span class="kw">for </span>Base58CryptoHash {
+    <span class="kw">fn </span>from(c: CryptoHash) -&gt; Base58CryptoHash {
+        Base58CryptoHash(c)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">CryptoHash</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Base58CryptoHash</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">c</span>: <span class="ident">CryptoHash</span>) -&gt; <span class="ident">Base58CryptoHash</span> {
-        <span class="ident">Base58CryptoHash</span>(<span class="ident">c</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">ser::Serialize</span> <span class="kw">for</span> <span class="ident">Base58CryptoHash</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">ser::Serializer</span>,
+<span class="kw">impl </span>ser::Serialize <span class="kw">for </span>Base58CryptoHash {
+    <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
+    <span class="kw">where
+        </span>S: ser::Serializer,
     {
-        <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="self">self</span>))
+        serializer.serialize_str(<span class="kw-2">&amp;</span>String::from(<span class="self">self</span>))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">de::Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Base58CryptoHash</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">D</span>: <span class="ident">de::Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;de</span>&gt; de::Deserialize&lt;<span class="lifetime">&#39;de</span>&gt; <span class="kw">for </span>Base58CryptoHash {
+    <span class="kw">fn </span>deserialize&lt;D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt;
+    <span class="kw">where
+        </span>D: de::Deserializer&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
-        <span class="kw">let</span> <span class="ident">s</span>: <span class="ident">String</span> <span class="op">=</span> <span class="ident">Deserialize::deserialize</span>(<span class="ident">deserializer</span>)<span class="question-mark">?</span>;
-        <span class="ident">s</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">de::Error::custom</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))
+        <span class="kw">let </span>s: String = Deserialize::deserialize(deserializer)<span class="question-mark">?</span>;
+        s.parse::&lt;<span class="self">Self</span>&gt;().map_err(|err| de::Error::custom(err.to_string()))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Base58CryptoHash</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">String</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">hash</span>: <span class="kw-2">&amp;</span><span class="ident">Base58CryptoHash</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">bs58::encode</span>(<span class="kw-2">&amp;</span><span class="ident">hash</span>.<span class="number">0</span>).<span class="ident">into_string</span>()
+<span class="attribute">#[cfg(feature = <span class="string">&quot;abi&quot;</span>)]
+</span><span class="kw">impl </span>schemars::JsonSchema <span class="kw">for </span>Base58CryptoHash {
+    <span class="kw">fn </span>is_referenceable() -&gt; bool {
+        <span class="bool-val">false
+    </span>}
+
+    <span class="kw">fn </span>schema_name() -&gt; String {
+        String::schema_name()
+    }
+
+    <span class="kw">fn </span>json_schema(gen: <span class="kw-2">&amp;mut </span>schemars::gen::SchemaGenerator) -&gt; schemars::schema::Schema {
+        String::json_schema(gen)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Base58CryptoHash</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std::error::Error</span><span class="op">&gt;</span>;
-
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="ident">String</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="ident"><span class="self">Self</span>::try_from</span>(<span class="ident">value</span>.<span class="ident">as_str</span>())
+<span class="kw">impl </span>From&lt;<span class="kw-2">&amp;</span>Base58CryptoHash&gt; <span class="kw">for </span>String {
+    <span class="kw">fn </span>from(hash: <span class="kw-2">&amp;</span>Base58CryptoHash) -&gt; <span class="self">Self </span>{
+        bs58::encode(<span class="kw-2">&amp;</span>hash.<span class="number">0</span>).into_string()
     }
 }
 
-<span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Base58CryptoHash</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std::error::Error</span><span class="op">&gt;</span>;
+<span class="kw">impl </span>TryFrom&lt;String&gt; <span class="kw">for </span>Base58CryptoHash {
+    <span class="kw">type </span>Error = ParseCryptoHashError;
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">value</span>.<span class="ident">parse</span>()<span class="question-mark">?</span>)
+    <span class="kw">fn </span>try_from(value: String) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        value.parse()
     }
 }
 
-<span class="kw">impl</span> <span class="ident">std::str::FromStr</span> <span class="kw">for</span> <span class="ident">Base58CryptoHash</span> {
-    <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ParseCryptoHashError</span>;
+<span class="kw">impl </span>TryFrom&lt;<span class="kw-2">&amp;</span>str&gt; <span class="kw">for </span>Base58CryptoHash {
+    <span class="kw">type </span>Error = ParseCryptoHashError;
 
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">crypto_hash</span>: <span class="ident">CryptoHash</span> <span class="op">=</span> <span class="ident">CryptoHash::default</span>();
-        <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">bs58::decode</span>(<span class="ident">value</span>).<span class="ident">into</span>(<span class="kw-2">&amp;mut</span> <span class="ident">crypto_hash</span>)<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">size</span> <span class="op">!</span><span class="op">=</span> <span class="ident">std::mem::size_of</span>::<span class="op">&lt;</span><span class="ident">CryptoHash</span><span class="op">&gt;</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseCryptoHashError</span> {
-                <span class="ident">kind</span>: <span class="ident">ParseCryptoHashErrorKind::InvalidLength</span>(<span class="ident">size</span>),
+    <span class="kw">fn </span>try_from(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        value.parse()
+    }
+}
+
+<span class="kw">impl </span>std::str::FromStr <span class="kw">for </span>Base58CryptoHash {
+    <span class="kw">type </span><span class="prelude-val">Err </span>= ParseCryptoHashError;
+
+    <span class="kw">fn </span>from_str(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>crypto_hash: CryptoHash = CryptoHash::default();
+        <span class="kw">let </span>size = bs58::decode(value).into(<span class="kw-2">&amp;mut </span>crypto_hash)<span class="question-mark">?</span>;
+        <span class="kw">if </span>size != std::mem::size_of::&lt;CryptoHash&gt;() {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(ParseCryptoHashError {
+                kind: ParseCryptoHashErrorKind::InvalidLength(size),
             });
         }
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span>(<span class="ident">crypto_hash</span>))
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>(crypto_hash))
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParseCryptoHashError</span> {
-    <span class="ident">kind</span>: <span class="ident">ParseCryptoHashErrorKind</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub struct </span>ParseCryptoHashError {
+    kind: ParseCryptoHashErrorKind,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">enum</span> <span class="ident">ParseCryptoHashErrorKind</span> {
-    <span class="ident">InvalidLength</span>(<span class="ident">usize</span>),
-    <span class="ident">Base58</span>(<span class="ident">B58Error</span>),
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">enum </span>ParseCryptoHashErrorKind {
+    InvalidLength(usize),
+    Base58(B58Error),
 }
 
-<span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">ParseCryptoHashError</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">kind</span> {
-            <span class="ident">ParseCryptoHashErrorKind::InvalidLength</span>(<span class="ident">l</span>) =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;invalid length of the crypto hash, expected 32 got {}&quot;</span>, <span class="ident">l</span>)
+<span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>ParseCryptoHashError {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="kw">match </span><span class="self">self</span>.kind {
+            ParseCryptoHashErrorKind::InvalidLength(l) =&gt; {
+                <span class="macro">write!</span>(f, <span class="string">&quot;invalid length of the crypto hash, expected 32 got {}&quot;</span>, l)
             }
-            <span class="ident">ParseCryptoHashErrorKind::Base58</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;base58 decoding error: {}&quot;</span>, <span class="ident">e</span>),
+            ParseCryptoHashErrorKind::Base58(e) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;base58 decoding error: {}&quot;</span>, e),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">B58Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParseCryptoHashError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">B58Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">kind</span>: <span class="ident">ParseCryptoHashErrorKind::Base58</span>(<span class="ident">e</span>) }
+<span class="kw">impl </span>From&lt;B58Error&gt; <span class="kw">for </span>ParseCryptoHashError {
+    <span class="kw">fn </span>from(e: B58Error) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ kind: ParseCryptoHashErrorKind::Base58(e) }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">ParseCryptoHashError</span> {}
+<span class="kw">impl </span>std::error::Error <span class="kw">for </span>ParseCryptoHashError {}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

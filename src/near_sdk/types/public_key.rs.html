@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/types/public_key.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>public_key.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/types/public_key.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>public_key.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -284,291 +284,321 @@
 <span id="284">284</span>
 <span id="285">285</span>
 <span id="286">286</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">borsh</span>::{<span class="ident">maybestd::io</span>, <span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>};
-<span class="kw">use</span> <span class="ident">bs58::decode::Error</span> <span class="kw">as</span> <span class="ident">B58Error</span>;
-<span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+</pre><pre class="rust"><code><span class="kw">use </span>borsh::{maybestd::io, BorshDeserialize, BorshSerialize};
+<span class="kw">use </span>bs58::decode::Error <span class="kw">as </span>B58Error;
+<span class="kw">use </span>std::convert::TryFrom;
 
-<span class="doccomment">/// PublicKey curve</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>)]</span>
-<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">u8</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CurveType</span> {
-    <span class="ident">ED25519</span> <span class="op">=</span> <span class="number">0</span>,
-    <span class="ident">SECP256K1</span> <span class="op">=</span> <span class="number">1</span>,
+<span class="doccomment">/// PublicKey curve
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialOrd, Ord, Eq, PartialEq, BorshDeserialize, BorshSerialize)]
+#[repr(u8)]
+</span><span class="kw">pub enum </span>CurveType {
+    ED25519 = <span class="number">0</span>,
+    SECP256K1 = <span class="number">1</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">CurveType</span> {
-    <span class="kw">fn</span> <span class="ident">from_u8</span>(<span class="ident">val</span>: <span class="ident">u8</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParsePublicKeyError</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">val</span> {
-            <span class="number">0</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">CurveType::ED25519</span>),
-            <span class="number">1</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">CurveType::SECP256K1</span>),
-            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParsePublicKeyError</span> { <span class="ident">kind</span>: <span class="ident">ParsePublicKeyErrorKind::UnknownCurve</span> }),
+<span class="kw">impl </span>CurveType {
+    <span class="kw">fn </span>from_u8(val: u8) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ParsePublicKeyError&gt; {
+        <span class="kw">match </span>val {
+            <span class="number">0 </span>=&gt; <span class="prelude-val">Ok</span>(CurveType::ED25519),
+            <span class="number">1 </span>=&gt; <span class="prelude-val">Ok</span>(CurveType::SECP256K1),
+            <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(ParsePublicKeyError { kind: ParsePublicKeyErrorKind::UnknownCurve }),
         }
     }
 
-    <span class="doccomment">/// Get the length of bytes associated to this CurveType</span>
-    <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">data_len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">CurveType::ED25519</span> =&gt; <span class="number">32</span>,
-            <span class="ident">CurveType::SECP256K1</span> =&gt; <span class="number">64</span>,
+    <span class="doccomment">/// Get the length of bytes associated to this CurveType
+    </span><span class="kw">const fn </span>data_len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="kw">match </span><span class="self">self </span>{
+            CurveType::ED25519 =&gt; <span class="number">32</span>,
+            CurveType::SECP256K1 =&gt; <span class="number">64</span>,
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">std::str::FromStr</span> <span class="kw">for</span> <span class="ident">CurveType</span> {
-    <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ParsePublicKeyError</span>;
+<span class="kw">impl </span>std::str::FromStr <span class="kw">for </span>CurveType {
+    <span class="kw">type </span><span class="prelude-val">Err </span>= ParsePublicKeyError;
 
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">value</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;ed25519&quot;</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">CurveType::ED25519</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">value</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;secp256k1&quot;</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">CurveType::SECP256K1</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">ParsePublicKeyError</span> { <span class="ident">kind</span>: <span class="ident">ParsePublicKeyErrorKind::UnknownCurve</span> })
+    <span class="kw">fn </span>from_str(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+        <span class="kw">if </span>value.eq_ignore_ascii_case(<span class="string">&quot;ed25519&quot;</span>) {
+            <span class="prelude-val">Ok</span>(CurveType::ED25519)
+        } <span class="kw">else if </span>value.eq_ignore_ascii_case(<span class="string">&quot;secp256k1&quot;</span>) {
+            <span class="prelude-val">Ok</span>(CurveType::SECP256K1)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(ParsePublicKeyError { kind: ParsePublicKeyErrorKind::UnknownCurve })
         }
     }
 }
 
-<span class="doccomment">/// Public key in a binary format with base58 string serialization with human-readable curve.</span>
-<span class="doccomment">/// The key types currently supported are `secp256k1` and `ed25519`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Ed25519 public keys accepted are 32 bytes and secp256k1 keys are the uncompressed 64 format.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Example</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// use near_sdk::PublicKey;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // Compressed ed25519 key</span>
-<span class="doccomment">/// let ed: PublicKey = &quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;.parse()</span>
-<span class="doccomment">///             .unwrap();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // Uncompressed secp256k1 key</span>
-<span class="doccomment">/// let secp256k1: PublicKey = &quot;secp256k1:qMoRgcoXai4mBPsdbHi1wfyxF9TdbPCF4qSDQTRP3TfescSRoUdSx6nmeQoN3aiwGzwMyGXAb1gUjBTv5AY8DXj&quot;</span>
-<span class="doccomment">///             .parse()</span>
-<span class="doccomment">///             .unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Eq</span>, <span class="ident">BorshSerialize</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PublicKey</span> {
-    <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Public key in a binary format with base58 string serialization with human-readable curve.
+/// The key types currently supported are `secp256k1` and `ed25519`.
+///
+/// Ed25519 public keys accepted are 32 bytes and secp256k1 keys are the uncompressed 64 format.
+///
+/// # Example
+/// ```
+/// use near_sdk::PublicKey;
+///
+/// // Compressed ed25519 key
+/// let ed: PublicKey = &quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;.parse()
+///             .unwrap();
+///
+/// // Uncompressed secp256k1 key
+/// let secp256k1: PublicKey = &quot;secp256k1:qMoRgcoXai4mBPsdbHi1wfyxF9TdbPCF4qSDQTRP3TfescSRoUdSx6nmeQoN3aiwGzwMyGXAb1gUjBTv5AY8DXj&quot;
+///             .parse()
+///             .unwrap();
+/// ```
+</span><span class="attribute">#[derive(Debug, Clone, PartialEq, PartialOrd, Ord, Eq, BorshSerialize, Hash)]
+</span><span class="kw">pub struct </span>PublicKey {
+    data: Vec&lt;u8&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">PublicKey</span> {
-    <span class="kw">fn</span> <span class="ident">split_key_type_data</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">CurveType</span>, <span class="kw-2">&amp;</span><span class="ident">str</span>), <span class="ident">ParsePublicKeyError</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">idx</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">find</span>(<span class="string">&#39;:&#39;</span>) {
-            <span class="kw">let</span> (<span class="ident">prefix</span>, <span class="ident">key_data</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">split_at</span>(<span class="ident">idx</span>);
-            <span class="prelude-val">Ok</span>((<span class="ident">prefix</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">CurveType</span><span class="op">&gt;</span>()<span class="question-mark">?</span>, <span class="kw-2">&amp;</span><span class="ident">key_data</span>[<span class="number">1</span>..]))
-        } <span class="kw">else</span> {
-            <span class="comment">// If there is no Default is ED25519.</span>
-            <span class="prelude-val">Ok</span>((<span class="ident">CurveType::ED25519</span>, <span class="ident">value</span>))
+<span class="kw">impl </span>PublicKey {
+    <span class="kw">fn </span>split_key_type_data(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;(CurveType, <span class="kw-2">&amp;</span>str), ParsePublicKeyError&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(idx) = value.find(<span class="string">&#39;:&#39;</span>) {
+            <span class="kw">let </span>(prefix, key_data) = value.split_at(idx);
+            <span class="prelude-val">Ok</span>((prefix.parse::&lt;CurveType&gt;()<span class="question-mark">?</span>, <span class="kw-2">&amp;</span>key_data[<span class="number">1</span>..]))
+        } <span class="kw">else </span>{
+            <span class="comment">// If there is no Default is ED25519.
+            </span><span class="prelude-val">Ok</span>((CurveType::ED25519, value))
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">from_parts</span>(<span class="ident">curve</span>: <span class="ident">CurveType</span>, <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParsePublicKeyError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">expected_length</span> <span class="op">=</span> <span class="ident">curve</span>.<span class="ident">data_len</span>();
-        <span class="kw">if</span> <span class="ident">data</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">expected_length</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParsePublicKeyError</span> {
-                <span class="ident">kind</span>: <span class="ident">ParsePublicKeyErrorKind::InvalidLength</span>(<span class="ident">data</span>.<span class="ident">len</span>()),
+    <span class="kw">fn </span>from_parts(curve: CurveType, data: Vec&lt;u8&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ParsePublicKeyError&gt; {
+        <span class="kw">let </span>expected_length = curve.data_len();
+        <span class="kw">if </span>data.len() != expected_length {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(ParsePublicKeyError {
+                kind: ParsePublicKeyErrorKind::InvalidLength(data.len()),
             });
         }
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="number">1</span> <span class="op">+</span> <span class="ident">expected_length</span>);
-        <span class="ident">bytes</span>.<span class="ident">push</span>(<span class="ident">curve</span> <span class="kw">as</span> <span class="ident">u8</span>);
-        <span class="ident">bytes</span>.<span class="ident">extend</span>(<span class="ident">data</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>bytes = Vec::with_capacity(<span class="number">1 </span>+ expected_length);
+        bytes.push(curve <span class="kw">as </span>u8);
+        bytes.extend(data);
 
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">data</span>: <span class="ident">bytes</span> })
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{ data: bytes })
     }
 
-    <span class="doccomment">/// Returns a byte slice of this `PublicKey`&#39;s contents.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>
+    <span class="doccomment">/// Returns a byte slice of this `PublicKey`&#39;s contents.
+    </span><span class="kw">pub fn </span>as_bytes(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[u8] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.data
     }
 
-    <span class="doccomment">/// Converts a `PublicKey` into a byte vector.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_bytes</span>(<span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">data</span>
+    <span class="doccomment">/// Converts a `PublicKey` into a byte vector.
+    </span><span class="kw">pub fn </span>into_bytes(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        <span class="self">self</span>.data
     }
 
-    <span class="doccomment">/// Get info about the CurveType for this public key</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">curve_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CurveType</span> {
-        <span class="ident">CurveType::from_u8</span>(<span class="self">self</span>.<span class="ident">data</span>[<span class="number">0</span>]).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident"><span class="kw">crate</span>::env::abort</span>())
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PublicKey</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">v</span>: <span class="ident">PublicKey</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="ident">v</span>.<span class="ident">data</span>
+    <span class="doccomment">/// Get info about the CurveType for this public key
+    </span><span class="kw">pub fn </span>curve_type(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; CurveType {
+        CurveType::from_u8(<span class="self">self</span>.data[<span class="number">0</span>]).unwrap_or_else(|<span class="kw">_</span>| <span class="kw">crate</span>::env::abort())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PublicKey</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">ParsePublicKeyError</span>;
+<span class="kw">impl </span>From&lt;PublicKey&gt; <span class="kw">for </span>Vec&lt;u8&gt; {
+    <span class="kw">fn </span>from(v: PublicKey) -&gt; Vec&lt;u8&gt; {
+        v.data
+    }
+}
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">data</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParsePublicKeyError</span> {
-                <span class="ident">kind</span>: <span class="ident">ParsePublicKeyErrorKind::InvalidLength</span>(<span class="ident">data</span>.<span class="ident">len</span>()),
+<span class="kw">impl </span>TryFrom&lt;Vec&lt;u8&gt;&gt; <span class="kw">for </span>PublicKey {
+    <span class="kw">type </span>Error = ParsePublicKeyError;
+
+    <span class="kw">fn </span>try_from(data: Vec&lt;u8&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">if </span>data.is_empty() {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(ParsePublicKeyError {
+                kind: ParsePublicKeyErrorKind::InvalidLength(data.len()),
             });
         }
 
-        <span class="kw">let</span> <span class="ident">curve</span> <span class="op">=</span> <span class="ident">CurveType::from_u8</span>(<span class="ident">data</span>[<span class="number">0</span>])<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">data</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">curve</span>.<span class="ident">data_len</span>() <span class="op">+</span> <span class="number">1</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParsePublicKeyError</span> {
-                <span class="ident">kind</span>: <span class="ident">ParsePublicKeyErrorKind::InvalidLength</span>(<span class="ident">data</span>.<span class="ident">len</span>()),
+        <span class="kw">let </span>curve = CurveType::from_u8(data[<span class="number">0</span>])<span class="question-mark">?</span>;
+        <span class="kw">if </span>data.len() != curve.data_len() + <span class="number">1 </span>{
+            <span class="kw">return </span><span class="prelude-val">Err</span>(ParsePublicKeyError {
+                kind: ParsePublicKeyErrorKind::InvalidLength(data.len()),
             });
         }
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">data</span> })
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{ data })
     }
 }
 
-<span class="kw">impl</span> <span class="ident">serde::Serialize</span> <span class="kw">for</span> <span class="ident">PublicKey</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">serde::Serializer</span>,
+<span class="kw">impl </span>serde::Serialize <span class="kw">for </span>PublicKey {
+    <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
+    <span class="kw">where
+        </span>S: serde::Serializer,
     {
-        <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="self">self</span>))
+        serializer.serialize_str(<span class="kw-2">&amp;</span>String::from(<span class="self">self</span>))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">BorshDeserialize</span> <span class="kw">for</span> <span class="ident">PublicKey</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span>(<span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="kw">as</span> <span class="ident">BorshDeserialize</span><span class="op">&gt;</span><span class="ident">::deserialize</span>(<span class="ident">buf</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> {
-            <span class="ident"><span class="self">Self</span>::try_from</span>(<span class="ident">s</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">io::Error::new</span>(<span class="ident">io::ErrorKind::InvalidData</span>, <span class="ident">e</span>))
+<span class="kw">impl </span>BorshDeserialize <span class="kw">for </span>PublicKey {
+    <span class="kw">fn </span>deserialize(buf: <span class="kw-2">&amp;mut &amp;</span>[u8]) -&gt; io::Result&lt;<span class="self">Self</span>&gt; {
+        &lt;Vec&lt;u8&gt; <span class="kw">as </span>BorshDeserialize&gt;::deserialize(buf).and_then(|s| {
+            <span class="self">Self</span>::try_from(s).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))
         })
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">serde::Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PublicKey</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">D</span>: <span class="ident">serde::Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;de</span>&gt; serde::Deserialize&lt;<span class="lifetime">&#39;de</span>&gt; <span class="kw">for </span>PublicKey {
+    <span class="kw">fn </span>deserialize&lt;D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt;
+    <span class="kw">where
+        </span>D: serde::Deserializer&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
-        <span class="kw">let</span> <span class="ident">s</span>: <span class="ident">String</span> <span class="op">=</span> <span class="ident">serde::Deserialize::deserialize</span>(<span class="ident">deserializer</span>)<span class="question-mark">?</span>;
-        <span class="ident">s</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">PublicKey</span><span class="op">&gt;</span>().<span class="ident">map_err</span>(<span class="ident">serde::de::Error::custom</span>)
+        <span class="kw">let </span>s: String = serde::Deserialize::deserialize(deserializer)<span class="question-mark">?</span>;
+        s.parse::&lt;PublicKey&gt;().map_err(serde::de::Error::custom)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PublicKey</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">String</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">str_public_key</span>: <span class="kw-2">&amp;</span><span class="ident">PublicKey</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">match</span> <span class="ident">str_public_key</span>.<span class="ident">curve_type</span>() {
-            <span class="ident">CurveType::ED25519</span> =&gt; {
-                [<span class="string">&quot;ed25519:&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">bs58::encode</span>(<span class="kw-2">&amp;</span><span class="ident">str_public_key</span>.<span class="ident">data</span>[<span class="number">1</span>..]).<span class="ident">into_string</span>()].<span class="ident">concat</span>()
+<span class="attribute">#[cfg(feature = <span class="string">&quot;abi&quot;</span>)]
+</span><span class="kw">impl </span>schemars::JsonSchema <span class="kw">for </span>PublicKey {
+    <span class="kw">fn </span>is_referenceable() -&gt; bool {
+        <span class="bool-val">false
+    </span>}
+
+    <span class="kw">fn </span>schema_name() -&gt; String {
+        String::schema_name()
+    }
+
+    <span class="kw">fn </span>json_schema(gen: <span class="kw-2">&amp;mut </span>schemars::gen::SchemaGenerator) -&gt; schemars::schema::Schema {
+        String::json_schema(gen)
+    }
+}
+
+<span class="kw">impl </span>From&lt;<span class="kw-2">&amp;</span>PublicKey&gt; <span class="kw">for </span>String {
+    <span class="kw">fn </span>from(str_public_key: <span class="kw-2">&amp;</span>PublicKey) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>str_public_key.curve_type() {
+            CurveType::ED25519 =&gt; {
+                [<span class="string">&quot;ed25519:&quot;</span>, <span class="kw-2">&amp;</span>bs58::encode(<span class="kw-2">&amp;</span>str_public_key.data[<span class="number">1</span>..]).into_string()].concat()
             }
-            <span class="ident">CurveType::SECP256K1</span> =&gt; {
-                [<span class="string">&quot;secp256k1:&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">bs58::encode</span>(<span class="kw-2">&amp;</span><span class="ident">str_public_key</span>.<span class="ident">data</span>[<span class="number">1</span>..]).<span class="ident">into_string</span>()].<span class="ident">concat</span>()
+            CurveType::SECP256K1 =&gt; {
+                [<span class="string">&quot;secp256k1:&quot;</span>, <span class="kw-2">&amp;</span>bs58::encode(<span class="kw-2">&amp;</span>str_public_key.data[<span class="number">1</span>..]).into_string()].concat()
             }
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">std::str::FromStr</span> <span class="kw">for</span> <span class="ident">PublicKey</span> {
-    <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ParsePublicKeyError</span>;
+<span class="kw">impl </span>std::str::FromStr <span class="kw">for </span>PublicKey {
+    <span class="kw">type </span><span class="prelude-val">Err </span>= ParsePublicKeyError;
 
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="ident">curve</span>, <span class="ident">key_data</span>) <span class="op">=</span> <span class="ident">PublicKey::split_key_type_data</span>(<span class="ident">value</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">bs58::decode</span>(<span class="ident">key_data</span>).<span class="ident">into_vec</span>()<span class="question-mark">?</span>;
-        <span class="ident"><span class="self">Self</span>::from_parts</span>(<span class="ident">curve</span>, <span class="ident">data</span>)
+    <span class="kw">fn </span>from_str(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+        <span class="kw">let </span>(curve, key_data) = PublicKey::split_key_type_data(value)<span class="question-mark">?</span>;
+        <span class="kw">let </span>data = bs58::decode(key_data).into_vec()<span class="question-mark">?</span>;
+        <span class="self">Self</span>::from_parts(curve, data)
     }
 }
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParsePublicKeyError</span> {
-    <span class="ident">kind</span>: <span class="ident">ParsePublicKeyErrorKind</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub struct </span>ParsePublicKeyError {
+    kind: ParsePublicKeyErrorKind,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">enum</span> <span class="ident">ParsePublicKeyErrorKind</span> {
-    <span class="ident">InvalidLength</span>(<span class="ident">usize</span>),
-    <span class="ident">Base58</span>(<span class="ident">B58Error</span>),
-    <span class="ident">UnknownCurve</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">enum </span>ParsePublicKeyErrorKind {
+    InvalidLength(usize),
+    Base58(B58Error),
+    UnknownCurve,
 }
 
-<span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">ParsePublicKeyError</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">kind</span> {
-            <span class="ident">ParsePublicKeyErrorKind::InvalidLength</span>(<span class="ident">l</span>) =&gt; {
-                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;invalid length of the public key, expected 32 got {}&quot;</span>, <span class="ident">l</span>)
+<span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>ParsePublicKeyError {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="kw">match </span><span class="self">self</span>.kind {
+            ParsePublicKeyErrorKind::InvalidLength(l) =&gt; {
+                <span class="macro">write!</span>(f, <span class="string">&quot;invalid length of the public key, expected 32 got {}&quot;</span>, l)
             }
-            <span class="ident">ParsePublicKeyErrorKind::Base58</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;base58 decoding error: {}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">ParsePublicKeyErrorKind::UnknownCurve</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;unknown curve kind&quot;</span>),
+            ParsePublicKeyErrorKind::Base58(e) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;base58 decoding error: {}&quot;</span>, e),
+            ParsePublicKeyErrorKind::UnknownCurve =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;unknown curve kind&quot;</span>),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">B58Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParsePublicKeyError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">B58Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">kind</span>: <span class="ident">ParsePublicKeyErrorKind::Base58</span>(<span class="ident">e</span>) }
+<span class="kw">impl </span>From&lt;B58Error&gt; <span class="kw">for </span>ParsePublicKeyError {
+    <span class="kw">fn </span>from(e: B58Error) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ kind: ParsePublicKeyErrorKind::Base58(e) }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">ParsePublicKeyError</span> {}
+<span class="kw">impl </span>std::error::Error <span class="kw">for </span>ParsePublicKeyError {}
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">std::convert::TryInto</span>;
-    <span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span>std::convert::TryInto;
+    <span class="kw">use </span>std::str::FromStr;
 
-    <span class="kw">fn</span> <span class="ident">expected_key</span>() -&gt; <span class="ident">PublicKey</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">CurveType::ED25519</span> <span class="kw">as</span> <span class="ident">u8</span>];
-        <span class="ident">key</span>.<span class="ident">extend</span>(
-            <span class="ident">bs58::decode</span>(<span class="string">&quot;6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;</span>).<span class="ident">into_vec</span>().<span class="ident">unwrap</span>(),
+    <span class="kw">fn </span>expected_key() -&gt; PublicKey {
+        <span class="kw">let </span><span class="kw-2">mut </span>key = <span class="macro">vec!</span>[CurveType::ED25519 <span class="kw">as </span>u8];
+        key.extend(
+            bs58::decode(<span class="string">&quot;6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;</span>).into_vec().unwrap(),
         );
-        <span class="ident">key</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>()
+        key.try_into().unwrap()
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_public_key_deser</span>() {
-        <span class="kw">let</span> <span class="ident">key</span>: <span class="ident">PublicKey</span> <span class="op">=</span>
-            <span class="ident">serde_json::from_str</span>(<span class="string">&quot;\&quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp\&quot;&quot;</span>)
-                .<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">key</span>, <span class="ident">expected_key</span>());
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_public_key_deser() {
+        <span class="kw">let </span>key: PublicKey =
+            serde_json::from_str(<span class="string">&quot;\&quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp\&quot;&quot;</span>)
+                .unwrap();
+        <span class="macro">assert_eq!</span>(key, expected_key());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_public_key_ser</span>() {
-        <span class="kw">let</span> <span class="ident">key</span>: <span class="ident">PublicKey</span> <span class="op">=</span> <span class="ident">expected_key</span>();
-        <span class="kw">let</span> <span class="ident">actual</span>: <span class="ident">String</span> <span class="op">=</span> <span class="ident">serde_json::to_string</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="string">&quot;\&quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp\&quot;&quot;</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_public_key_ser() {
+        <span class="kw">let </span>key: PublicKey = expected_key();
+        <span class="kw">let </span>actual: String = serde_json::to_string(<span class="kw-2">&amp;</span>key).unwrap();
+        <span class="macro">assert_eq!</span>(actual, <span class="string">&quot;\&quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp\&quot;&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_public_key_from_str</span>() {
-        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span>
-            <span class="ident">PublicKey::from_str</span>(<span class="string">&quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">key</span>, <span class="ident">expected_key</span>());
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_public_key_from_str() {
+        <span class="kw">let </span>key =
+            PublicKey::from_str(<span class="string">&quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;</span>).unwrap();
+        <span class="macro">assert_eq!</span>(key, expected_key());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_public_key_to_string</span>() {
-        <span class="kw">let</span> <span class="ident">key</span>: <span class="ident">PublicKey</span> <span class="op">=</span> <span class="ident">expected_key</span>();
-        <span class="kw">let</span> <span class="ident">actual</span>: <span class="ident">String</span> <span class="op">=</span> <span class="ident">String::try_from</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="string">&quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_public_key_to_string() {
+        <span class="kw">let </span>key: PublicKey = expected_key();
+        <span class="kw">let </span>actual: String = String::try_from(<span class="kw-2">&amp;</span>key).unwrap();
+        <span class="macro">assert_eq!</span>(actual, <span class="string">&quot;ed25519:6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_public_key_borsh_format_change</span>() {
-        <span class="comment">// Original struct to reference Borsh serialization from</span>
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">BorshSerialize</span>, <span class="ident">BorshDeserialize</span>)]</span>
-        <span class="kw">struct</span> <span class="ident">PublicKeyRef</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_public_key_borsh_format_change() {
+        <span class="comment">// Original struct to reference Borsh serialization from
+        </span><span class="attribute">#[derive(BorshSerialize, BorshDeserialize)]
+        </span><span class="kw">struct </span>PublicKeyRef(Vec&lt;u8&gt;);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">CurveType::ED25519</span> <span class="kw">as</span> <span class="ident">u8</span>];
-        <span class="ident">data</span>.<span class="ident">extend</span>(
-            <span class="ident">bs58::decode</span>(<span class="string">&quot;6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;</span>).<span class="ident">into_vec</span>().<span class="ident">unwrap</span>(),
+        <span class="kw">let </span><span class="kw-2">mut </span>data = <span class="macro">vec!</span>[CurveType::ED25519 <span class="kw">as </span>u8];
+        data.extend(
+            bs58::decode(<span class="string">&quot;6E8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp&quot;</span>).into_vec().unwrap(),
         );
 
-        <span class="comment">// Test internal serialization of Vec&lt;u8&gt; is the same:</span>
-        <span class="kw">let</span> <span class="ident">old_key</span> <span class="op">=</span> <span class="ident">PublicKeyRef</span>(<span class="ident">data</span>.<span class="ident">clone</span>());
-        <span class="kw">let</span> <span class="ident">old_encoded_key</span> <span class="op">=</span> <span class="ident">old_key</span>.<span class="ident">try_to_vec</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">new_key</span>: <span class="ident">PublicKey</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">new_encoded_key</span> <span class="op">=</span> <span class="ident">new_key</span>.<span class="ident">try_to_vec</span>().<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">old_encoded_key</span>, <span class="ident">new_encoded_key</span>);
+        <span class="comment">// Test internal serialization of Vec&lt;u8&gt; is the same:
+        </span><span class="kw">let </span>old_key = PublicKeyRef(data.clone());
+        <span class="kw">let </span>old_encoded_key = old_key.try_to_vec().unwrap();
+        <span class="kw">let </span>new_key: PublicKey = data.try_into().unwrap();
+        <span class="kw">let </span>new_encoded_key = new_key.try_to_vec().unwrap();
+        <span class="macro">assert_eq!</span>(old_encoded_key, new_encoded_key);
         <span class="macro">assert_eq!</span>(
-            <span class="kw-2">&amp;</span><span class="ident">new_encoded_key</span>,
-            <span class="kw-2">&amp;</span><span class="ident">bs58::decode</span>(<span class="string">&quot;279Zpep9MBBg4nKsVmTQE7NbXZkWdxti6HS1yzhp8qnc1ExS7gU&quot;</span>)
-                .<span class="ident">into_vec</span>()
-                .<span class="ident">unwrap</span>()
+            <span class="kw-2">&amp;</span>new_encoded_key,
+            <span class="kw-2">&amp;</span>bs58::decode(<span class="string">&quot;279Zpep9MBBg4nKsVmTQE7NbXZkWdxti6HS1yzhp8qnc1ExS7gU&quot;</span>)
+                .into_vec()
+                .unwrap()
         );
 
-        <span class="kw">let</span> <span class="ident">decoded_key</span> <span class="op">=</span> <span class="ident">PublicKey::try_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">new_encoded_key</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">decoded_key</span>, <span class="ident">new_key</span>);
+        <span class="kw">let </span>decoded_key = PublicKey::try_from_slice(<span class="kw-2">&amp;</span>new_encoded_key).unwrap();
+        <span class="macro">assert_eq!</span>(decoded_key, new_key);
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

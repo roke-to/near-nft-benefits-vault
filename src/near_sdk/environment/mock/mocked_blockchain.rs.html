@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/environment/mock/mocked_blockchain.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mocked_blockchain.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../near_sdk/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/environment/mock/mocked_blockchain.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mocked_blockchain.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../normalize.css"><link rel="stylesheet" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../dark.css" disabled><link rel="stylesheet" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../near_sdk/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -566,573 +566,597 @@
 <span id="566">566</span>
 <span id="567">567</span>
 <span id="568">568</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Receipt</span>, <span class="ident">SdkExternal</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::mock::VmAction</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test_utils::VMContextBuilder</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types</span>::{<span class="ident">Balance</span>, <span class="ident">PromiseResult</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Gas</span>, <span class="ident">RuntimeFeesConfig</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">PublicKey</span>, <span class="ident">VMContext</span>};
-<span class="kw">use</span> <span class="ident">near_crypto::PublicKey</span> <span class="kw">as</span> <span class="ident">VmPublicKey</span>;
-<span class="kw">use</span> <span class="ident">near_primitives::transaction::Action</span> <span class="kw">as</span> <span class="ident">PrimitivesAction</span>;
-<span class="kw">use</span> <span class="ident">near_vm_logic::mocks::mock_memory::MockedMemory</span>;
-<span class="kw">use</span> <span class="ident">near_vm_logic::types::PromiseResult</span> <span class="kw">as</span> <span class="ident">VmPromiseResult</span>;
-<span class="kw">use</span> <span class="ident">near_vm_logic</span>::{<span class="ident">External</span>, <span class="ident">MemoryLike</span>, <span class="ident">VMConfig</span>, <span class="ident">VMLogic</span>};
-<span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
-<span class="kw">use</span> <span class="ident">std::collections::HashMap</span>;
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+</pre><pre class="rust"><code><span class="kw">use super</span>::{Receipt, SdkExternal};
+<span class="kw">use </span><span class="kw">crate</span>::mock::VmAction;
+<span class="kw">use </span><span class="kw">crate</span>::test_utils::VMContextBuilder;
+<span class="kw">use </span><span class="kw">crate</span>::types::{Balance, PromiseResult};
+<span class="kw">use crate</span>::{Gas, RuntimeFeesConfig};
+<span class="kw">use crate</span>::{PublicKey, VMContext};
+<span class="kw">use </span>near_crypto::PublicKey <span class="kw">as </span>VmPublicKey;
+<span class="kw">use </span>near_primitives::transaction::Action <span class="kw">as </span>PrimitivesAction;
+<span class="kw">use </span>near_vm_logic::mocks::mock_memory::MockedMemory;
+<span class="kw">use </span>near_vm_logic::types::PromiseResult <span class="kw">as </span>VmPromiseResult;
+<span class="kw">use </span>near_vm_logic::{External, MemoryLike, VMConfig, VMLogic};
+<span class="kw">use </span>std::cell::RefCell;
+<span class="kw">use </span>std::collections::HashMap;
 
-<span class="doccomment">/// Mocked blockchain that can be used in the tests for the smart contracts.</span>
-<span class="doccomment">/// It implements `BlockchainInterface` by redirecting calls to `VMLogic`. It unwraps errors of</span>
-<span class="doccomment">/// `VMLogic` to cause panic during the unit tests similarly to how errors of `VMLogic` would cause</span>
-<span class="doccomment">/// the termination of guest program execution. Unit tests can even assert the expected error</span>
-<span class="doccomment">/// message.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MockedBlockchain</span> {
-    <span class="ident">logic</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">VMLogic</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="comment">// We keep ownership over logic fixture so that references in `VMLogic` are valid.</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-    <span class="ident">logic_fixture</span>: <span class="ident">LogicFixture</span>,
+<span class="doccomment">/// Mocked blockchain that can be used in the tests for the smart contracts.
+/// It implements `BlockchainInterface` by redirecting calls to `VMLogic`. It unwraps errors of
+/// `VMLogic` to cause panic during the unit tests similarly to how errors of `VMLogic` would cause
+/// the termination of guest program execution. Unit tests can even assert the expected error
+/// message.
+</span><span class="kw">pub struct </span>MockedBlockchain {
+    logic: RefCell&lt;VMLogic&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
+    <span class="comment">// We keep ownership over logic fixture so that references in `VMLogic` are valid.
+    </span><span class="attribute">#[allow(dead_code)]
+    </span>logic_fixture: LogicFixture,
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">MockedBlockchain</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident">MockedBlockchain::new</span>(
-            <span class="ident">VMContextBuilder::new</span>().<span class="ident">build</span>(),
-            <span class="ident">VMConfig::test</span>(),
-            <span class="ident">RuntimeFeesConfig::test</span>(),
+<span class="kw">impl </span>Default <span class="kw">for </span>MockedBlockchain {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        MockedBlockchain::new(
+            VMContextBuilder::new().build(),
+            VMConfig::test(),
+            RuntimeFeesConfig::test(),
             <span class="macro">vec!</span>[],
-            <span class="ident">Default::default</span>(),
-            <span class="ident">Default::default</span>(),
+            Default::default(),
+            Default::default(),
             <span class="prelude-val">None</span>,
         )
     }
 }
 
-<span class="kw">struct</span> <span class="ident">LogicFixture</span> {
-    <span class="ident">ext</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">SdkExternal</span><span class="op">&gt;</span>,
-    <span class="ident">memory</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">MemoryLike</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::box_collection</span>)]</span>
-    <span class="ident">promise_results</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">VmPromiseResult</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">config</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">VMConfig</span><span class="op">&gt;</span>,
-    <span class="ident">fees_config</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">RuntimeFeesConfig</span><span class="op">&gt;</span>,
+<span class="kw">struct </span>LogicFixture {
+    ext: Box&lt;SdkExternal&gt;,
+    memory: Box&lt;<span class="kw">dyn </span>MemoryLike&gt;,
+    <span class="attribute">#[allow(clippy::box_collection)]
+    </span>promise_results: Box&lt;Vec&lt;VmPromiseResult&gt;&gt;,
+    config: Box&lt;VMConfig&gt;,
+    fees_config: Box&lt;RuntimeFeesConfig&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">MockedBlockchain</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">context</span>: <span class="ident">VMContext</span>,
-        <span class="ident">config</span>: <span class="ident">VMConfig</span>,
-        <span class="ident">fees_config</span>: <span class="ident">RuntimeFeesConfig</span>,
-        <span class="ident">promise_results</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PromiseResult</span><span class="op">&gt;</span>,
-        <span class="ident">storage</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">validators</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Balance</span><span class="op">&gt;</span>,
-        <span class="ident">memory_opt</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">MemoryLike</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ext</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="ident">SdkExternal::new</span>());
-        <span class="kw">let</span> <span class="ident">context</span> <span class="op">=</span> <span class="ident">sdk_context_to_vm_context</span>(<span class="ident">context</span>);
-        <span class="ident">ext</span>.<span class="ident">fake_trie</span> <span class="op">=</span> <span class="ident">storage</span>;
-        <span class="ident">ext</span>.<span class="ident">validators</span> <span class="op">=</span> <span class="ident">validators</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">k</span>, <span class="ident">v</span>)<span class="op">|</span> (<span class="ident">k</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">v</span>)).<span class="ident">collect</span>();
-        <span class="kw">let</span> <span class="ident">memory</span> <span class="op">=</span> <span class="ident">memory_opt</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Box::new</span>(<span class="ident">MockedMemory</span> {}));
-        <span class="kw">let</span> <span class="ident">promise_results</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="ident">promise_results</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="ident">From::from</span>).<span class="ident">collect</span>());
-        <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="ident">config</span>);
-        <span class="kw">let</span> <span class="ident">fees_config</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="ident">fees_config</span>);
+<span class="kw">impl </span>MockedBlockchain {
+    <span class="kw">pub fn </span>new(
+        context: VMContext,
+        config: VMConfig,
+        fees_config: RuntimeFeesConfig,
+        promise_results: Vec&lt;PromiseResult&gt;,
+        storage: HashMap&lt;Vec&lt;u8&gt;, Vec&lt;u8&gt;&gt;,
+        validators: HashMap&lt;String, Balance&gt;,
+        memory_opt: <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span>MemoryLike&gt;&gt;,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>ext = Box::new(SdkExternal::new());
+        <span class="kw">let </span>context = sdk_context_to_vm_context(context);
+        ext.fake_trie = storage;
+        ext.validators = validators.into_iter().map(|(k, v)| (k.parse().unwrap(), v)).collect();
+        <span class="kw">let </span>memory = memory_opt.unwrap_or_else(|| Box::new(MockedMemory {}));
+        <span class="kw">let </span>promise_results = Box::new(promise_results.into_iter().map(From::from).collect());
+        <span class="kw">let </span>config = Box::new(config);
+        <span class="kw">let </span>fees_config = Box::new(fees_config);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">logic_fixture</span> <span class="op">=</span> <span class="ident">LogicFixture</span> { <span class="ident">ext</span>, <span class="ident">memory</span>, <span class="ident">promise_results</span>, <span class="ident">config</span>, <span class="ident">fees_config</span> };
+        <span class="kw">let </span><span class="kw-2">mut </span>logic_fixture = LogicFixture { ext, memory, promise_results, config, fees_config };
 
-        <span class="kw">let</span> <span class="ident">logic</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="ident">VMLogic::new_with_protocol_version</span>(
-                <span class="kw-2">&amp;mut</span> <span class="kw-2">*</span>(<span class="ident">logic_fixture</span>.<span class="ident">ext</span>.<span class="ident">as_mut</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="kw">dyn</span> <span class="ident">External</span>),
-                <span class="ident">context</span>,
-                <span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">logic_fixture</span>.<span class="ident">config</span>.<span class="ident">as_mut</span>() <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">VMConfig</span>),
-                <span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">logic_fixture</span>.<span class="ident">fees_config</span>.<span class="ident">as_mut</span>() <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">RuntimeFeesConfig</span>),
-                <span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">logic_fixture</span>.<span class="ident">promise_results</span>.<span class="ident">as_ref</span>().<span class="ident">as_slice</span>() <span class="kw">as</span> <span class="kw-2">*const</span> [<span class="ident">VmPromiseResult</span>]),
-                <span class="kw-2">&amp;mut</span> <span class="kw-2">*</span>(<span class="ident">logic_fixture</span>.<span class="ident">memory</span>.<span class="ident">as_mut</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="kw">dyn</span> <span class="ident">MemoryLike</span>),
-                <span class="ident">u32::MAX</span>,
+        <span class="kw">let </span>logic = <span class="kw">unsafe </span>{
+            VMLogic::new_with_protocol_version(
+                <span class="kw-2">&amp;mut *</span>(logic_fixture.ext.as_mut() <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">dyn </span>External),
+                context,
+                <span class="kw-2">&amp;*</span>(logic_fixture.config.as_mut() <span class="kw">as </span><span class="kw-2">*const </span>VMConfig),
+                <span class="kw-2">&amp;*</span>(logic_fixture.fees_config.as_mut() <span class="kw">as </span><span class="kw-2">*const </span>RuntimeFeesConfig),
+                <span class="kw-2">&amp;*</span>(logic_fixture.promise_results.as_ref().as_slice() <span class="kw">as </span><span class="kw-2">*const </span>[VmPromiseResult]),
+                <span class="kw-2">&amp;mut *</span>(logic_fixture.memory.as_mut() <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">dyn </span>MemoryLike),
+                u32::MAX,
             )
         };
 
-        <span class="kw">let</span> <span class="ident">logic</span> <span class="op">=</span> <span class="ident">RefCell::new</span>(<span class="ident">logic</span>);
-        <span class="self">Self</span> { <span class="ident">logic</span>, <span class="ident">logic_fixture</span> }
+        <span class="kw">let </span>logic = RefCell::new(logic);
+        <span class="self">Self </span>{ logic, logic_fixture }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">take_storage</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="ident">std::mem::take</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">logic_fixture</span>.<span class="ident">ext</span>.<span class="ident">fake_trie</span>)
+    <span class="kw">pub fn </span>take_storage(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; HashMap&lt;Vec&lt;u8&gt;, Vec&lt;u8&gt;&gt; {
+        std::mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.logic_fixture.ext.fake_trie)
     }
 
-    <span class="doccomment">/// Returns metadata about the receipts created</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">created_receipts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Receipt</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">logic</span>
-            .<span class="ident">borrow</span>()
-            .<span class="ident">action_receipts</span>()
-            .<span class="ident">iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">receiver</span>, <span class="ident">receipt</span>)<span class="op">|</span> {
-                <span class="kw">let</span> <span class="ident">actions</span> <span class="op">=</span> <span class="ident">receipt</span>.<span class="ident">actions</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">action_to_sdk_action</span>).<span class="ident">collect</span>();
-                <span class="ident">Receipt</span> { <span class="ident">receiver_id</span>: <span class="ident">receiver</span>.<span class="ident">as_str</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">actions</span> }
+    <span class="doccomment">/// Returns metadata about the receipts created
+    </span><span class="kw">pub fn </span>created_receipts(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Receipt&gt; {
+        <span class="self">self</span>.logic
+            .borrow()
+            .action_receipts()
+            .iter()
+            .map(|(receiver, receipt)| {
+                <span class="kw">let </span>actions = receipt.actions.iter().map(action_to_sdk_action).collect();
+                Receipt { receiver_id: receiver.as_str().parse().unwrap(), actions }
             })
-            .<span class="ident">collect</span>()
+            .collect()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gas</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">gas_amount</span>: <span class="ident">u32</span>) {
-        <span class="self">self</span>.<span class="ident">logic</span>.<span class="ident">borrow_mut</span>().<span class="ident">gas</span>(<span class="ident">gas_amount</span>).<span class="ident">unwrap</span>()
+    <span class="kw">pub fn </span>gas(<span class="kw-2">&amp;mut </span><span class="self">self</span>, gas_amount: u32) {
+        <span class="self">self</span>.logic.borrow_mut().gas(gas_amount).unwrap()
     }
 
-    <span class="doccomment">/// Returns logs created so far by the runtime.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">logs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">logic</span>.<span class="ident">borrow</span>().<span class="ident">logs</span>().<span class="ident">to_vec</span>()
-    }
-}
-
-<span class="kw">fn</span> <span class="ident">sdk_context_to_vm_context</span>(<span class="ident">context</span>: <span class="ident">VMContext</span>) -&gt; <span class="ident">near_vm_logic::VMContext</span> {
-    <span class="ident">near_vm_logic::VMContext</span> {
-        <span class="ident">current_account_id</span>: <span class="ident">context</span>.<span class="ident">current_account_id</span>.<span class="ident">as_str</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-        <span class="ident">signer_account_id</span>: <span class="ident">context</span>.<span class="ident">signer_account_id</span>.<span class="ident">as_str</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-        <span class="ident">signer_account_pk</span>: <span class="ident">context</span>.<span class="ident">signer_account_pk</span>.<span class="ident">into_bytes</span>(),
-        <span class="ident">predecessor_account_id</span>: <span class="ident">context</span>.<span class="ident">predecessor_account_id</span>.<span class="ident">as_str</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-        <span class="ident">input</span>: <span class="ident">context</span>.<span class="ident">input</span>,
-        <span class="ident">block_index</span>: <span class="ident">context</span>.<span class="ident">block_index</span>,
-        <span class="ident">block_timestamp</span>: <span class="ident">context</span>.<span class="ident">block_timestamp</span>,
-        <span class="ident">epoch_height</span>: <span class="ident">context</span>.<span class="ident">epoch_height</span>,
-        <span class="ident">account_balance</span>: <span class="ident">context</span>.<span class="ident">account_balance</span>,
-        <span class="ident">account_locked_balance</span>: <span class="ident">context</span>.<span class="ident">account_locked_balance</span>,
-        <span class="ident">storage_usage</span>: <span class="ident">context</span>.<span class="ident">storage_usage</span>,
-        <span class="ident">attached_deposit</span>: <span class="ident">context</span>.<span class="ident">attached_deposit</span>,
-        <span class="ident">prepaid_gas</span>: <span class="ident">context</span>.<span class="ident">prepaid_gas</span>.<span class="number">0</span>,
-        <span class="ident">random_seed</span>: <span class="ident">context</span>.<span class="ident">random_seed</span>.<span class="ident">to_vec</span>(),
-        <span class="ident">view_config</span>: <span class="ident">context</span>.<span class="ident">view_config</span>,
-        <span class="ident">output_data_receivers</span>: <span class="ident">context</span>
-            .<span class="ident">output_data_receivers</span>
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">as_str</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>())
-            .<span class="ident">collect</span>(),
+    <span class="doccomment">/// Returns logs created so far by the runtime.
+    </span><span class="kw">pub fn </span>logs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;String&gt; {
+        <span class="self">self</span>.logic.borrow().logs().to_vec()
     }
 }
 
-<span class="kw">fn</span> <span class="ident">action_to_sdk_action</span>(<span class="ident">action</span>: <span class="kw-2">&amp;</span><span class="ident">PrimitivesAction</span>) -&gt; <span class="ident">VmAction</span> {
-    <span class="kw">match</span> <span class="ident">action</span> {
-        <span class="ident">PrimitivesAction::CreateAccount</span>(<span class="kw">_</span>) =&gt; <span class="ident">VmAction::CreateAccount</span>,
-        <span class="ident">PrimitivesAction::DeployContract</span>(<span class="ident">c</span>) =&gt; <span class="ident">VmAction::DeployContract</span> { <span class="ident">code</span>: <span class="ident">c</span>.<span class="ident">code</span>.<span class="ident">clone</span>() },
-        <span class="ident">PrimitivesAction::FunctionCall</span>(<span class="ident">f</span>) =&gt; <span class="ident">VmAction::FunctionCall</span> {
-            <span class="ident">function_name</span>: <span class="ident">f</span>.<span class="ident">method_name</span>.<span class="ident">clone</span>(),
-            <span class="ident">args</span>: <span class="ident">f</span>.<span class="ident">args</span>.<span class="ident">clone</span>(),
-            <span class="ident">gas</span>: <span class="ident">Gas</span>(<span class="ident">f</span>.<span class="ident">gas</span>),
-            <span class="ident">deposit</span>: <span class="ident">f</span>.<span class="ident">deposit</span>,
+<span class="kw">fn </span>sdk_context_to_vm_context(context: VMContext) -&gt; near_vm_logic::VMContext {
+    near_vm_logic::VMContext {
+        current_account_id: context.current_account_id.as_str().parse().unwrap(),
+        signer_account_id: context.signer_account_id.as_str().parse().unwrap(),
+        signer_account_pk: context.signer_account_pk.into_bytes(),
+        predecessor_account_id: context.predecessor_account_id.as_str().parse().unwrap(),
+        input: context.input,
+        block_index: context.block_index,
+        block_timestamp: context.block_timestamp,
+        epoch_height: context.epoch_height,
+        account_balance: context.account_balance,
+        account_locked_balance: context.account_locked_balance,
+        storage_usage: context.storage_usage,
+        attached_deposit: context.attached_deposit,
+        prepaid_gas: context.prepaid_gas.<span class="number">0</span>,
+        random_seed: context.random_seed.to_vec(),
+        view_config: context.view_config,
+        output_data_receivers: context
+            .output_data_receivers
+            .into_iter()
+            .map(|a| a.as_str().parse().unwrap())
+            .collect(),
+    }
+}
+
+<span class="kw">fn </span>action_to_sdk_action(action: <span class="kw-2">&amp;</span>PrimitivesAction) -&gt; VmAction {
+    <span class="kw">match </span>action {
+        PrimitivesAction::CreateAccount(<span class="kw">_</span>) =&gt; VmAction::CreateAccount,
+        PrimitivesAction::DeployContract(c) =&gt; VmAction::DeployContract { code: c.code.clone() },
+        PrimitivesAction::FunctionCall(f) =&gt; VmAction::FunctionCall {
+            function_name: f.method_name.clone(),
+            args: f.args.clone(),
+            gas: Gas(f.gas),
+            deposit: f.deposit,
         },
-        <span class="ident">PrimitivesAction::Transfer</span>(<span class="ident">t</span>) =&gt; <span class="ident">VmAction::Transfer</span> { <span class="ident">deposit</span>: <span class="ident">t</span>.<span class="ident">deposit</span> },
-        <span class="ident">PrimitivesAction::Stake</span>(<span class="ident">s</span>) =&gt; {
-            <span class="ident">VmAction::Stake</span> { <span class="ident">stake</span>: <span class="ident">s</span>.<span class="ident">stake</span>, <span class="ident">public_key</span>: <span class="ident">pub_key_conversion</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="ident">public_key</span>) }
+        PrimitivesAction::Transfer(t) =&gt; VmAction::Transfer { deposit: t.deposit },
+        PrimitivesAction::Stake(s) =&gt; {
+            VmAction::Stake { stake: s.stake, public_key: pub_key_conversion(<span class="kw-2">&amp;</span>s.public_key) }
         }
-        <span class="ident">PrimitivesAction::AddKey</span>(<span class="ident">k</span>) =&gt; <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">k</span>.<span class="ident">access_key</span>.<span class="ident">permission</span> {
-            <span class="ident">near_primitives::account::AccessKeyPermission::FunctionCall</span>(<span class="ident">f</span>) =&gt; {
-                <span class="ident">VmAction::AddKeyWithFunctionCall</span> {
-                    <span class="ident">public_key</span>: <span class="ident">pub_key_conversion</span>(<span class="kw-2">&amp;</span><span class="ident">k</span>.<span class="ident">public_key</span>),
-                    <span class="ident">nonce</span>: <span class="ident">k</span>.<span class="ident">access_key</span>.<span class="ident">nonce</span>,
-                    <span class="ident">allowance</span>: <span class="ident">f</span>.<span class="ident">allowance</span>,
-                    <span class="ident">receiver_id</span>: <span class="ident">f</span>.<span class="ident">receiver_id</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-                    <span class="ident">function_names</span>: <span class="ident">f</span>.<span class="ident">method_names</span>.<span class="ident">clone</span>(),
+        PrimitivesAction::AddKey(k) =&gt; <span class="kw">match </span><span class="kw-2">&amp;</span>k.access_key.permission {
+            near_primitives::account::AccessKeyPermission::FunctionCall(f) =&gt; {
+                VmAction::AddKeyWithFunctionCall {
+                    public_key: pub_key_conversion(<span class="kw-2">&amp;</span>k.public_key),
+                    nonce: k.access_key.nonce,
+                    allowance: f.allowance,
+                    receiver_id: f.receiver_id.parse().unwrap(),
+                    function_names: f.method_names.clone(),
                 }
             }
-            <span class="ident">near_primitives::account::AccessKeyPermission::FullAccess</span> =&gt; {
-                <span class="ident">VmAction::AddKeyWithFullAccess</span> {
-                    <span class="ident">public_key</span>: <span class="ident">pub_key_conversion</span>(<span class="kw-2">&amp;</span><span class="ident">k</span>.<span class="ident">public_key</span>),
-                    <span class="ident">nonce</span>: <span class="ident">k</span>.<span class="ident">access_key</span>.<span class="ident">nonce</span>,
+            near_primitives::account::AccessKeyPermission::FullAccess =&gt; {
+                VmAction::AddKeyWithFullAccess {
+                    public_key: pub_key_conversion(<span class="kw-2">&amp;</span>k.public_key),
+                    nonce: k.access_key.nonce,
                 }
             }
         },
-        <span class="ident">PrimitivesAction::DeleteKey</span>(<span class="ident">k</span>) =&gt; {
-            <span class="ident">VmAction::DeleteKey</span> { <span class="ident">public_key</span>: <span class="ident">pub_key_conversion</span>(<span class="kw-2">&amp;</span><span class="ident">k</span>.<span class="ident">public_key</span>) }
+        PrimitivesAction::DeleteKey(k) =&gt; {
+            VmAction::DeleteKey { public_key: pub_key_conversion(<span class="kw-2">&amp;</span>k.public_key) }
         }
-        <span class="ident">PrimitivesAction::DeleteAccount</span>(<span class="ident">a</span>) =&gt; {
-            <span class="ident">VmAction::DeleteAccount</span> { <span class="ident">beneficiary_id</span>: <span class="ident">a</span>.<span class="ident">beneficiary_id</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>() }
+        PrimitivesAction::DeleteAccount(a) =&gt; {
+            VmAction::DeleteAccount { beneficiary_id: a.beneficiary_id.parse().unwrap() }
         }
     }
 }
 
-<span class="kw">fn</span> <span class="ident">pub_key_conversion</span>(<span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">VmPublicKey</span>) -&gt; <span class="ident">PublicKey</span> {
-    <span class="comment">// Hack by serializing and deserializing the key. This format should be consistent.</span>
-    <span class="ident">String::from</span>(<span class="ident">key</span>).<span class="ident">parse</span>().<span class="ident">unwrap</span>()
+<span class="kw">fn </span>pub_key_conversion(key: <span class="kw-2">&amp;</span>VmPublicKey) -&gt; PublicKey {
+    <span class="comment">// Hack by serializing and deserializing the key. This format should be consistent.
+    </span>String::from(key).parse().unwrap()
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-<span class="kw">mod</span> <span class="ident">mock_chain</span> {
-    <span class="kw">use</span> <span class="ident">near_vm_logic</span>::{<span class="ident">VMLogic</span>, <span class="ident">VMLogicError</span>};
+<span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+</span><span class="kw">mod </span>mock_chain {
+    <span class="kw">use </span>near_vm_logic::{VMLogic, VMLogicError};
 
-    <span class="kw">fn</span> <span class="ident">with_mock_interface</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">R</span>
-    <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">VMLogic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">VMLogicError</span><span class="op">&gt;</span>,
+    <span class="kw">fn </span>with_mock_interface&lt;F, R&gt;(f: F) -&gt; R
+    <span class="kw">where
+        </span>F: FnOnce(<span class="kw-2">&amp;mut </span>VMLogic) -&gt; <span class="prelude-ty">Result</span>&lt;R, VMLogicError&gt;,
     {
-        <span class="ident"><span class="kw">crate</span>::mock::with_mocked_blockchain</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">f</span>(<span class="kw-2">&amp;mut</span> <span class="ident">b</span>.<span class="ident">logic</span>.<span class="ident">borrow_mut</span>()).<span class="ident">unwrap</span>())
+        <span class="kw">crate</span>::mock::with_mocked_blockchain(|b| f(<span class="kw-2">&amp;mut </span>b.logic.borrow_mut()).unwrap())
     }
 
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">read_register</span>(<span class="ident">register_id</span>: <span class="ident">u64</span>, <span class="ident">ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">read_register</span>(<span class="ident">register_id</span>, <span class="ident">ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>read_register(register_id: u64, ptr: u64) {
+        with_mock_interface(|b| b.read_register(register_id, ptr))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">register_len</span>(<span class="ident">register_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">register_len</span>(<span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>register_len(register_id: u64) -&gt; u64 {
+        with_mock_interface(|b| b.register_len(register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">current_account_id</span>(<span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">current_account_id</span>(<span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>current_account_id(register_id: u64) {
+        with_mock_interface(|b| b.current_account_id(register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">signer_account_id</span>(<span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">signer_account_id</span>(<span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>signer_account_id(register_id: u64) {
+        with_mock_interface(|b| b.signer_account_id(register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">signer_account_pk</span>(<span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">signer_account_pk</span>(<span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>signer_account_pk(register_id: u64) {
+        with_mock_interface(|b| b.signer_account_pk(register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">predecessor_account_id</span>(<span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">predecessor_account_id</span>(<span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>predecessor_account_id(register_id: u64) {
+        with_mock_interface(|b| b.predecessor_account_id(register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">input</span>(<span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">input</span>(<span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>input(register_id: u64) {
+        with_mock_interface(|b| b.input(register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">block_index</span>() -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">block_index</span>())
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>block_index() -&gt; u64 {
+        with_mock_interface(|b| b.block_index())
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">block_timestamp</span>() -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">block_timestamp</span>())
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>block_timestamp() -&gt; u64 {
+        with_mock_interface(|b| b.block_timestamp())
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">epoch_height</span>() -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">epoch_height</span>())
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>epoch_height() -&gt; u64 {
+        with_mock_interface(|b| b.epoch_height())
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">storage_usage</span>() -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">storage_usage</span>())
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>storage_usage() -&gt; u64 {
+        with_mock_interface(|b| b.storage_usage())
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">account_balance</span>(<span class="ident">balance_ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">account_balance</span>(<span class="ident">balance_ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>account_balance(balance_ptr: u64) {
+        with_mock_interface(|b| b.account_balance(balance_ptr))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">account_locked_balance</span>(<span class="ident">balance_ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">account_locked_balance</span>(<span class="ident">balance_ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>account_locked_balance(balance_ptr: u64) {
+        with_mock_interface(|b| b.account_locked_balance(balance_ptr))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">attached_deposit</span>(<span class="ident">balance_ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">attached_deposit</span>(<span class="ident">balance_ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>attached_deposit(balance_ptr: u64) {
+        with_mock_interface(|b| b.attached_deposit(balance_ptr))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">prepaid_gas</span>() -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">prepaid_gas</span>())
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>prepaid_gas() -&gt; u64 {
+        with_mock_interface(|b| b.prepaid_gas())
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">used_gas</span>() -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">used_gas</span>())
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>used_gas() -&gt; u64 {
+        with_mock_interface(|b| b.used_gas())
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">random_seed</span>(<span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">random_seed</span>(<span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>random_seed(register_id: u64) {
+        with_mock_interface(|b| b.random_seed(register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">sha256</span>(<span class="ident">value_len</span>: <span class="ident">u64</span>, <span class="ident">value_ptr</span>: <span class="ident">u64</span>, <span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">sha256</span>(<span class="ident">value_len</span>, <span class="ident">value_ptr</span>, <span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>sha256(value_len: u64, value_ptr: u64, register_id: u64) {
+        with_mock_interface(|b| b.sha256(value_len, value_ptr, register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">keccak256</span>(<span class="ident">value_len</span>: <span class="ident">u64</span>, <span class="ident">value_ptr</span>: <span class="ident">u64</span>, <span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">keccak256</span>(<span class="ident">value_len</span>, <span class="ident">value_ptr</span>, <span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>keccak256(value_len: u64, value_ptr: u64, register_id: u64) {
+        with_mock_interface(|b| b.keccak256(value_len, value_ptr, register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">keccak512</span>(<span class="ident">value_len</span>: <span class="ident">u64</span>, <span class="ident">value_ptr</span>: <span class="ident">u64</span>, <span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">keccak512</span>(<span class="ident">value_len</span>, <span class="ident">value_ptr</span>, <span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>keccak512(value_len: u64, value_ptr: u64, register_id: u64) {
+        with_mock_interface(|b| b.keccak512(value_len, value_ptr, register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">ripemd160</span>(<span class="ident">value_len</span>: <span class="ident">u64</span>, <span class="ident">value_ptr</span>: <span class="ident">u64</span>, <span class="ident">register_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">ripemd160</span>(<span class="ident">value_len</span>, <span class="ident">value_ptr</span>, <span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>ripemd160(value_len: u64, value_ptr: u64, register_id: u64) {
+        with_mock_interface(|b| b.ripemd160(value_len, value_ptr, register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">ecrecover</span>(
-        <span class="ident">hash_len</span>: <span class="ident">u64</span>,
-        <span class="ident">hash_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">sig_len</span>: <span class="ident">u64</span>,
-        <span class="ident">sig_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">v</span>: <span class="ident">u64</span>,
-        <span class="ident">malleability_flag</span>: <span class="ident">u64</span>,
-        <span class="ident">register_id</span>: <span class="ident">u64</span>,
-    ) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">ecrecover</span>(<span class="ident">hash_len</span>, <span class="ident">hash_ptr</span>, <span class="ident">sig_len</span>, <span class="ident">sig_ptr</span>, <span class="ident">v</span>, <span class="ident">malleability_flag</span>, <span class="ident">register_id</span>)
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>ecrecover(
+        hash_len: u64,
+        hash_ptr: u64,
+        sig_len: u64,
+        sig_ptr: u64,
+        v: u64,
+        malleability_flag: u64,
+        register_id: u64,
+    ) -&gt; u64 {
+        with_mock_interface(|b| {
+            b.ecrecover(hash_len, hash_ptr, sig_len, sig_ptr, v, malleability_flag, register_id)
         })
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">value_return</span>(<span class="ident">value_len</span>: <span class="ident">u64</span>, <span class="ident">value_ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">value_return</span>(<span class="ident">value_len</span>, <span class="ident">value_ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>value_return(value_len: u64, value_ptr: u64) {
+        with_mock_interface(|b| b.value_return(value_len, value_ptr))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">panic</span>() -&gt; <span class="op">!</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">panic</span>());
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>panic() -&gt; ! {
+        with_mock_interface(|b| b.panic());
         <span class="macro">unreachable!</span>()
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">panic_utf8</span>(<span class="ident">len</span>: <span class="ident">u64</span>, <span class="ident">ptr</span>: <span class="ident">u64</span>) -&gt; <span class="op">!</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">panic_utf8</span>(<span class="ident">len</span>, <span class="ident">ptr</span>));
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>panic_utf8(len: u64, ptr: u64) -&gt; ! {
+        with_mock_interface(|b| b.panic_utf8(len, ptr));
         <span class="macro">unreachable!</span>()
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">log_utf8</span>(<span class="ident">len</span>: <span class="ident">u64</span>, <span class="ident">ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">log_utf8</span>(<span class="ident">len</span>, <span class="ident">ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>log_utf8(len: u64, ptr: u64) {
+        with_mock_interface(|b| b.log_utf8(len, ptr))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">log_utf16</span>(<span class="ident">len</span>: <span class="ident">u64</span>, <span class="ident">ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">log_utf16</span>(<span class="ident">len</span>, <span class="ident">ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>log_utf16(len: u64, ptr: u64) {
+        with_mock_interface(|b| b.log_utf16(len, ptr))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_create</span>(
-        <span class="ident">account_id_len</span>: <span class="ident">u64</span>,
-        <span class="ident">account_id_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">function_name_len</span>: <span class="ident">u64</span>,
-        <span class="ident">function_name_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">arguments_len</span>: <span class="ident">u64</span>,
-        <span class="ident">arguments_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">amount_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">gas</span>: <span class="ident">u64</span>,
-    ) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_create</span>(
-                <span class="ident">account_id_len</span>,
-                <span class="ident">account_id_ptr</span>,
-                <span class="ident">function_name_len</span>,
-                <span class="ident">function_name_ptr</span>,
-                <span class="ident">arguments_len</span>,
-                <span class="ident">arguments_ptr</span>,
-                <span class="ident">amount_ptr</span>,
-                <span class="ident">gas</span>,
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_create(
+        account_id_len: u64,
+        account_id_ptr: u64,
+        function_name_len: u64,
+        function_name_ptr: u64,
+        arguments_len: u64,
+        arguments_ptr: u64,
+        amount_ptr: u64,
+        gas: u64,
+    ) -&gt; u64 {
+        with_mock_interface(|b| {
+            b.promise_create(
+                account_id_len,
+                account_id_ptr,
+                function_name_len,
+                function_name_ptr,
+                arguments_len,
+                arguments_ptr,
+                amount_ptr,
+                gas,
             )
         })
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_then</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">account_id_len</span>: <span class="ident">u64</span>,
-        <span class="ident">account_id_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">function_name_len</span>: <span class="ident">u64</span>,
-        <span class="ident">function_name_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">arguments_len</span>: <span class="ident">u64</span>,
-        <span class="ident">arguments_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">amount_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">gas</span>: <span class="ident">u64</span>,
-    ) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_then</span>(
-                <span class="ident">promise_index</span>,
-                <span class="ident">account_id_len</span>,
-                <span class="ident">account_id_ptr</span>,
-                <span class="ident">function_name_len</span>,
-                <span class="ident">function_name_ptr</span>,
-                <span class="ident">arguments_len</span>,
-                <span class="ident">arguments_ptr</span>,
-                <span class="ident">amount_ptr</span>,
-                <span class="ident">gas</span>,
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_then(
+        promise_index: u64,
+        account_id_len: u64,
+        account_id_ptr: u64,
+        function_name_len: u64,
+        function_name_ptr: u64,
+        arguments_len: u64,
+        arguments_ptr: u64,
+        amount_ptr: u64,
+        gas: u64,
+    ) -&gt; u64 {
+        with_mock_interface(|b| {
+            b.promise_then(
+                promise_index,
+                account_id_len,
+                account_id_ptr,
+                function_name_len,
+                function_name_ptr,
+                arguments_len,
+                arguments_ptr,
+                amount_ptr,
+                gas,
             )
         })
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_and</span>(<span class="ident">promise_idx_ptr</span>: <span class="ident">u64</span>, <span class="ident">promise_idx_count</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">promise_and</span>(<span class="ident">promise_idx_ptr</span>, <span class="ident">promise_idx_count</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_and(promise_idx_ptr: u64, promise_idx_count: u64) -&gt; u64 {
+        with_mock_interface(|b| b.promise_and(promise_idx_ptr, promise_idx_count))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_create</span>(<span class="ident">account_id_len</span>: <span class="ident">u64</span>, <span class="ident">account_id_ptr</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">promise_batch_create</span>(<span class="ident">account_id_len</span>, <span class="ident">account_id_ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_create(account_id_len: u64, account_id_ptr: u64) -&gt; u64 {
+        with_mock_interface(|b| b.promise_batch_create(account_id_len, account_id_ptr))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_then</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">account_id_len</span>: <span class="ident">u64</span>,
-        <span class="ident">account_id_ptr</span>: <span class="ident">u64</span>,
-    ) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">promise_batch_then</span>(<span class="ident">promise_index</span>, <span class="ident">account_id_len</span>, <span class="ident">account_id_ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_then(
+        promise_index: u64,
+        account_id_len: u64,
+        account_id_ptr: u64,
+    ) -&gt; u64 {
+        with_mock_interface(|b| b.promise_batch_then(promise_index, account_id_len, account_id_ptr))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_create_account</span>(<span class="ident">promise_index</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">promise_batch_action_create_account</span>(<span class="ident">promise_index</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_create_account(promise_index: u64) {
+        with_mock_interface(|b| b.promise_batch_action_create_account(promise_index))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_deploy_contract</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">code_len</span>: <span class="ident">u64</span>,
-        <span class="ident">code_ptr</span>: <span class="ident">u64</span>,
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_deploy_contract(
+        promise_index: u64,
+        code_len: u64,
+        code_ptr: u64,
     ) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_batch_action_deploy_contract</span>(<span class="ident">promise_index</span>, <span class="ident">code_len</span>, <span class="ident">code_ptr</span>)
+        with_mock_interface(|b| {
+            b.promise_batch_action_deploy_contract(promise_index, code_len, code_ptr)
         })
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_function_call</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">function_name_len</span>: <span class="ident">u64</span>,
-        <span class="ident">function_name_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">arguments_len</span>: <span class="ident">u64</span>,
-        <span class="ident">arguments_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">amount_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">gas</span>: <span class="ident">u64</span>,
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_function_call(
+        promise_index: u64,
+        function_name_len: u64,
+        function_name_ptr: u64,
+        arguments_len: u64,
+        arguments_ptr: u64,
+        amount_ptr: u64,
+        gas: u64,
     ) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_batch_action_function_call</span>(
-                <span class="ident">promise_index</span>,
-                <span class="ident">function_name_len</span>,
-                <span class="ident">function_name_ptr</span>,
-                <span class="ident">arguments_len</span>,
-                <span class="ident">arguments_ptr</span>,
-                <span class="ident">amount_ptr</span>,
-                <span class="ident">gas</span>,
-            )
-        })
-    }
-
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_function_call_weight</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">function_name_len</span>: <span class="ident">u64</span>,
-        <span class="ident">function_name_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">arguments_len</span>: <span class="ident">u64</span>,
-        <span class="ident">arguments_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">amount_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">gas</span>: <span class="ident">u64</span>,
-        <span class="ident">weight</span>: <span class="ident">u64</span>,
-    ) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_batch_action_function_call_weight</span>(
-                <span class="ident">promise_index</span>,
-                <span class="ident">function_name_len</span>,
-                <span class="ident">function_name_ptr</span>,
-                <span class="ident">arguments_len</span>,
-                <span class="ident">arguments_ptr</span>,
-                <span class="ident">amount_ptr</span>,
-                <span class="ident">gas</span>,
-                <span class="ident">weight</span>,
+        with_mock_interface(|b| {
+            b.promise_batch_action_function_call(
+                promise_index,
+                function_name_len,
+                function_name_ptr,
+                arguments_len,
+                arguments_ptr,
+                amount_ptr,
+                gas,
             )
         })
     }
 
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_transfer</span>(<span class="ident">promise_index</span>: <span class="ident">u64</span>, <span class="ident">amount_ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">promise_batch_action_transfer</span>(<span class="ident">promise_index</span>, <span class="ident">amount_ptr</span>))
-    }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_stake</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">amount_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">public_key_len</span>: <span class="ident">u64</span>,
-        <span class="ident">public_key_ptr</span>: <span class="ident">u64</span>,
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_function_call_weight(
+        promise_index: u64,
+        function_name_len: u64,
+        function_name_ptr: u64,
+        arguments_len: u64,
+        arguments_ptr: u64,
+        amount_ptr: u64,
+        gas: u64,
+        weight: u64,
     ) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_batch_action_stake</span>(<span class="ident">promise_index</span>, <span class="ident">amount_ptr</span>, <span class="ident">public_key_len</span>, <span class="ident">public_key_ptr</span>)
-        })
-    }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_add_key_with_full_access</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">public_key_len</span>: <span class="ident">u64</span>,
-        <span class="ident">public_key_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">nonce</span>: <span class="ident">u64</span>,
-    ) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_batch_action_add_key_with_full_access</span>(
-                <span class="ident">promise_index</span>,
-                <span class="ident">public_key_len</span>,
-                <span class="ident">public_key_ptr</span>,
-                <span class="ident">nonce</span>,
+        with_mock_interface(|b| {
+            b.promise_batch_action_function_call_weight(
+                promise_index,
+                function_name_len,
+                function_name_ptr,
+                arguments_len,
+                arguments_ptr,
+                amount_ptr,
+                gas,
+                weight,
             )
         })
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_add_key_with_function_call</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">public_key_len</span>: <span class="ident">u64</span>,
-        <span class="ident">public_key_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">nonce</span>: <span class="ident">u64</span>,
-        <span class="ident">allowance_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">receiver_id_len</span>: <span class="ident">u64</span>,
-        <span class="ident">receiver_id_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">function_names_len</span>: <span class="ident">u64</span>,
-        <span class="ident">function_names_ptr</span>: <span class="ident">u64</span>,
+
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_transfer(promise_index: u64, amount_ptr: u64) {
+        with_mock_interface(|b| b.promise_batch_action_transfer(promise_index, amount_ptr))
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_stake(
+        promise_index: u64,
+        amount_ptr: u64,
+        public_key_len: u64,
+        public_key_ptr: u64,
     ) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_batch_action_add_key_with_function_call</span>(
-                <span class="ident">promise_index</span>,
-                <span class="ident">public_key_len</span>,
-                <span class="ident">public_key_ptr</span>,
-                <span class="ident">nonce</span>,
-                <span class="ident">allowance_ptr</span>,
-                <span class="ident">receiver_id_len</span>,
-                <span class="ident">receiver_id_ptr</span>,
-                <span class="ident">function_names_len</span>,
-                <span class="ident">function_names_ptr</span>,
+        with_mock_interface(|b| {
+            b.promise_batch_action_stake(promise_index, amount_ptr, public_key_len, public_key_ptr)
+        })
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_add_key_with_full_access(
+        promise_index: u64,
+        public_key_len: u64,
+        public_key_ptr: u64,
+        nonce: u64,
+    ) {
+        with_mock_interface(|b| {
+            b.promise_batch_action_add_key_with_full_access(
+                promise_index,
+                public_key_len,
+                public_key_ptr,
+                nonce,
             )
         })
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_delete_key</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">public_key_len</span>: <span class="ident">u64</span>,
-        <span class="ident">public_key_ptr</span>: <span class="ident">u64</span>,
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_add_key_with_function_call(
+        promise_index: u64,
+        public_key_len: u64,
+        public_key_ptr: u64,
+        nonce: u64,
+        allowance_ptr: u64,
+        receiver_id_len: u64,
+        receiver_id_ptr: u64,
+        function_names_len: u64,
+        function_names_ptr: u64,
     ) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_batch_action_delete_key</span>(<span class="ident">promise_index</span>, <span class="ident">public_key_len</span>, <span class="ident">public_key_ptr</span>)
-        })
-    }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_batch_action_delete_account</span>(
-        <span class="ident">promise_index</span>: <span class="ident">u64</span>,
-        <span class="ident">beneficiary_id_len</span>: <span class="ident">u64</span>,
-        <span class="ident">beneficiary_id_ptr</span>: <span class="ident">u64</span>,
-    ) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">promise_batch_action_delete_account</span>(
-                <span class="ident">promise_index</span>,
-                <span class="ident">beneficiary_id_len</span>,
-                <span class="ident">beneficiary_id_ptr</span>,
+        with_mock_interface(|b| {
+            b.promise_batch_action_add_key_with_function_call(
+                promise_index,
+                public_key_len,
+                public_key_ptr,
+                nonce,
+                allowance_ptr,
+                receiver_id_len,
+                receiver_id_ptr,
+                function_names_len,
+                function_names_ptr,
             )
         })
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_results_count</span>() -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">promise_results_count</span>())
-    }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_result</span>(<span class="ident">result_idx</span>: <span class="ident">u64</span>, <span class="ident">register_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">promise_result</span>(<span class="ident">result_idx</span>, <span class="ident">register_id</span>))
-    }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">promise_return</span>(<span class="ident">promise_id</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">promise_return</span>(<span class="ident">promise_id</span>))
-    }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">storage_write</span>(
-        <span class="ident">key_len</span>: <span class="ident">u64</span>,
-        <span class="ident">key_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">value_len</span>: <span class="ident">u64</span>,
-        <span class="ident">value_ptr</span>: <span class="ident">u64</span>,
-        <span class="ident">register_id</span>: <span class="ident">u64</span>,
-    ) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> {
-            <span class="ident">b</span>.<span class="ident">storage_write</span>(<span class="ident">key_len</span>, <span class="ident">key_ptr</span>, <span class="ident">value_len</span>, <span class="ident">value_ptr</span>, <span class="ident">register_id</span>)
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_delete_key(
+        promise_index: u64,
+        public_key_len: u64,
+        public_key_ptr: u64,
+    ) {
+        with_mock_interface(|b| {
+            b.promise_batch_action_delete_key(promise_index, public_key_len, public_key_ptr)
         })
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">storage_read</span>(<span class="ident">key_len</span>: <span class="ident">u64</span>, <span class="ident">key_ptr</span>: <span class="ident">u64</span>, <span class="ident">register_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">storage_read</span>(<span class="ident">key_len</span>, <span class="ident">key_ptr</span>, <span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_batch_action_delete_account(
+        promise_index: u64,
+        beneficiary_id_len: u64,
+        beneficiary_id_ptr: u64,
+    ) {
+        with_mock_interface(|b| {
+            b.promise_batch_action_delete_account(
+                promise_index,
+                beneficiary_id_len,
+                beneficiary_id_ptr,
+            )
+        })
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">storage_remove</span>(<span class="ident">key_len</span>: <span class="ident">u64</span>, <span class="ident">key_ptr</span>: <span class="ident">u64</span>, <span class="ident">register_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">storage_remove</span>(<span class="ident">key_len</span>, <span class="ident">key_ptr</span>, <span class="ident">register_id</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_results_count() -&gt; u64 {
+        with_mock_interface(|b| b.promise_results_count())
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">storage_has_key</span>(<span class="ident">key_len</span>: <span class="ident">u64</span>, <span class="ident">key_ptr</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">storage_has_key</span>(<span class="ident">key_len</span>, <span class="ident">key_ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_result(result_idx: u64, register_id: u64) -&gt; u64 {
+        with_mock_interface(|b| b.promise_result(result_idx, register_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">validator_stake</span>(<span class="ident">account_id_len</span>: <span class="ident">u64</span>, <span class="ident">account_id_ptr</span>: <span class="ident">u64</span>, <span class="ident">stake_ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">validator_stake</span>(<span class="ident">account_id_len</span>, <span class="ident">account_id_ptr</span>, <span class="ident">stake_ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>promise_return(promise_id: u64) {
+        with_mock_interface(|b| b.promise_return(promise_id))
     }
-    <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">validator_total_stake</span>(<span class="ident">stake_ptr</span>: <span class="ident">u64</span>) {
-        <span class="ident">with_mock_interface</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">validator_total_stake</span>(<span class="ident">stake_ptr</span>))
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>storage_write(
+        key_len: u64,
+        key_ptr: u64,
+        value_len: u64,
+        value_ptr: u64,
+        register_id: u64,
+    ) -&gt; u64 {
+        with_mock_interface(|b| {
+            b.storage_write(key_len, key_ptr, value_len, value_ptr, register_id)
+        })
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>storage_read(key_len: u64, key_ptr: u64, register_id: u64) -&gt; u64 {
+        with_mock_interface(|b| b.storage_read(key_len, key_ptr, register_id))
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>storage_remove(key_len: u64, key_ptr: u64, register_id: u64) -&gt; u64 {
+        with_mock_interface(|b| b.storage_remove(key_len, key_ptr, register_id))
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>storage_has_key(key_len: u64, key_ptr: u64) -&gt; u64 {
+        with_mock_interface(|b| b.storage_has_key(key_len, key_ptr))
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>validator_stake(account_id_len: u64, account_id_ptr: u64, stake_ptr: u64) {
+        with_mock_interface(|b| b.validator_stake(account_id_len, account_id_ptr, stake_ptr))
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>validator_total_stake(stake_ptr: u64) {
+        with_mock_interface(|b| b.validator_total_stake(stake_ptr))
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>alt_bn128_g1_multiexp(value_len: u64, value_ptr: u64, register_id: u64) {
+        with_mock_interface(|b| b.alt_bn128_g1_multiexp(value_len, value_ptr, register_id))
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>alt_bn128_g1_sum(value_len: u64, value_ptr: u64, register_id: u64) {
+        with_mock_interface(|b| b.alt_bn128_g1_sum(value_len, value_ptr, register_id))
+    }
+    <span class="attribute">#[no_mangle]
+    </span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>alt_bn128_pairing_check(value_len: u64, value_ptr: u64) -&gt; u64 {
+        with_mock_interface(|b| b.alt_bn128_pairing_check(value_len, value_ptr))
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

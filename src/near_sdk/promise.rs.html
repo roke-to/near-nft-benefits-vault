@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/promise.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>promise.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../near_sdk/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/promise.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>promise.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../near_sdk/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -529,536 +529,584 @@
 <span id="529">529</span>
 <span id="530">530</span>
 <span id="531">531</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">borsh::BorshSchema</span>;
-<span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
-<span class="kw">use</span> <span class="ident">std::collections::HashMap</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">Error</span>, <span class="ident">Write</span>};
-<span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+</pre><pre class="rust"><code><span class="kw">use </span>borsh::BorshSchema;
+<span class="kw">use </span>std::cell::RefCell;
+<span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::io::{Error, Write};
+<span class="kw">use </span>std::rc::Rc;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">AccountId</span>, <span class="ident">Balance</span>, <span class="ident">Gas</span>, <span class="ident">GasWeight</span>, <span class="ident">PromiseIndex</span>, <span class="ident">PublicKey</span>};
+<span class="kw">use crate</span>::{AccountId, Balance, Gas, GasWeight, PromiseIndex, PublicKey};
 
-<span class="kw">enum</span> <span class="ident">PromiseAction</span> {
-    <span class="ident">CreateAccount</span>,
-    <span class="ident">DeployContract</span> {
-        <span class="ident">code</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+<span class="kw">enum </span>PromiseAction {
+    CreateAccount,
+    DeployContract {
+        code: Vec&lt;u8&gt;,
     },
-    <span class="ident">FunctionCall</span> {
-        <span class="ident">function_name</span>: <span class="ident">String</span>,
-        <span class="ident">arguments</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-        <span class="ident">amount</span>: <span class="ident">Balance</span>,
-        <span class="ident">gas</span>: <span class="ident">Gas</span>,
+    FunctionCall {
+        function_name: String,
+        arguments: Vec&lt;u8&gt;,
+        amount: Balance,
+        gas: Gas,
     },
-    <span class="ident">FunctionCallWeight</span> {
-        <span class="ident">function_name</span>: <span class="ident">String</span>,
-        <span class="ident">arguments</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-        <span class="ident">amount</span>: <span class="ident">Balance</span>,
-        <span class="ident">gas</span>: <span class="ident">Gas</span>,
-        <span class="ident">weight</span>: <span class="ident">GasWeight</span>,
+    FunctionCallWeight {
+        function_name: String,
+        arguments: Vec&lt;u8&gt;,
+        amount: Balance,
+        gas: Gas,
+        weight: GasWeight,
     },
-    <span class="ident">Transfer</span> {
-        <span class="ident">amount</span>: <span class="ident">Balance</span>,
+    Transfer {
+        amount: Balance,
     },
-    <span class="ident">Stake</span> {
-        <span class="ident">amount</span>: <span class="ident">Balance</span>,
-        <span class="ident">public_key</span>: <span class="ident">PublicKey</span>,
+    Stake {
+        amount: Balance,
+        public_key: PublicKey,
     },
-    <span class="ident">AddFullAccessKey</span> {
-        <span class="ident">public_key</span>: <span class="ident">PublicKey</span>,
-        <span class="ident">nonce</span>: <span class="ident">u64</span>,
+    AddFullAccessKey {
+        public_key: PublicKey,
+        nonce: u64,
     },
-    <span class="ident">AddAccessKey</span> {
-        <span class="ident">public_key</span>: <span class="ident">PublicKey</span>,
-        <span class="ident">allowance</span>: <span class="ident">Balance</span>,
-        <span class="ident">receiver_id</span>: <span class="ident">AccountId</span>,
-        <span class="ident">function_names</span>: <span class="ident">String</span>,
-        <span class="ident">nonce</span>: <span class="ident">u64</span>,
+    AddAccessKey {
+        public_key: PublicKey,
+        allowance: Balance,
+        receiver_id: AccountId,
+        function_names: String,
+        nonce: u64,
     },
-    <span class="ident">DeleteKey</span> {
-        <span class="ident">public_key</span>: <span class="ident">PublicKey</span>,
+    DeleteKey {
+        public_key: PublicKey,
     },
-    <span class="ident">DeleteAccount</span> {
-        <span class="ident">beneficiary_id</span>: <span class="ident">AccountId</span>,
+    DeleteAccount {
+        beneficiary_id: AccountId,
     },
 }
 
-<span class="kw">impl</span> <span class="ident">PromiseAction</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">promise_index</span>: <span class="ident">PromiseIndex</span>) {
-        <span class="kw">use</span> <span class="ident">PromiseAction</span>::<span class="kw-2">*</span>;
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">CreateAccount</span> =&gt; <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_create_account</span>(<span class="ident">promise_index</span>),
-            <span class="ident">DeployContract</span> { <span class="ident">code</span> } =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_deploy_contract</span>(<span class="ident">promise_index</span>, <span class="ident">code</span>)
+<span class="kw">impl </span>PromiseAction {
+    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;</span><span class="self">self</span>, promise_index: PromiseIndex) {
+        <span class="kw">use </span>PromiseAction::<span class="kw-2">*</span>;
+        <span class="kw">match </span><span class="self">self </span>{
+            CreateAccount =&gt; <span class="kw">crate</span>::env::promise_batch_action_create_account(promise_index),
+            DeployContract { code } =&gt; {
+                <span class="kw">crate</span>::env::promise_batch_action_deploy_contract(promise_index, code)
             }
-            <span class="ident">FunctionCall</span> { <span class="ident">function_name</span>, <span class="ident">arguments</span>, <span class="ident">amount</span>, <span class="ident">gas</span> } =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_function_call</span>(
-                    <span class="ident">promise_index</span>,
-                    <span class="ident">function_name</span>,
-                    <span class="ident">arguments</span>,
-                    <span class="kw-2">*</span><span class="ident">amount</span>,
-                    <span class="kw-2">*</span><span class="ident">gas</span>,
+            FunctionCall { function_name, arguments, amount, gas } =&gt; {
+                <span class="kw">crate</span>::env::promise_batch_action_function_call(
+                    promise_index,
+                    function_name,
+                    arguments,
+                    <span class="kw-2">*</span>amount,
+                    <span class="kw-2">*</span>gas,
                 )
             }
-            <span class="ident">FunctionCallWeight</span> { <span class="ident">function_name</span>, <span class="ident">arguments</span>, <span class="ident">amount</span>, <span class="ident">gas</span>, <span class="ident">weight</span> } =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_function_call_weight</span>(
-                    <span class="ident">promise_index</span>,
-                    <span class="ident">function_name</span>,
-                    <span class="ident">arguments</span>,
-                    <span class="kw-2">*</span><span class="ident">amount</span>,
-                    <span class="kw-2">*</span><span class="ident">gas</span>,
-                    <span class="ident">GasWeight</span>(<span class="ident">weight</span>.<span class="number">0</span>),
+            FunctionCallWeight { function_name, arguments, amount, gas, weight } =&gt; {
+                <span class="kw">crate</span>::env::promise_batch_action_function_call_weight(
+                    promise_index,
+                    function_name,
+                    arguments,
+                    <span class="kw-2">*</span>amount,
+                    <span class="kw-2">*</span>gas,
+                    GasWeight(weight.<span class="number">0</span>),
                 )
             }
-            <span class="ident">Transfer</span> { <span class="ident">amount</span> } =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_transfer</span>(<span class="ident">promise_index</span>, <span class="kw-2">*</span><span class="ident">amount</span>)
+            Transfer { amount } =&gt; {
+                <span class="kw">crate</span>::env::promise_batch_action_transfer(promise_index, <span class="kw-2">*</span>amount)
             }
-            <span class="ident">Stake</span> { <span class="ident">amount</span>, <span class="ident">public_key</span> } =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_stake</span>(<span class="ident">promise_index</span>, <span class="kw-2">*</span><span class="ident">amount</span>, <span class="ident">public_key</span>)
+            Stake { amount, public_key } =&gt; {
+                <span class="kw">crate</span>::env::promise_batch_action_stake(promise_index, <span class="kw-2">*</span>amount, public_key)
             }
-            <span class="ident">AddFullAccessKey</span> { <span class="ident">public_key</span>, <span class="ident">nonce</span> } =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_add_key_with_full_access</span>(
-                    <span class="ident">promise_index</span>,
-                    <span class="ident">public_key</span>,
-                    <span class="kw-2">*</span><span class="ident">nonce</span>,
+            AddFullAccessKey { public_key, nonce } =&gt; {
+                <span class="kw">crate</span>::env::promise_batch_action_add_key_with_full_access(
+                    promise_index,
+                    public_key,
+                    <span class="kw-2">*</span>nonce,
                 )
             }
-            <span class="ident">AddAccessKey</span> { <span class="ident">public_key</span>, <span class="ident">allowance</span>, <span class="ident">receiver_id</span>, <span class="ident">function_names</span>, <span class="ident">nonce</span> } =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_add_key_with_function_call</span>(
-                    <span class="ident">promise_index</span>,
-                    <span class="ident">public_key</span>,
-                    <span class="kw-2">*</span><span class="ident">nonce</span>,
-                    <span class="kw-2">*</span><span class="ident">allowance</span>,
-                    <span class="ident">receiver_id</span>,
-                    <span class="ident">function_names</span>,
+            AddAccessKey { public_key, allowance, receiver_id, function_names, nonce } =&gt; {
+                <span class="kw">crate</span>::env::promise_batch_action_add_key_with_function_call(
+                    promise_index,
+                    public_key,
+                    <span class="kw-2">*</span>nonce,
+                    <span class="kw-2">*</span>allowance,
+                    receiver_id,
+                    function_names,
                 )
             }
-            <span class="ident">DeleteKey</span> { <span class="ident">public_key</span> } =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_delete_key</span>(<span class="ident">promise_index</span>, <span class="ident">public_key</span>)
+            DeleteKey { public_key } =&gt; {
+                <span class="kw">crate</span>::env::promise_batch_action_delete_key(promise_index, public_key)
             }
-            <span class="ident">DeleteAccount</span> { <span class="ident">beneficiary_id</span> } =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::promise_batch_action_delete_account</span>(<span class="ident">promise_index</span>, <span class="ident">beneficiary_id</span>)
+            DeleteAccount { beneficiary_id } =&gt; {
+                <span class="kw">crate</span>::env::promise_batch_action_delete_account(promise_index, beneficiary_id)
             }
         }
     }
 }
 
-<span class="kw">struct</span> <span class="ident">PromiseSingle</span> {
-    <span class="kw">pub</span> <span class="ident">account_id</span>: <span class="ident">AccountId</span>,
-    <span class="kw">pub</span> <span class="ident">actions</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PromiseAction</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">after</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Promise</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// Promise index that is computed only once.</span>
-    <span class="kw">pub</span> <span class="ident">promise_index</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PromiseIndex</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="kw">struct </span>PromiseSingle {
+    <span class="kw">pub </span>account_id: AccountId,
+    <span class="kw">pub </span>actions: RefCell&lt;Vec&lt;PromiseAction&gt;&gt;,
+    <span class="kw">pub </span>after: RefCell&lt;<span class="prelude-ty">Option</span>&lt;Promise&gt;&gt;,
+    <span class="doccomment">/// Promise index that is computed only once.
+    </span><span class="kw">pub </span>promise_index: RefCell&lt;<span class="prelude-ty">Option</span>&lt;PromiseIndex&gt;&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">PromiseSingle</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">construct_recursively</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">PromiseIndex</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">promise_lock</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">promise_index</span>.<span class="ident">borrow_mut</span>();
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">res</span>) <span class="op">=</span> <span class="ident">promise_lock</span>.<span class="ident">as_ref</span>() {
-            <span class="kw">return</span> <span class="kw-2">*</span><span class="ident">res</span>;
+<span class="kw">impl </span>PromiseSingle {
+    <span class="kw">pub fn </span>construct_recursively(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; PromiseIndex {
+        <span class="kw">let </span><span class="kw-2">mut </span>promise_lock = <span class="self">self</span>.promise_index.borrow_mut();
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(res) = promise_lock.as_ref() {
+            <span class="kw">return </span><span class="kw-2">*</span>res;
         }
-        <span class="kw">let</span> <span class="ident">promise_index</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">after</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">after</span>.<span class="ident">borrow</span>().<span class="ident">as_ref</span>() {
-            <span class="ident"><span class="kw">crate</span>::env::promise_batch_then</span>(<span class="ident">after</span>.<span class="ident">construct_recursively</span>(), <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">account_id</span>)
-        } <span class="kw">else</span> {
-            <span class="ident"><span class="kw">crate</span>::env::promise_batch_create</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">account_id</span>)
+        <span class="kw">let </span>promise_index = <span class="kw">if let </span><span class="prelude-val">Some</span>(after) = <span class="self">self</span>.after.borrow().as_ref() {
+            <span class="kw">crate</span>::env::promise_batch_then(after.construct_recursively(), <span class="kw-2">&amp;</span><span class="self">self</span>.account_id)
+        } <span class="kw">else </span>{
+            <span class="kw">crate</span>::env::promise_batch_create(<span class="kw-2">&amp;</span><span class="self">self</span>.account_id)
         };
-        <span class="kw">let</span> <span class="ident">actions_lock</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">actions</span>.<span class="ident">borrow</span>();
-        <span class="kw">for</span> <span class="ident">action</span> <span class="kw">in</span> <span class="ident">actions_lock</span>.<span class="ident">iter</span>() {
-            <span class="ident">action</span>.<span class="ident">add</span>(<span class="ident">promise_index</span>);
+        <span class="kw">let </span>actions_lock = <span class="self">self</span>.actions.borrow();
+        <span class="kw">for </span>action <span class="kw">in </span>actions_lock.iter() {
+            action.add(promise_index);
         }
-        <span class="kw-2">*</span><span class="ident">promise_lock</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">promise_index</span>);
-        <span class="ident">promise_index</span>
+        <span class="kw-2">*</span>promise_lock = <span class="prelude-val">Some</span>(promise_index);
+        promise_index
     }
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PromiseJoint</span> {
-    <span class="kw">pub</span> <span class="ident">promise_a</span>: <span class="ident">Promise</span>,
-    <span class="kw">pub</span> <span class="ident">promise_b</span>: <span class="ident">Promise</span>,
-    <span class="doccomment">/// Promise index that is computed only once.</span>
-    <span class="kw">pub</span> <span class="ident">promise_index</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PromiseIndex</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="kw">pub struct </span>PromiseJoint {
+    <span class="kw">pub </span>promise_a: Promise,
+    <span class="kw">pub </span>promise_b: Promise,
+    <span class="doccomment">/// Promise index that is computed only once.
+    </span><span class="kw">pub </span>promise_index: RefCell&lt;<span class="prelude-ty">Option</span>&lt;PromiseIndex&gt;&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">PromiseJoint</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">construct_recursively</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">PromiseIndex</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">promise_lock</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">promise_index</span>.<span class="ident">borrow_mut</span>();
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">res</span>) <span class="op">=</span> <span class="ident">promise_lock</span>.<span class="ident">as_ref</span>() {
-            <span class="kw">return</span> <span class="kw-2">*</span><span class="ident">res</span>;
+<span class="kw">impl </span>PromiseJoint {
+    <span class="kw">pub fn </span>construct_recursively(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; PromiseIndex {
+        <span class="kw">let </span><span class="kw-2">mut </span>promise_lock = <span class="self">self</span>.promise_index.borrow_mut();
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(res) = promise_lock.as_ref() {
+            <span class="kw">return </span><span class="kw-2">*</span>res;
         }
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::env::promise_and</span>(<span class="kw-2">&amp;</span>[
-            <span class="self">self</span>.<span class="ident">promise_a</span>.<span class="ident">construct_recursively</span>(),
-            <span class="self">self</span>.<span class="ident">promise_b</span>.<span class="ident">construct_recursively</span>(),
+        <span class="kw">let </span>res = <span class="kw">crate</span>::env::promise_and(<span class="kw-2">&amp;</span>[
+            <span class="self">self</span>.promise_a.construct_recursively(),
+            <span class="self">self</span>.promise_b.construct_recursively(),
         ]);
-        <span class="kw-2">*</span><span class="ident">promise_lock</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">res</span>);
-        <span class="ident">res</span>
+        <span class="kw-2">*</span>promise_lock = <span class="prelude-val">Some</span>(res);
+        res
     }
 }
 
-<span class="doccomment">/// A structure representing a result of the scheduled execution on another contract.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Smart contract developers will explicitly use `Promise` in two situations:</span>
-<span class="doccomment">/// * When they need to return `Promise`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///   In the following code if someone calls method `ContractA::a` they will internally cause an</span>
-<span class="doccomment">///   execution of method `ContractB::b` of `bob_near` account, and the return value of `ContractA::a`</span>
-<span class="doccomment">///   will be what `ContractB::b` returned.</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// # use near_sdk::{ext_contract, near_bindgen, Promise, Gas};</span>
-<span class="doccomment">/// # use borsh::{BorshDeserialize, BorshSerialize};</span>
-<span class="doccomment">/// #[ext_contract]</span>
-<span class="doccomment">/// pub trait ContractB {</span>
-<span class="doccomment">///     fn b(&amp;mut self);</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[near_bindgen]</span>
-<span class="doccomment">/// #[derive(Default, BorshDeserialize, BorshSerialize)]</span>
-<span class="doccomment">/// struct ContractA {}</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[near_bindgen]</span>
-<span class="doccomment">/// impl ContractA {</span>
-<span class="doccomment">///     pub fn a(&amp;self) -&gt; Promise {</span>
-<span class="doccomment">///         contract_b::ext(&quot;bob_near&quot;.parse().unwrap()).b()</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * When they need to create a transaction with one or many actions, e.g. the following code</span>
-<span class="doccomment">///   schedules a transaction that creates an account, transfers tokens, and assigns a public key:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// # use near_sdk::{Promise, env, test_utils::VMContextBuilder, testing_env};</span>
-<span class="doccomment">/// # testing_env!(VMContextBuilder::new().signer_account_id(&quot;bob_near&quot;.parse().unwrap())</span>
-<span class="doccomment">/// #               .account_balance(1000).prepaid_gas(1_000_000.into()).build());</span>
-<span class="doccomment">/// Promise::new(&quot;bob_near&quot;.parse().unwrap())</span>
-<span class="doccomment">///   .create_account()</span>
-<span class="doccomment">///   .transfer(1000)</span>
-<span class="doccomment">///   .add_full_access_key(env::signer_account_pk());</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Promise</span> {
-    <span class="ident">subtype</span>: <span class="ident">PromiseSubtype</span>,
-    <span class="ident">should_return</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A structure representing a result of the scheduled execution on another contract.
+///
+/// Smart contract developers will explicitly use `Promise` in two situations:
+/// * When they need to return `Promise`.
+///
+///   In the following code if someone calls method `ContractA::a` they will internally cause an
+///   execution of method `ContractB::b` of `bob_near` account, and the return value of `ContractA::a`
+///   will be what `ContractB::b` returned.
+/// ```no_run
+/// # use near_sdk::{ext_contract, near_bindgen, Promise, Gas};
+/// # use borsh::{BorshDeserialize, BorshSerialize};
+/// #[ext_contract]
+/// pub trait ContractB {
+///     fn b(&amp;mut self);
+/// }
+///
+/// #[near_bindgen]
+/// #[derive(Default, BorshDeserialize, BorshSerialize)]
+/// struct ContractA {}
+///
+/// #[near_bindgen]
+/// impl ContractA {
+///     pub fn a(&amp;self) -&gt; Promise {
+///         contract_b::ext(&quot;bob_near&quot;.parse().unwrap()).b()
+///     }
+/// }
+/// ```
+///
+/// * When they need to create a transaction with one or many actions, e.g. the following code
+///   schedules a transaction that creates an account, transfers tokens, and assigns a public key:
+///
+/// ```no_run
+/// # use near_sdk::{Promise, env, test_utils::VMContextBuilder, testing_env};
+/// # testing_env!(VMContextBuilder::new().signer_account_id(&quot;bob_near&quot;.parse().unwrap())
+/// #               .account_balance(1000).prepaid_gas(1_000_000.into()).build());
+/// Promise::new(&quot;bob_near&quot;.parse().unwrap())
+///   .create_account()
+///   .transfer(1000)
+///   .add_full_access_key(env::signer_account_pk());
+/// ```
+</span><span class="kw">pub struct </span>Promise {
+    subtype: PromiseSubtype,
+    should_return: RefCell&lt;bool&gt;,
 }
 
-<span class="doccomment">/// Until we implement strongly typed promises we serialize them as unit struct.</span>
-<span class="kw">impl</span> <span class="ident">BorshSchema</span> <span class="kw">for</span> <span class="ident">Promise</span> {
-    <span class="kw">fn</span> <span class="ident">add_definitions_recursively</span>(
-        <span class="ident">definitions</span>: <span class="kw-2">&amp;mut</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">borsh::schema::Declaration</span>, <span class="ident">borsh::schema::Definition</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Until we implement strongly typed promises we serialize them as unit struct.
+</span><span class="kw">impl </span>BorshSchema <span class="kw">for </span>Promise {
+    <span class="kw">fn </span>add_definitions_recursively(
+        definitions: <span class="kw-2">&amp;mut </span>HashMap&lt;borsh::schema::Declaration, borsh::schema::Definition&gt;,
     ) {
-        <span class="op">&lt;</span>()<span class="op">&gt;</span><span class="ident">::add_definitions_recursively</span>(<span class="ident">definitions</span>);
+        &lt;()&gt;::add_definitions_recursively(definitions);
     }
 
-    <span class="kw">fn</span> <span class="ident">declaration</span>() -&gt; <span class="ident">borsh::schema::Declaration</span> {
-        <span class="op">&lt;</span>()<span class="op">&gt;</span><span class="ident">::declaration</span>()
+    <span class="kw">fn </span>declaration() -&gt; borsh::schema::Declaration {
+        &lt;()&gt;::declaration()
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">enum</span> <span class="ident">PromiseSubtype</span> {
-    <span class="ident">Single</span>(<span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">PromiseSingle</span><span class="op">&gt;</span>),
-    <span class="ident">Joint</span>(<span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">PromiseJoint</span><span class="op">&gt;</span>),
+<span class="attribute">#[derive(Clone)]
+</span><span class="kw">enum </span>PromiseSubtype {
+    Single(Rc&lt;PromiseSingle&gt;),
+    Joint(Rc&lt;PromiseJoint&gt;),
 }
 
-<span class="kw">impl</span> <span class="ident">Promise</span> {
-    <span class="doccomment">/// Create a promise that acts on the given account.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">account_id</span>: <span class="ident">AccountId</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">subtype</span>: <span class="ident">PromiseSubtype::Single</span>(<span class="ident">Rc::new</span>(<span class="ident">PromiseSingle</span> {
-                <span class="ident">account_id</span>,
-                <span class="ident">actions</span>: <span class="ident">RefCell::new</span>(<span class="macro">vec!</span>[]),
-                <span class="ident">after</span>: <span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>),
-                <span class="ident">promise_index</span>: <span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>),
+<span class="kw">impl </span>Promise {
+    <span class="doccomment">/// Create a promise that acts on the given account.
+    </span><span class="kw">pub fn </span>new(account_id: AccountId) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            subtype: PromiseSubtype::Single(Rc::new(PromiseSingle {
+                account_id,
+                actions: RefCell::new(<span class="macro">vec!</span>[]),
+                after: RefCell::new(<span class="prelude-val">None</span>),
+                promise_index: RefCell::new(<span class="prelude-val">None</span>),
             })),
-            <span class="ident">should_return</span>: <span class="ident">RefCell::new</span>(<span class="bool-val">false</span>),
+            should_return: RefCell::new(<span class="bool-val">false</span>),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">add_action</span>(<span class="self">self</span>, <span class="ident">action</span>: <span class="ident">PromiseAction</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">subtype</span> {
-            <span class="ident">PromiseSubtype::Single</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">actions</span>.<span class="ident">borrow_mut</span>().<span class="ident">push</span>(<span class="ident">action</span>),
-            <span class="ident">PromiseSubtype::Joint</span>(<span class="kw">_</span>) =&gt; {
-                <span class="ident"><span class="kw">crate</span>::env::panic_str</span>(<span class="string">&quot;Cannot add action to a joint promise.&quot;</span>)
+    <span class="kw">fn </span>add_action(<span class="self">self</span>, action: PromiseAction) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.subtype {
+            PromiseSubtype::Single(x) =&gt; x.actions.borrow_mut().push(action),
+            PromiseSubtype::Joint(<span class="kw">_</span>) =&gt; {
+                <span class="kw">crate</span>::env::panic_str(<span class="string">&quot;Cannot add action to a joint promise.&quot;</span>)
             }
         }
-        <span class="self">self</span>
+        <span class="self">self
+    </span>}
+
+    <span class="doccomment">/// Create account on which this promise acts.
+    </span><span class="kw">pub fn </span>create_account(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::CreateAccount)
     }
 
-    <span class="doccomment">/// Create account on which this promise acts.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_account</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::CreateAccount</span>)
+    <span class="doccomment">/// Deploy a smart contract to the account on which this promise acts.
+    </span><span class="kw">pub fn </span>deploy_contract(<span class="self">self</span>, code: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::DeployContract { code })
     }
 
-    <span class="doccomment">/// Deploy a smart contract to the account on which this promise acts.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deploy_contract</span>(<span class="self">self</span>, <span class="ident">code</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::DeployContract</span> { <span class="ident">code</span> })
-    }
-
-    <span class="doccomment">/// A low-level interface for making a function call to the account that this promise acts on.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">function_call</span>(
+    <span class="doccomment">/// A low-level interface for making a function call to the account that this promise acts on.
+    </span><span class="kw">pub fn </span>function_call(
         <span class="self">self</span>,
-        <span class="ident">function_name</span>: <span class="ident">String</span>,
-        <span class="ident">arguments</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-        <span class="ident">amount</span>: <span class="ident">Balance</span>,
-        <span class="ident">gas</span>: <span class="ident">Gas</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::FunctionCall</span> { <span class="ident">function_name</span>, <span class="ident">arguments</span>, <span class="ident">amount</span>, <span class="ident">gas</span> })
+        function_name: String,
+        arguments: Vec&lt;u8&gt;,
+        amount: Balance,
+        gas: Gas,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::FunctionCall { function_name, arguments, amount, gas })
     }
 
-    <span class="doccomment">/// A low-level interface for making a function call to the account that this promise acts on.</span>
-    <span class="doccomment">/// unlike [`Promise::function_call`], this function accepts a weight to use relative unused gas</span>
-    <span class="doccomment">/// on this function call at the end of the scheduling method execution.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">function_call_weight</span>(
+    <span class="doccomment">/// A low-level interface for making a function call to the account that this promise acts on.
+    /// unlike [`Promise::function_call`], this function accepts a weight to use relative unused gas
+    /// on this function call at the end of the scheduling method execution.
+    </span><span class="kw">pub fn </span>function_call_weight(
         <span class="self">self</span>,
-        <span class="ident">function_name</span>: <span class="ident">String</span>,
-        <span class="ident">arguments</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-        <span class="ident">amount</span>: <span class="ident">Balance</span>,
-        <span class="ident">gas</span>: <span class="ident">Gas</span>,
-        <span class="ident">weight</span>: <span class="ident">GasWeight</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::FunctionCallWeight</span> {
-            <span class="ident">function_name</span>,
-            <span class="ident">arguments</span>,
-            <span class="ident">amount</span>,
-            <span class="ident">gas</span>,
-            <span class="ident">weight</span>,
+        function_name: String,
+        arguments: Vec&lt;u8&gt;,
+        amount: Balance,
+        gas: Gas,
+        weight: GasWeight,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::FunctionCallWeight {
+            function_name,
+            arguments,
+            amount,
+            gas,
+            weight,
         })
     }
 
-    <span class="doccomment">/// Transfer tokens to the account that this promise acts on.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">transfer</span>(<span class="self">self</span>, <span class="ident">amount</span>: <span class="ident">Balance</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::Transfer</span> { <span class="ident">amount</span> })
+    <span class="doccomment">/// Transfer tokens to the account that this promise acts on.
+    </span><span class="kw">pub fn </span>transfer(<span class="self">self</span>, amount: Balance) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::Transfer { amount })
     }
 
-    <span class="doccomment">/// Stake the account for the given amount of tokens using the given public key.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">stake</span>(<span class="self">self</span>, <span class="ident">amount</span>: <span class="ident">Balance</span>, <span class="ident">public_key</span>: <span class="ident">PublicKey</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::Stake</span> { <span class="ident">amount</span>, <span class="ident">public_key</span> })
+    <span class="doccomment">/// Stake the account for the given amount of tokens using the given public key.
+    </span><span class="kw">pub fn </span>stake(<span class="self">self</span>, amount: Balance, public_key: PublicKey) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::Stake { amount, public_key })
     }
 
-    <span class="doccomment">/// Add full access key to the given account.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_full_access_key</span>(<span class="self">self</span>, <span class="ident">public_key</span>: <span class="ident">PublicKey</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_full_access_key_with_nonce</span>(<span class="ident">public_key</span>, <span class="number">0</span>)
+    <span class="doccomment">/// Add full access key to the given account.
+    </span><span class="kw">pub fn </span>add_full_access_key(<span class="self">self</span>, public_key: PublicKey) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_full_access_key_with_nonce(public_key, <span class="number">0</span>)
     }
 
-    <span class="doccomment">/// Add full access key to the given account with a provided nonce.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_full_access_key_with_nonce</span>(<span class="self">self</span>, <span class="ident">public_key</span>: <span class="ident">PublicKey</span>, <span class="ident">nonce</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::AddFullAccessKey</span> { <span class="ident">public_key</span>, <span class="ident">nonce</span> })
+    <span class="doccomment">/// Add full access key to the given account with a provided nonce.
+    </span><span class="kw">pub fn </span>add_full_access_key_with_nonce(<span class="self">self</span>, public_key: PublicKey, nonce: u64) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::AddFullAccessKey { public_key, nonce })
     }
 
-    <span class="doccomment">/// Add an access key that is restricted to only calling a smart contract on some account using</span>
-    <span class="doccomment">/// only a restricted set of methods. Here `function_names` is a comma separated list of methods,</span>
-    <span class="doccomment">/// e.g. `&quot;method_a,method_b&quot;.to_string()`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_access_key</span>(
+    <span class="doccomment">/// Add an access key that is restricted to only calling a smart contract on some account using
+    /// only a restricted set of methods. Here `function_names` is a comma separated list of methods,
+    /// e.g. `&quot;method_a,method_b&quot;.to_string()`.
+    </span><span class="kw">pub fn </span>add_access_key(
         <span class="self">self</span>,
-        <span class="ident">public_key</span>: <span class="ident">PublicKey</span>,
-        <span class="ident">allowance</span>: <span class="ident">Balance</span>,
-        <span class="ident">receiver_id</span>: <span class="ident">AccountId</span>,
-        <span class="ident">function_names</span>: <span class="ident">String</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_access_key_with_nonce</span>(<span class="ident">public_key</span>, <span class="ident">allowance</span>, <span class="ident">receiver_id</span>, <span class="ident">function_names</span>, <span class="number">0</span>)
+        public_key: PublicKey,
+        allowance: Balance,
+        receiver_id: AccountId,
+        function_names: String,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_access_key_with_nonce(public_key, allowance, receiver_id, function_names, <span class="number">0</span>)
     }
 
-    <span class="doccomment">/// Add an access key with a provided nonce.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_access_key_with_nonce</span>(
+    <span class="doccomment">/// Add an access key with a provided nonce.
+    </span><span class="kw">pub fn </span>add_access_key_with_nonce(
         <span class="self">self</span>,
-        <span class="ident">public_key</span>: <span class="ident">PublicKey</span>,
-        <span class="ident">allowance</span>: <span class="ident">Balance</span>,
-        <span class="ident">receiver_id</span>: <span class="ident">AccountId</span>,
-        <span class="ident">function_names</span>: <span class="ident">String</span>,
-        <span class="ident">nonce</span>: <span class="ident">u64</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::AddAccessKey</span> {
-            <span class="ident">public_key</span>,
-            <span class="ident">allowance</span>,
-            <span class="ident">receiver_id</span>,
-            <span class="ident">function_names</span>,
-            <span class="ident">nonce</span>,
+        public_key: PublicKey,
+        allowance: Balance,
+        receiver_id: AccountId,
+        function_names: String,
+        nonce: u64,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::AddAccessKey {
+            public_key,
+            allowance,
+            receiver_id,
+            function_names,
+            nonce,
         })
     }
 
-    <span class="doccomment">/// Delete access key from the given account.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_key</span>(<span class="self">self</span>, <span class="ident">public_key</span>: <span class="ident">PublicKey</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::DeleteKey</span> { <span class="ident">public_key</span> })
+    <span class="doccomment">/// Delete access key from the given account.
+    </span><span class="kw">pub fn </span>delete_key(<span class="self">self</span>, public_key: PublicKey) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::DeleteKey { public_key })
     }
 
-    <span class="doccomment">/// Delete the given account.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_account</span>(<span class="self">self</span>, <span class="ident">beneficiary_id</span>: <span class="ident">AccountId</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add_action</span>(<span class="ident">PromiseAction::DeleteAccount</span> { <span class="ident">beneficiary_id</span> })
+    <span class="doccomment">/// Delete the given account.
+    </span><span class="kw">pub fn </span>delete_account(<span class="self">self</span>, beneficiary_id: AccountId) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.add_action(PromiseAction::DeleteAccount { beneficiary_id })
     }
 
-    <span class="doccomment">/// Merge this promise with another promise, so that we can schedule execution of another</span>
-    <span class="doccomment">/// smart contract right after all merged promises finish.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Note, once the promises are merged it is not possible to add actions to them, e.g. the</span>
-    <span class="doccomment">/// following code will panic during the execution of the smart contract:</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```no_run</span>
-    <span class="doccomment">/// # use near_sdk::{Promise, testing_env};</span>
-    <span class="doccomment">/// let p1 = Promise::new(&quot;bob_near&quot;.parse().unwrap()).create_account();</span>
-    <span class="doccomment">/// let p2 = Promise::new(&quot;carol_near&quot;.parse().unwrap()).create_account();</span>
-    <span class="doccomment">/// let p3 = p1.and(p2);</span>
-    <span class="doccomment">/// // p3.create_account();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">and</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="ident">Promise</span>) -&gt; <span class="ident">Promise</span> {
-        <span class="ident">Promise</span> {
-            <span class="ident">subtype</span>: <span class="ident">PromiseSubtype::Joint</span>(<span class="ident">Rc::new</span>(<span class="ident">PromiseJoint</span> {
-                <span class="ident">promise_a</span>: <span class="self">self</span>,
-                <span class="ident">promise_b</span>: <span class="ident">other</span>,
-                <span class="ident">promise_index</span>: <span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>),
+    <span class="doccomment">/// Merge this promise with another promise, so that we can schedule execution of another
+    /// smart contract right after all merged promises finish.
+    ///
+    /// Note, once the promises are merged it is not possible to add actions to them, e.g. the
+    /// following code will panic during the execution of the smart contract:
+    ///
+    /// ```no_run
+    /// # use near_sdk::{Promise, testing_env};
+    /// let p1 = Promise::new(&quot;bob_near&quot;.parse().unwrap()).create_account();
+    /// let p2 = Promise::new(&quot;carol_near&quot;.parse().unwrap()).create_account();
+    /// let p3 = p1.and(p2);
+    /// // p3.create_account();
+    /// ```
+    </span><span class="kw">pub fn </span>and(<span class="self">self</span>, other: Promise) -&gt; Promise {
+        Promise {
+            subtype: PromiseSubtype::Joint(Rc::new(PromiseJoint {
+                promise_a: <span class="self">self</span>,
+                promise_b: other,
+                promise_index: RefCell::new(<span class="prelude-val">None</span>),
             })),
-            <span class="ident">should_return</span>: <span class="ident">RefCell::new</span>(<span class="bool-val">false</span>),
+            should_return: RefCell::new(<span class="bool-val">false</span>),
         }
     }
 
-    <span class="doccomment">/// Schedules execution of another promise right after the current promise finish executing.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// In the following code `bob_near` and `dave_near` will be created concurrently. `carol_near`</span>
-    <span class="doccomment">/// creation will wait for `bob_near` to be created, and `eva_near` will wait for both `carol_near`</span>
-    <span class="doccomment">/// and `dave_near` to be created first.</span>
-    <span class="doccomment">/// ```no_run</span>
-    <span class="doccomment">/// # use near_sdk::{Promise, VMContext, testing_env};</span>
-    <span class="doccomment">/// let p1 = Promise::new(&quot;bob_near&quot;.parse().unwrap()).create_account();</span>
-    <span class="doccomment">/// let p2 = Promise::new(&quot;carol_near&quot;.parse().unwrap()).create_account();</span>
-    <span class="doccomment">/// let p3 = Promise::new(&quot;dave_near&quot;.parse().unwrap()).create_account();</span>
-    <span class="doccomment">/// let p4 = Promise::new(&quot;eva_near&quot;.parse().unwrap()).create_account();</span>
-    <span class="doccomment">/// p1.then(p2).and(p3).then(p4);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">then</span>(<span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">other</span>: <span class="ident">Promise</span>) -&gt; <span class="ident">Promise</span> {
-        <span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="ident">other</span>.<span class="ident">subtype</span> {
-            <span class="ident">PromiseSubtype::Single</span>(<span class="ident">x</span>) =&gt; {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">after</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">after</span>.<span class="ident">borrow_mut</span>();
-                <span class="kw">if</span> <span class="ident">after</span>.<span class="ident">is_some</span>() {
-                    <span class="ident"><span class="kw">crate</span>::env::panic_str</span>(
+    <span class="doccomment">/// Schedules execution of another promise right after the current promise finish executing.
+    ///
+    /// In the following code `bob_near` and `dave_near` will be created concurrently. `carol_near`
+    /// creation will wait for `bob_near` to be created, and `eva_near` will wait for both `carol_near`
+    /// and `dave_near` to be created first.
+    /// ```no_run
+    /// # use near_sdk::{Promise, VMContext, testing_env};
+    /// let p1 = Promise::new(&quot;bob_near&quot;.parse().unwrap()).create_account();
+    /// let p2 = Promise::new(&quot;carol_near&quot;.parse().unwrap()).create_account();
+    /// let p3 = Promise::new(&quot;dave_near&quot;.parse().unwrap()).create_account();
+    /// let p4 = Promise::new(&quot;eva_near&quot;.parse().unwrap()).create_account();
+    /// p1.then(p2).and(p3).then(p4);
+    /// ```
+    </span><span class="kw">pub fn </span>then(<span class="self">self</span>, <span class="kw-2">mut </span>other: Promise) -&gt; Promise {
+        <span class="kw">match </span><span class="kw-2">&amp;mut </span>other.subtype {
+            PromiseSubtype::Single(x) =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>after = x.after.borrow_mut();
+                <span class="kw">if </span>after.is_some() {
+                    <span class="kw">crate</span>::env::panic_str(
                         <span class="string">&quot;Cannot callback promise which is already scheduled after another&quot;</span>,
                     );
                 }
-                <span class="kw-2">*</span><span class="ident">after</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>)
+                <span class="kw-2">*</span>after = <span class="prelude-val">Some</span>(<span class="self">self</span>)
             }
-            <span class="ident">PromiseSubtype::Joint</span>(<span class="kw">_</span>) =&gt; <span class="ident"><span class="kw">crate</span>::env::panic_str</span>(<span class="string">&quot;Cannot callback joint promise.&quot;</span>),
+            PromiseSubtype::Joint(<span class="kw">_</span>) =&gt; <span class="kw">crate</span>::env::panic_str(<span class="string">&quot;Cannot callback joint promise.&quot;</span>),
         }
-        <span class="ident">other</span>
+        other
     }
 
-    <span class="doccomment">/// A specialized, relatively low-level API method. Allows to mark the given promise as the one</span>
-    <span class="doccomment">/// that should be considered as a return value.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// In the below code `a1` and `a2` functions are equivalent.</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use near_sdk::{ext_contract, Gas, near_bindgen, Promise};</span>
-    <span class="doccomment">/// # use borsh::{BorshDeserialize, BorshSerialize};</span>
-    <span class="doccomment">/// #[ext_contract]</span>
-    <span class="doccomment">/// pub trait ContractB {</span>
-    <span class="doccomment">///     fn b(&amp;mut self);</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// #[near_bindgen]</span>
-    <span class="doccomment">/// #[derive(Default, BorshDeserialize, BorshSerialize)]</span>
-    <span class="doccomment">/// struct ContractA {}</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// #[near_bindgen]</span>
-    <span class="doccomment">/// impl ContractA {</span>
-    <span class="doccomment">///     pub fn a1(&amp;self) {</span>
-    <span class="doccomment">///        contract_b::ext(&quot;bob_near&quot;.parse().unwrap()).b().as_return();</span>
-    <span class="doccomment">///     }</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     pub fn a2(&amp;self) -&gt; Promise {</span>
-    <span class="doccomment">///        contract_b::ext(&quot;bob_near&quot;.parse().unwrap()).b()</span>
-    <span class="doccomment">///     }</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::wrong_self_convention</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_return</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">should_return</span>.<span class="ident">borrow_mut</span>() <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// A specialized, relatively low-level API method. Allows to mark the given promise as the one
+    /// that should be considered as a return value.
+    ///
+    /// In the below code `a1` and `a2` functions are equivalent.
+    /// ```
+    /// # use near_sdk::{ext_contract, Gas, near_bindgen, Promise};
+    /// # use borsh::{BorshDeserialize, BorshSerialize};
+    /// #[ext_contract]
+    /// pub trait ContractB {
+    ///     fn b(&amp;mut self);
+    /// }
+    ///
+    /// #[near_bindgen]
+    /// #[derive(Default, BorshDeserialize, BorshSerialize)]
+    /// struct ContractA {}
+    ///
+    /// #[near_bindgen]
+    /// impl ContractA {
+    ///     pub fn a1(&amp;self) {
+    ///        contract_b::ext(&quot;bob_near&quot;.parse().unwrap()).b().as_return();
+    ///     }
+    ///
+    ///     pub fn a2(&amp;self) -&gt; Promise {
+    ///        contract_b::ext(&quot;bob_near&quot;.parse().unwrap()).b()
+    ///     }
+    /// }
+    /// ```
+    </span><span class="attribute">#[allow(clippy::wrong_self_convention)]
+    </span><span class="kw">pub fn </span>as_return(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="kw-2">*</span><span class="self">self</span>.should_return.borrow_mut() = <span class="bool-val">true</span>;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">construct_recursively</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">PromiseIndex</span> {
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">subtype</span> {
-            <span class="ident">PromiseSubtype::Single</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">construct_recursively</span>(),
-            <span class="ident">PromiseSubtype::Joint</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">construct_recursively</span>(),
+    <span class="kw">fn </span>construct_recursively(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; PromiseIndex {
+        <span class="kw">let </span>res = <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.subtype {
+            PromiseSubtype::Single(x) =&gt; x.construct_recursively(),
+            PromiseSubtype::Joint(x) =&gt; x.construct_recursively(),
         };
-        <span class="kw">if</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">should_return</span>.<span class="ident">borrow</span>() {
-            <span class="ident"><span class="kw">crate</span>::env::promise_return</span>(<span class="ident">res</span>);
+        <span class="kw">if </span><span class="kw-2">*</span><span class="self">self</span>.should_return.borrow() {
+            <span class="kw">crate</span>::env::promise_return(res);
         }
-        <span class="ident">res</span>
+        res
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Promise</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">construct_recursively</span>();
+<span class="kw">impl </span>Drop <span class="kw">for </span>Promise {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.construct_recursively();
     }
 }
 
-<span class="kw">impl</span> <span class="ident">serde::Serialize</span> <span class="kw">for</span> <span class="ident">Promise</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">serde::Serializer</span>,
+<span class="kw">impl </span>serde::Serialize <span class="kw">for </span>Promise {
+    <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
+    <span class="kw">where
+        </span>S: serde::Serializer,
     {
-        <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">should_return</span>.<span class="ident">borrow_mut</span>() <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="ident">serializer</span>.<span class="ident">serialize_unit</span>()
+        <span class="kw-2">*</span><span class="self">self</span>.should_return.borrow_mut() = <span class="bool-val">true</span>;
+        serializer.serialize_unit()
     }
 }
 
-<span class="kw">impl</span> <span class="ident">borsh::BorshSerialize</span> <span class="kw">for</span> <span class="ident">Promise</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">W</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">should_return</span>.<span class="ident">borrow_mut</span>() <span class="op">=</span> <span class="bool-val">true</span>;
+<span class="kw">impl </span>borsh::BorshSerialize <span class="kw">for </span>Promise {
+    <span class="kw">fn </span>serialize&lt;W: Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, _writer: <span class="kw-2">&amp;mut </span>W) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw-2">*</span><span class="self">self</span>.should_return.borrow_mut() = <span class="bool-val">true</span>;
 
-        <span class="comment">// Intentionally no bytes written for the promise, the return value from the promise</span>
-        <span class="comment">// will be considered as the return value from the contract call.</span>
-        <span class="prelude-val">Ok</span>(())
+        <span class="comment">// Intentionally no bytes written for the promise, the return value from the promise
+        // will be considered as the return value from the contract call.
+        </span><span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// When the method can return either a promise or a value, it can be called with `PromiseOrValue::Promise`</span>
-<span class="doccomment">/// or `PromiseOrValue::Value` to specify which one should be returned.</span>
-<span class="doccomment">/// # Example</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// # use near_sdk::{ext_contract, near_bindgen, Gas, PromiseOrValue};</span>
-<span class="doccomment">/// #[ext_contract]</span>
-<span class="doccomment">/// pub trait ContractA {</span>
-<span class="doccomment">///     fn a(&amp;mut self);</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let value = Some(true);</span>
-<span class="doccomment">/// let val: PromiseOrValue&lt;bool&gt; = if let Some(value) = value {</span>
-<span class="doccomment">///     PromiseOrValue::Value(value)</span>
-<span class="doccomment">/// } else {</span>
-<span class="doccomment">///     contract_a::ext(&quot;bob_near&quot;.parse().unwrap()).a().into()</span>
-<span class="doccomment">/// };</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">serde::Serialize</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">untagged</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PromiseOrValue</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">Promise</span>(<span class="ident">Promise</span>),
-    <span class="ident">Value</span>(<span class="ident">T</span>),
+<span class="attribute">#[cfg(feature = <span class="string">&quot;abi&quot;</span>)]
+</span><span class="kw">impl </span>schemars::JsonSchema <span class="kw">for </span>Promise {
+    <span class="kw">fn </span>schema_name() -&gt; String {
+        <span class="string">&quot;Promise&quot;</span>.to_string()
+    }
+
+    <span class="kw">fn </span>json_schema(_gen: <span class="kw-2">&amp;mut </span>schemars::gen::SchemaGenerator) -&gt; schemars::schema::Schema {
+        <span class="comment">// Since promises are untyped, for now we represent Promise results with the schema
+        // `true` which matches everything (i.e. always passes validation)
+        </span>schemars::schema::Schema::Bool(<span class="bool-val">true</span>)
+    }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">BorshSchema</span> <span class="kw">for</span> <span class="ident">PromiseOrValue</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">BorshSchema</span>,
+<span class="doccomment">/// When the method can return either a promise or a value, it can be called with `PromiseOrValue::Promise`
+/// or `PromiseOrValue::Value` to specify which one should be returned.
+/// # Example
+/// ```no_run
+/// # use near_sdk::{ext_contract, near_bindgen, Gas, PromiseOrValue};
+/// #[ext_contract]
+/// pub trait ContractA {
+///     fn a(&amp;mut self);
+/// }
+///
+/// let value = Some(true);
+/// let val: PromiseOrValue&lt;bool&gt; = if let Some(value) = value {
+///     PromiseOrValue::Value(value)
+/// } else {
+///     contract_a::ext(&quot;bob_near&quot;.parse().unwrap()).a().into()
+/// };
+/// ```
+</span><span class="attribute">#[derive(serde::Serialize)]
+#[serde(untagged)]
+</span><span class="kw">pub enum </span>PromiseOrValue&lt;T&gt; {
+    Promise(Promise),
+    Value(T),
+}
+
+<span class="kw">impl</span>&lt;T&gt; BorshSchema <span class="kw">for </span>PromiseOrValue&lt;T&gt;
+<span class="kw">where
+    </span>T: BorshSchema,
 {
-    <span class="kw">fn</span> <span class="ident">add_definitions_recursively</span>(
-        <span class="ident">definitions</span>: <span class="kw-2">&amp;mut</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">borsh::schema::Declaration</span>, <span class="ident">borsh::schema::Definition</span><span class="op">&gt;</span>,
+    <span class="kw">fn </span>add_definitions_recursively(
+        definitions: <span class="kw-2">&amp;mut </span>HashMap&lt;borsh::schema::Declaration, borsh::schema::Definition&gt;,
     ) {
-        <span class="ident">T::add_definitions_recursively</span>(<span class="ident">definitions</span>);
+        T::add_definitions_recursively(definitions);
     }
 
-    <span class="kw">fn</span> <span class="ident">declaration</span>() -&gt; <span class="ident">borsh::schema::Declaration</span> {
-        <span class="ident">T::declaration</span>()
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Promise</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PromiseOrValue</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">promise</span>: <span class="ident">Promise</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">PromiseOrValue::Promise</span>(<span class="ident">promise</span>)
+    <span class="kw">fn </span>declaration() -&gt; borsh::schema::Declaration {
+        T::declaration()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">borsh::BorshSerialize</span><span class="op">&gt;</span> <span class="ident">borsh::BorshSerialize</span> <span class="kw">for</span> <span class="ident">PromiseOrValue</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">writer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">W</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="comment">// Only actual value is serialized.</span>
-            <span class="ident">PromiseOrValue::Value</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">serialize</span>(<span class="ident">writer</span>),
-            <span class="comment">// The promise is dropped to cause env::promise calls.</span>
-            <span class="ident">PromiseOrValue::Promise</span>(<span class="ident">p</span>) =&gt; <span class="ident">p</span>.<span class="ident">serialize</span>(<span class="ident">writer</span>),
+<span class="kw">impl</span>&lt;T&gt; From&lt;Promise&gt; <span class="kw">for </span>PromiseOrValue&lt;T&gt; {
+    <span class="kw">fn </span>from(promise: Promise) -&gt; <span class="self">Self </span>{
+        PromiseOrValue::Promise(promise)
+    }
+}
+
+<span class="kw">impl</span>&lt;T: borsh::BorshSerialize&gt; borsh::BorshSerialize <span class="kw">for </span>PromiseOrValue&lt;T&gt; {
+    <span class="kw">fn </span>serialize&lt;W: Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, writer: <span class="kw-2">&amp;mut </span>W) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">match </span><span class="self">self </span>{
+            <span class="comment">// Only actual value is serialized.
+            </span>PromiseOrValue::Value(x) =&gt; x.serialize(writer),
+            <span class="comment">// The promise is dropped to cause env::promise calls.
+            </span>PromiseOrValue::Promise(p) =&gt; p.serialize(writer),
         }
+    }
+}
+
+<span class="attribute">#[cfg(feature = <span class="string">&quot;abi&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: schemars::JsonSchema&gt; schemars::JsonSchema <span class="kw">for </span>PromiseOrValue&lt;T&gt; {
+    <span class="kw">fn </span>schema_name() -&gt; String {
+        <span class="macro">format!</span>(<span class="string">&quot;PromiseOrValue{}&quot;</span>, T::schema_name())
+    }
+
+    <span class="kw">fn </span>json_schema(gen: <span class="kw-2">&amp;mut </span>schemars::gen::SchemaGenerator) -&gt; schemars::schema::Schema {
+        T::json_schema(gen)
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

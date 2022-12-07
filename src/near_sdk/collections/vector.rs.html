@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/collections/vector.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>vector.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/collections/vector.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>vector.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -534,541 +534,577 @@
 <span id="534">534</span>
 <span id="535">535</span>
 <span id="536">536</span>
-</pre><pre class="rust"><code><span class="doccomment">//! A vector implemented on a trie. Unlike standard vector does not support insertion and removal</span>
-<span class="doccomment">//! of an element results in the last element being placed in the empty position.</span>
-<span class="kw">use</span> <span class="ident">core::ops::Range</span>;
-<span class="kw">use</span> <span class="ident">std::iter::FusedIterator</span>;
-<span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+</pre><pre class="rust"><code><span class="doccomment">//! A vector implemented on a trie. Unlike standard vector does not support insertion and removal
+//! of an element results in the last element being placed in the empty position.
+</span><span class="kw">use </span>core::ops::Range;
+<span class="kw">use </span>std::iter::FusedIterator;
+<span class="kw">use </span>std::marker::PhantomData;
 
-<span class="kw">use</span> <span class="ident">borsh</span>::{<span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>};
+<span class="kw">use </span>borsh::{BorshDeserialize, BorshSerialize};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collections::append_slice</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">env</span>, <span class="ident">IntoStorageKey</span>};
+<span class="kw">use </span><span class="kw">crate</span>::collections::append_slice;
+<span class="kw">use crate</span>::{env, IntoStorageKey};
 
-<span class="kw">const</span> <span class="ident">ERR_INCONSISTENT_STATE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;The collection is an inconsistent state. Did previous smart contract execution terminate unexpectedly?&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_ELEMENT_DESERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot deserialize element&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_ELEMENT_SERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot serialize element&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_INDEX_OUT_OF_BOUNDS</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Index out of bounds&quot;</span>;
+<span class="kw">const </span>ERR_INCONSISTENT_STATE: <span class="kw-2">&amp;</span>str = <span class="string">&quot;The collection is an inconsistent state. Did previous smart contract execution terminate unexpectedly?&quot;</span>;
+<span class="kw">const </span>ERR_ELEMENT_DESERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot deserialize element&quot;</span>;
+<span class="kw">const </span>ERR_ELEMENT_SERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot serialize element&quot;</span>;
+<span class="kw">const </span>ERR_INDEX_OUT_OF_BOUNDS: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Index out of bounds&quot;</span>;
 
-<span class="kw">fn</span> <span class="ident">expect_consistent_state</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">val</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="ident">T</span> {
-    <span class="ident">val</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">env::panic_str</span>(<span class="ident">ERR_INCONSISTENT_STATE</span>))
+<span class="kw">fn </span>expect_consistent_state&lt;T&gt;(val: <span class="prelude-ty">Option</span>&lt;T&gt;) -&gt; T {
+    val.unwrap_or_else(|| env::panic_str(ERR_INCONSISTENT_STATE))
 }
 
-<span class="doccomment">/// An iterable implementation of vector that stores its content on the trie.</span>
-<span class="doccomment">/// Uses the following map: index -&gt; element.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">BorshSerialize</span>, <span class="ident">BorshDeserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">len</span>: <span class="ident">u64</span>,
-    <span class="ident">prefix</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">borsh_skip</span>]</span>
-    <span class="ident">el</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+<span class="doccomment">/// An iterable implementation of vector that stores its content on the trie.
+/// Uses the following map: index -&gt; element.
+</span><span class="attribute">#[derive(BorshSerialize, BorshDeserialize)]
+</span><span class="kw">pub struct </span>Vector&lt;T&gt; {
+    len: u64,
+    prefix: Vec&lt;u8&gt;,
+    <span class="attribute">#[borsh_skip]
+    </span>el: PhantomData&lt;T&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Returns the number of elements in the vector, also referred to as its size.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
-        <span class="self">self</span>.<span class="ident">len</span>
+<span class="kw">impl</span>&lt;T&gt; Vector&lt;T&gt; {
+    <span class="doccomment">/// Returns the number of elements in the vector, also referred to as its size.
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
+        <span class="self">self</span>.len
     }
 
-    <span class="doccomment">/// Returns `true` if the vector contains no elements.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">len</span> <span class="op">==</span> <span class="number">0</span>
-    }
+    <span class="doccomment">/// Returns `true` if the vector contains no elements.
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.len == <span class="number">0
+    </span>}
 
-    <span class="doccomment">/// Create new vector with zero elements. Use `id` as a unique identifier on the trie.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::Vector;</span>
-    <span class="doccomment">/// let mut set: Vector&lt;u32&gt; = Vector::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">prefix</span>: <span class="ident">S</span>) -&gt; <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">IntoStorageKey</span>,
+    <span class="doccomment">/// Create new vector with zero elements. Use `id` as a unique identifier on the trie.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::Vector;
+    /// let mut set: Vector&lt;u32&gt; = Vector::new(b&quot;m&quot;);
+    /// ```
+    </span><span class="kw">pub fn </span>new&lt;S&gt;(prefix: S) -&gt; <span class="self">Self
+    </span><span class="kw">where
+        </span>S: IntoStorageKey,
     {
-        <span class="self">Self</span> { <span class="ident">len</span>: <span class="number">0</span>, <span class="ident">prefix</span>: <span class="ident">prefix</span>.<span class="ident">into_storage_key</span>(), <span class="ident">el</span>: <span class="ident">PhantomData</span> }
+        <span class="self">Self </span>{ len: <span class="number">0</span>, prefix: prefix.into_storage_key(), el: PhantomData }
     }
 
-    <span class="kw">fn</span> <span class="ident">index_to_lookup_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">u64</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="ident">append_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">prefix</span>, <span class="kw-2">&amp;</span><span class="ident">index</span>.<span class="ident">to_le_bytes</span>()[..])
-    }
-
-    <span class="doccomment">/// Returns the serialized element by index or `None` if it is not present.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">index</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">len</span> {
-            <span class="kw">return</span> <span class="prelude-val">None</span>;
+    <span class="doccomment">/// Helper utility to be able to easily migrate to the new [`Vector`] implementation.
+    ///
+    /// This new [`Vector`]&#39;s API matches the Rust [`Vec`] API more closely and has a caching
+    /// layer to avoid reading/writing redundant times to storage.
+    ///
+    /// [`Vector`]: crate::store::Vector
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;unstable&quot;</span>)]
+    </span><span class="kw">pub fn </span>to_v2(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">crate</span>::store::Vector&lt;T&gt;
+    <span class="kw">where
+        </span>T: BorshSerialize,
+    {
+        <span class="kw">crate</span>::store::Vector {
+            <span class="comment">// Length cannot feasibly exceed u32::MAX, but checked conversion anyway.
+            </span>len: <span class="self">self</span>.len.try_into().unwrap(),
+            values: <span class="kw">crate</span>::store::IndexMap::new(<span class="self">self</span>.prefix.as_slice()),
         }
-        <span class="kw">let</span> <span class="ident">lookup_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">index_to_lookup_key</span>(<span class="ident">index</span>);
-        <span class="prelude-val">Some</span>(<span class="ident">expect_consistent_state</span>(<span class="ident">env::storage_read</span>(<span class="kw-2">&amp;</span><span class="ident">lookup_key</span>)))
     }
 
-    <span class="doccomment">/// Removes an element from the vector and returns it in serialized form.</span>
-    <span class="doccomment">/// The removed element is replaced by the last element of the vector.</span>
-    <span class="doccomment">/// Does not preserve ordering, but is `O(1)`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Panics if `index` is out of bounds.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap_remove_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">u64</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">index</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">len</span> {
-            <span class="ident">env::panic_str</span>(<span class="ident">ERR_INDEX_OUT_OF_BOUNDS</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">index</span> <span class="op">+</span> <span class="number">1</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">len</span> {
-            <span class="ident">expect_consistent_state</span>(<span class="self">self</span>.<span class="ident">pop_raw</span>())
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">lookup_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">index_to_lookup_key</span>(<span class="ident">index</span>);
-            <span class="kw">let</span> <span class="ident">raw_last_value</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">pop_raw</span>().<span class="ident">expect</span>(<span class="string">&quot;checked `index &lt; len` above, so `len &gt; 0`&quot;</span>);
-            <span class="kw">if</span> <span class="ident">env::storage_write</span>(<span class="kw-2">&amp;</span><span class="ident">lookup_key</span>, <span class="kw-2">&amp;</span><span class="ident">raw_last_value</span>) {
-                <span class="ident">expect_consistent_state</span>(<span class="ident">env::storage_get_evicted</span>())
-            } <span class="kw">else</span> {
-                <span class="ident">env::panic_str</span>(<span class="ident">ERR_INCONSISTENT_STATE</span>)
+    <span class="kw">fn </span>index_to_lookup_key(<span class="kw-2">&amp;</span><span class="self">self</span>, index: u64) -&gt; Vec&lt;u8&gt; {
+        append_slice(<span class="kw-2">&amp;</span><span class="self">self</span>.prefix, <span class="kw-2">&amp;</span>index.to_le_bytes()[..])
+    }
+
+    <span class="doccomment">/// Returns the serialized element by index or `None` if it is not present.
+    </span><span class="kw">pub fn </span>get_raw(<span class="kw-2">&amp;</span><span class="self">self</span>, index: u64) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">if </span>index &gt;= <span class="self">self</span>.len {
+            <span class="kw">return </span><span class="prelude-val">None</span>;
+        }
+        <span class="kw">let </span>lookup_key = <span class="self">self</span>.index_to_lookup_key(index);
+        <span class="prelude-val">Some</span>(expect_consistent_state(env::storage_read(<span class="kw-2">&amp;</span>lookup_key)))
+    }
+
+    <span class="doccomment">/// Removes an element from the vector and returns it in serialized form.
+    /// The removed element is replaced by the last element of the vector.
+    /// Does not preserve ordering, but is `O(1)`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `index` is out of bounds.
+    </span><span class="kw">pub fn </span>swap_remove_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: u64) -&gt; Vec&lt;u8&gt; {
+        <span class="kw">if </span>index &gt;= <span class="self">self</span>.len {
+            env::panic_str(ERR_INDEX_OUT_OF_BOUNDS)
+        } <span class="kw">else if </span>index + <span class="number">1 </span>== <span class="self">self</span>.len {
+            expect_consistent_state(<span class="self">self</span>.pop_raw())
+        } <span class="kw">else </span>{
+            <span class="kw">let </span>lookup_key = <span class="self">self</span>.index_to_lookup_key(index);
+            <span class="kw">let </span>raw_last_value = <span class="self">self</span>.pop_raw().expect(<span class="string">&quot;checked `index &lt; len` above, so `len &gt; 0`&quot;</span>);
+            <span class="kw">if </span>env::storage_write(<span class="kw-2">&amp;</span>lookup_key, <span class="kw-2">&amp;</span>raw_last_value) {
+                expect_consistent_state(env::storage_get_evicted())
+            } <span class="kw">else </span>{
+                env::panic_str(ERR_INCONSISTENT_STATE)
             }
         }
     }
 
-    <span class="doccomment">/// Appends a serialized element to the back of the collection.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">raw_element</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) {
-        <span class="kw">let</span> <span class="ident">lookup_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">index_to_lookup_key</span>(<span class="self">self</span>.<span class="ident">len</span>);
-        <span class="self">self</span>.<span class="ident">len</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-        <span class="ident">env::storage_write</span>(<span class="kw-2">&amp;</span><span class="ident">lookup_key</span>, <span class="ident">raw_element</span>);
+    <span class="doccomment">/// Appends a serialized element to the back of the collection.
+    </span><span class="kw">pub fn </span>push_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, raw_element: <span class="kw-2">&amp;</span>[u8]) {
+        <span class="kw">let </span>lookup_key = <span class="self">self</span>.index_to_lookup_key(<span class="self">self</span>.len);
+        <span class="self">self</span>.len += <span class="number">1</span>;
+        env::storage_write(<span class="kw-2">&amp;</span>lookup_key, raw_element);
     }
 
-    <span class="doccomment">/// Removes the last element from a vector and returns it without deserializing, or `None` if it is empty.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pop_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_empty</span>() {
-            <span class="prelude-val">None</span>
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">last_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">len</span> <span class="op">-</span> <span class="number">1</span>;
-            <span class="kw">let</span> <span class="ident">last_lookup_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">index_to_lookup_key</span>(<span class="ident">last_index</span>);
+    <span class="doccomment">/// Removes the last element from a vector and returns it without deserializing, or `None` if it is empty.
+    </span><span class="kw">pub fn </span>pop_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">if </span><span class="self">self</span>.is_empty() {
+            <span class="prelude-val">None
+        </span>} <span class="kw">else </span>{
+            <span class="kw">let </span>last_index = <span class="self">self</span>.len - <span class="number">1</span>;
+            <span class="kw">let </span>last_lookup_key = <span class="self">self</span>.index_to_lookup_key(last_index);
 
-            <span class="self">self</span>.<span class="ident">len</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
-            <span class="kw">let</span> <span class="ident">raw_last_value</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="ident">last_lookup_key</span>) {
-                <span class="ident">expect_consistent_state</span>(<span class="ident">env::storage_get_evicted</span>())
-            } <span class="kw">else</span> {
-                <span class="ident">env::panic_str</span>(<span class="ident">ERR_INCONSISTENT_STATE</span>)
+            <span class="self">self</span>.len -= <span class="number">1</span>;
+            <span class="kw">let </span>raw_last_value = <span class="kw">if </span>env::storage_remove(<span class="kw-2">&amp;</span>last_lookup_key) {
+                expect_consistent_state(env::storage_get_evicted())
+            } <span class="kw">else </span>{
+                env::panic_str(ERR_INCONSISTENT_STATE)
             };
-            <span class="prelude-val">Some</span>(<span class="ident">raw_last_value</span>)
+            <span class="prelude-val">Some</span>(raw_last_value)
         }
     }
 
-    <span class="doccomment">/// Inserts a serialized element at `index`, returns a serialized evicted element.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If `index` is out of bounds.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">replace_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">u64</span>, <span class="ident">raw_element</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">index</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">len</span> {
-            <span class="ident">env::panic_str</span>(<span class="ident">ERR_INDEX_OUT_OF_BOUNDS</span>)
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">lookup_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">index_to_lookup_key</span>(<span class="ident">index</span>);
-            <span class="kw">if</span> <span class="ident">env::storage_write</span>(<span class="kw-2">&amp;</span><span class="ident">lookup_key</span>, <span class="ident">raw_element</span>) {
-                <span class="ident">expect_consistent_state</span>(<span class="ident">env::storage_get_evicted</span>())
-            } <span class="kw">else</span> {
-                <span class="ident">env::panic_str</span>(<span class="ident">ERR_INCONSISTENT_STATE</span>);
+    <span class="doccomment">/// Inserts a serialized element at `index`, returns a serialized evicted element.
+    ///
+    /// # Panics
+    ///
+    /// If `index` is out of bounds.
+    </span><span class="kw">pub fn </span>replace_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: u64, raw_element: <span class="kw-2">&amp;</span>[u8]) -&gt; Vec&lt;u8&gt; {
+        <span class="kw">if </span>index &gt;= <span class="self">self</span>.len {
+            env::panic_str(ERR_INDEX_OUT_OF_BOUNDS)
+        } <span class="kw">else </span>{
+            <span class="kw">let </span>lookup_key = <span class="self">self</span>.index_to_lookup_key(index);
+            <span class="kw">if </span>env::storage_write(<span class="kw-2">&amp;</span>lookup_key, raw_element) {
+                expect_consistent_state(env::storage_get_evicted())
+            } <span class="kw">else </span>{
+                env::panic_str(ERR_INCONSISTENT_STATE);
             }
         }
     }
 
-    <span class="doccomment">/// Iterate over raw serialized elements.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iter_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">RawIter</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="ident">RawIter::new</span>(<span class="self">self</span>)
+    <span class="doccomment">/// Iterate over raw serialized elements.
+    </span><span class="kw">pub fn </span>iter_raw(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; RawIter&lt;T&gt; {
+        RawIter::new(<span class="self">self</span>)
     }
 
-    <span class="doccomment">/// Extends vector from the given collection of serialized elements.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extend_raw</span><span class="op">&lt;</span><span class="ident">IT</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">iter</span>: <span class="ident">IT</span>) {
-        <span class="kw">for</span> <span class="ident">el</span> <span class="kw">in</span> <span class="ident">iter</span> {
-            <span class="self">self</span>.<span class="ident">push_raw</span>(<span class="kw-2">&amp;</span><span class="ident">el</span>)
+    <span class="doccomment">/// Extends vector from the given collection of serialized elements.
+    </span><span class="kw">pub fn </span>extend_raw&lt;IT: IntoIterator&lt;Item = Vec&lt;u8&gt;&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: IT) {
+        <span class="kw">for </span>el <span class="kw">in </span>iter {
+            <span class="self">self</span>.push_raw(<span class="kw-2">&amp;</span>el)
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Removes all elements from the collection.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">len</span> {
-            <span class="kw">let</span> <span class="ident">lookup_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">index_to_lookup_key</span>(<span class="ident">i</span>);
-            <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="ident">lookup_key</span>);
+<span class="kw">impl</span>&lt;T&gt; Vector&lt;T&gt; {
+    <span class="doccomment">/// Removes all elements from the collection.
+    </span><span class="kw">pub fn </span>clear(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.len {
+            <span class="kw">let </span>lookup_key = <span class="self">self</span>.index_to_lookup_key(i);
+            env::storage_remove(<span class="kw-2">&amp;</span>lookup_key);
         }
-        <span class="self">self</span>.<span class="ident">len</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="self">self</span>.len = <span class="number">0</span>;
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">BorshSerialize</span>,
+<span class="kw">impl</span>&lt;T&gt; Vector&lt;T&gt;
+<span class="kw">where
+    </span>T: BorshSerialize,
 {
-    <span class="kw">fn</span> <span class="ident">serialize_element</span>(<span class="ident">element</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="ident">element</span>.<span class="ident">try_to_vec</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">env::panic_str</span>(<span class="ident">ERR_ELEMENT_SERIALIZATION</span>))
+    <span class="kw">fn </span>serialize_element(element: <span class="kw-2">&amp;</span>T) -&gt; Vec&lt;u8&gt; {
+        element.try_to_vec().unwrap_or_else(|<span class="kw">_</span>| env::panic_str(ERR_ELEMENT_SERIALIZATION))
     }
 
-    <span class="doccomment">/// Appends an element to the back of the collection.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">element</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) {
-        <span class="kw">let</span> <span class="ident">raw_element</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::serialize_element</span>(<span class="ident">element</span>);
-        <span class="self">self</span>.<span class="ident">push_raw</span>(<span class="kw-2">&amp;</span><span class="ident">raw_element</span>);
+    <span class="doccomment">/// Appends an element to the back of the collection.
+    </span><span class="kw">pub fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, element: <span class="kw-2">&amp;</span>T) {
+        <span class="kw">let </span>raw_element = <span class="self">Self</span>::serialize_element(element);
+        <span class="self">self</span>.push_raw(<span class="kw-2">&amp;</span>raw_element);
     }
 
-    <span class="doccomment">/// Extends vector from the given collection.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extend</span><span class="op">&lt;</span><span class="ident">IT</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">iter</span>: <span class="ident">IT</span>) {
-        <span class="kw">for</span> <span class="ident">el</span> <span class="kw">in</span> <span class="ident">iter</span> {
-            <span class="self">self</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">el</span>)
+    <span class="doccomment">/// Extends vector from the given collection.
+    </span><span class="kw">pub fn </span>extend&lt;IT: IntoIterator&lt;Item = T&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: IT) {
+        <span class="kw">for </span>el <span class="kw">in </span>iter {
+            <span class="self">self</span>.push(<span class="kw-2">&amp;</span>el)
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;T&gt; Vector&lt;T&gt;
+<span class="kw">where
+    </span>T: BorshDeserialize,
 {
-    <span class="kw">fn</span> <span class="ident">deserialize_element</span>(<span class="ident">raw_element</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">T</span> {
-        <span class="ident">T::try_from_slice</span>(<span class="ident">raw_element</span>)
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">env::panic_str</span>(<span class="ident">ERR_ELEMENT_DESERIALIZATION</span>))
+    <span class="kw">fn </span>deserialize_element(raw_element: <span class="kw-2">&amp;</span>[u8]) -&gt; T {
+        T::try_from_slice(raw_element)
+            .unwrap_or_else(|<span class="kw">_</span>| env::panic_str(ERR_ELEMENT_DESERIALIZATION))
     }
 
-    <span class="doccomment">/// Returns the element by index or `None` if it is not present.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">get_raw</span>(<span class="ident">index</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_element</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>))
+    <span class="doccomment">/// Returns the element by index or `None` if it is not present.
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, index: u64) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="self">self</span>.get_raw(index).map(|x| <span class="self">Self</span>::deserialize_element(<span class="kw-2">&amp;</span>x))
     }
 
-    <span class="doccomment">/// Removes an element from the vector and returns it.</span>
-    <span class="doccomment">/// The removed element is replaced by the last element of the vector.</span>
-    <span class="doccomment">/// Does not preserve ordering, but is `O(1)`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Panics if `index` is out of bounds.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap_remove</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">u64</span>) -&gt; <span class="ident">T</span> {
-        <span class="kw">let</span> <span class="ident">raw_evicted</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">swap_remove_raw</span>(<span class="ident">index</span>);
-        <span class="ident"><span class="self">Self</span>::deserialize_element</span>(<span class="kw-2">&amp;</span><span class="ident">raw_evicted</span>)
+    <span class="doccomment">/// Removes an element from the vector and returns it.
+    /// The removed element is replaced by the last element of the vector.
+    /// Does not preserve ordering, but is `O(1)`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `index` is out of bounds.
+    </span><span class="kw">pub fn </span>swap_remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: u64) -&gt; T {
+        <span class="kw">let </span>raw_evicted = <span class="self">self</span>.swap_remove_raw(index);
+        <span class="self">Self</span>::deserialize_element(<span class="kw-2">&amp;</span>raw_evicted)
     }
 
-    <span class="doccomment">/// Removes the last element from a vector and returns it, or `None` if it is empty.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">pop_raw</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_element</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>))
+    <span class="doccomment">/// Removes the last element from a vector and returns it, or `None` if it is empty.
+    </span><span class="kw">pub fn </span>pop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="self">self</span>.pop_raw().map(|x| <span class="self">Self</span>::deserialize_element(<span class="kw-2">&amp;</span>x))
     }
 
-    <span class="doccomment">/// Iterate over deserialized elements.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Iter</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="ident">Iter::new</span>(<span class="self">self</span>)
+    <span class="doccomment">/// Iterate over deserialized elements.
+    </span><span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Iter&lt;T&gt; {
+        Iter::new(<span class="self">self</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_vec</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">iter</span>().<span class="ident">collect</span>()
+    <span class="kw">pub fn </span>to_vec(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;T&gt; {
+        <span class="self">self</span>.iter().collect()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;T&gt; Vector&lt;T&gt;
+<span class="kw">where
+    </span>T: BorshSerialize + BorshDeserialize,
 {
-    <span class="doccomment">/// Inserts a element at `index`, returns an evicted element.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If `index` is out of bounds.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">replace</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">u64</span>, <span class="ident">element</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">T</span> {
-        <span class="kw">let</span> <span class="ident">raw_element</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::serialize_element</span>(<span class="ident">element</span>);
-        <span class="ident"><span class="self">Self</span>::deserialize_element</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">replace_raw</span>(<span class="ident">index</span>, <span class="kw-2">&amp;</span><span class="ident">raw_element</span>))
+    <span class="doccomment">/// Inserts a element at `index`, returns an evicted element.
+    ///
+    /// # Panics
+    ///
+    /// If `index` is out of bounds.
+    </span><span class="kw">pub fn </span>replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: u64, element: <span class="kw-2">&amp;</span>T) -&gt; T {
+        <span class="kw">let </span>raw_element = <span class="self">Self</span>::serialize_element(element);
+        <span class="self">Self</span>::deserialize_element(<span class="kw-2">&amp;</span><span class="self">self</span>.replace_raw(index, <span class="kw-2">&amp;</span>raw_element))
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;expensive-debug&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">std::fmt::Debug</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span><span class="op">&gt;</span> <span class="ident">std::fmt::Debug</span> <span class="kw">for</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="self">self</span>.<span class="ident">to_vec</span>().<span class="ident">fmt</span>(<span class="ident">f</span>)
+<span class="attribute">#[cfg(feature = <span class="string">&quot;expensive-debug&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: std::fmt::Debug + BorshDeserialize&gt; std::fmt::Debug <span class="kw">for </span>Vector&lt;T&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="self">self</span>.to_vec().fmt(f)
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;expensive-debug&quot;</span>))]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">std::fmt::Debug</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span><span class="op">&gt;</span> <span class="ident">std::fmt::Debug</span> <span class="kw">for</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Vector&quot;</span>).<span class="ident">field</span>(<span class="string">&quot;len&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">len</span>).<span class="ident">field</span>(<span class="string">&quot;prefix&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">prefix</span>).<span class="ident">finish</span>()
+<span class="attribute">#[cfg(not(feature = <span class="string">&quot;expensive-debug&quot;</span>))]
+</span><span class="kw">impl</span>&lt;T: std::fmt::Debug + BorshDeserialize&gt; std::fmt::Debug <span class="kw">for </span>Vector&lt;T&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_struct(<span class="string">&quot;Vector&quot;</span>).field(<span class="string">&quot;len&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.len).field(<span class="string">&quot;prefix&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.prefix).finish()
     }
 }
 
-<span class="doccomment">/// An iterator over raw serialized bytes of each element in the [`Vector`].</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RawIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">vec</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
-    <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
+<span class="doccomment">/// An iterator over raw serialized bytes of each element in the [`Vector`].
+</span><span class="kw">pub struct </span>RawIter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+    vec: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Vector&lt;T&gt;,
+    range: Range&lt;u64&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">RawIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">vec</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">vec</span>, <span class="ident">range</span>: <span class="ident">Range</span> { <span class="ident">start</span>: <span class="number">0</span>, <span class="ident">end</span>: <span class="ident">vec</span>.<span class="ident">len</span>() } }
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; RawIter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+    <span class="kw">fn </span>new(vec: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Vector&lt;T&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ vec, range: Range { start: <span class="number">0</span>, end: vec.len() } }
     }
 
-    <span class="doccomment">/// Returns number of elements left to iterate.</span>
-    <span class="kw">fn</span> <span class="ident">remaining</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        (<span class="self">self</span>.<span class="ident">range</span>.<span class="ident">end</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">range</span>.<span class="ident">start</span>) <span class="kw">as</span> <span class="ident">usize</span>
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">RawIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
-
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::nth</span>(<span class="self">self</span>, <span class="number">0</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">size_hint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (<span class="ident">usize</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="ident">remaining</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">remaining</span>();
-        (<span class="ident">remaining</span>, <span class="prelude-val">Some</span>(<span class="ident">remaining</span>))
-    }
-
-    <span class="kw">fn</span> <span class="ident">count</span>(<span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="self">self</span>.<span class="ident">remaining</span>()
-    }
-
-    <span class="kw">fn</span> <span class="ident">nth</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">n</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">range</span>.<span class="ident">nth</span>(<span class="ident">n</span>)<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">vec</span>.<span class="ident">get_raw</span>(<span class="ident">idx</span>)
+    <span class="doccomment">/// Returns number of elements left to iterate.
+    </span><span class="kw">fn </span>remaining(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        (<span class="self">self</span>.range.end - <span class="self">self</span>.range.start) <span class="kw">as </span>usize
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ExactSizeIterator</span> <span class="kw">for</span> <span class="ident">RawIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {}
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">FusedIterator</span> <span class="kw">for</span> <span class="ident">RawIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {}
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; Iterator <span class="kw">for </span>RawIter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+    <span class="kw">type </span>Item = Vec&lt;u8&gt;;
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">DoubleEndedIterator</span> <span class="kw">for</span> <span class="ident">RawIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">next_back</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">DoubleEndedIterator</span><span class="op">&gt;</span><span class="ident">::nth_back</span>(<span class="self">self</span>, <span class="number">0</span>)
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        &lt;<span class="self">Self </span><span class="kw">as </span>Iterator&gt;::nth(<span class="self">self</span>, <span class="number">0</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">nth_back</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">n</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">range</span>.<span class="ident">nth_back</span>(<span class="ident">n</span>)<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">vec</span>.<span class="ident">get_raw</span>(<span class="ident">idx</span>)
+    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
+        <span class="kw">let </span>remaining = <span class="self">self</span>.remaining();
+        (remaining, <span class="prelude-val">Some</span>(remaining))
     }
-}
 
-<span class="doccomment">/// An iterator over each element deserialized in the [`Vector`].</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">inner</span>: <span class="ident">RawIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span>,
-}
+    <span class="kw">fn </span>count(<span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.remaining()
+    }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">vec</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">inner</span>: <span class="ident">RawIter::new</span>(<span class="ident">vec</span>) }
+    <span class="kw">fn </span>nth(<span class="kw-2">&amp;mut </span><span class="self">self</span>, n: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">let </span>idx = <span class="self">self</span>.range.nth(n)<span class="question-mark">?</span>;
+        <span class="self">self</span>.vec.get_raw(idx)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; ExactSizeIterator <span class="kw">for </span>RawIter&lt;<span class="lifetime">&#39;a</span>, T&gt; {}
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; FusedIterator <span class="kw">for </span>RawIter&lt;<span class="lifetime">&#39;a</span>, T&gt; {}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; DoubleEndedIterator <span class="kw">for </span>RawIter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+    <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        &lt;<span class="self">Self </span><span class="kw">as </span>DoubleEndedIterator&gt;::nth_back(<span class="self">self</span>, <span class="number">0</span>)
+    }
+
+    <span class="kw">fn </span>nth_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>, n: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">let </span>idx = <span class="self">self</span>.range.nth_back(n)<span class="question-mark">?</span>;
+        <span class="self">self</span>.vec.get_raw(idx)
+    }
+}
+
+<span class="doccomment">/// An iterator over each element deserialized in the [`Vector`].
+</span><span class="kw">pub struct </span>Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+    inner: RawIter&lt;<span class="lifetime">&#39;a</span>, T&gt;,
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+    <span class="kw">fn </span>new(vec: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Vector&lt;T&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ inner: RawIter::new(vec) }
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; Iterator <span class="kw">for </span>Iter&lt;<span class="lifetime">&#39;a</span>, T&gt;
+<span class="kw">where
+    </span>T: BorshDeserialize,
 {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">T</span>;
+    <span class="kw">type </span>Item = T;
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::nth</span>(<span class="self">self</span>, <span class="number">0</span>)
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        &lt;<span class="self">Self </span><span class="kw">as </span>Iterator&gt;::nth(<span class="self">self</span>, <span class="number">0</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">size_hint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (<span class="ident">usize</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="ident">remaining</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">remaining</span>();
-        (<span class="ident">remaining</span>, <span class="prelude-val">Some</span>(<span class="ident">remaining</span>))
+    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
+        <span class="kw">let </span>remaining = <span class="self">self</span>.inner.remaining();
+        (remaining, <span class="prelude-val">Some</span>(remaining))
     }
 
-    <span class="kw">fn</span> <span class="ident">count</span>(<span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">remaining</span>()
+    <span class="kw">fn </span>count(<span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.inner.remaining()
     }
 
-    <span class="kw">fn</span> <span class="ident">nth</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">n</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">nth</span>(<span class="ident">n</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">raw_element</span><span class="op">|</span> <span class="ident">Vector::deserialize_element</span>(<span class="kw-2">&amp;</span><span class="ident">raw_element</span>))
+    <span class="kw">fn </span>nth(<span class="kw-2">&amp;mut </span><span class="self">self</span>, n: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="self">self</span>.inner.nth(n).map(|raw_element| Vector::deserialize_element(<span class="kw-2">&amp;</span>raw_element))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ExactSizeIterator</span> <span class="kw">for</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">BorshDeserialize</span> {}
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">FusedIterator</span> <span class="kw">for</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">BorshDeserialize</span> {}
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; ExactSizeIterator <span class="kw">for </span>Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; <span class="kw">where </span>T: BorshDeserialize {}
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; FusedIterator <span class="kw">for </span>Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; <span class="kw">where </span>T: BorshDeserialize {}
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">DoubleEndedIterator</span> <span class="kw">for</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; DoubleEndedIterator <span class="kw">for </span>Iter&lt;<span class="lifetime">&#39;a</span>, T&gt;
+<span class="kw">where
+    </span>T: BorshDeserialize,
 {
-    <span class="kw">fn</span> <span class="ident">next_back</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">DoubleEndedIterator</span><span class="op">&gt;</span><span class="ident">::nth_back</span>(<span class="self">self</span>, <span class="number">0</span>)
+    <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        &lt;<span class="self">Self </span><span class="kw">as </span>DoubleEndedIterator&gt;::nth_back(<span class="self">self</span>, <span class="number">0</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">nth_back</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">n</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">nth_back</span>(<span class="ident">n</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">raw_element</span><span class="op">|</span> <span class="ident">Vector::deserialize_element</span>(<span class="kw-2">&amp;</span><span class="ident">raw_element</span>))
+    <span class="kw">fn </span>nth_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>, n: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="self">self</span>.inner.nth_back(n).map(|raw_element| Vector::deserialize_element(<span class="kw-2">&amp;</span>raw_element))
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">borsh::BorshDeserialize</span>;
-    <span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">Rng</span>, <span class="ident">SeedableRng</span>};
+<span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use </span>borsh::BorshDeserialize;
+    <span class="kw">use </span>rand::{Rng, SeedableRng};
 
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collections::Vector</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::collections::Vector;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_push_pop</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">0</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec</span> <span class="op">=</span> <span class="ident">Vector::new</span>(<span class="string">b&quot;v&quot;</span>.<span class="ident">to_vec</span>());
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">baseline</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">vec</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>);
-            <span class="ident">baseline</span>.<span class="ident">push</span>(<span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_push_pop() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">0</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>vec = Vector::new(<span class="string">b&quot;v&quot;</span>.to_vec());
+        <span class="kw">let </span><span class="kw-2">mut </span>baseline = <span class="macro">vec!</span>[];
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            vec.push(<span class="kw-2">&amp;</span>value);
+            baseline.push(value);
         }
-        <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">to_vec</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">baseline</span>);
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">1001</span> {
-            <span class="macro">assert_eq!</span>(<span class="ident">baseline</span>.<span class="ident">pop</span>(), <span class="ident">vec</span>.<span class="ident">pop</span>());
+        <span class="kw">let </span>actual = vec.to_vec();
+        <span class="macro">assert_eq!</span>(actual, baseline);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">1001 </span>{
+            <span class="macro">assert_eq!</span>(baseline.pop(), vec.pop());
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_replace</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">1</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec</span> <span class="op">=</span> <span class="ident">Vector::new</span>(<span class="string">b&quot;v&quot;</span>.<span class="ident">to_vec</span>());
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">baseline</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">vec</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>);
-            <span class="ident">baseline</span>.<span class="ident">push</span>(<span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_replace() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">1</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>vec = Vector::new(<span class="string">b&quot;v&quot;</span>.to_vec());
+        <span class="kw">let </span><span class="kw-2">mut </span>baseline = <span class="macro">vec!</span>[];
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            vec.push(<span class="kw-2">&amp;</span>value);
+            baseline.push(value);
         }
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="ident">vec</span>.<span class="ident">len</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">old_value0</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">get</span>(<span class="ident">index</span>).<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">old_value1</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">replace</span>(<span class="ident">index</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
-            <span class="kw">let</span> <span class="ident">old_value2</span> <span class="op">=</span> <span class="ident">baseline</span>[<span class="ident">index</span> <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="macro">assert_eq!</span>(<span class="ident">old_value0</span>, <span class="ident">old_value1</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">old_value0</span>, <span class="ident">old_value2</span>);
-            <span class="kw-2">*</span><span class="ident">baseline</span>.<span class="ident">get_mut</span>(<span class="ident">index</span> <span class="kw">as</span> <span class="ident">usize</span>).<span class="ident">unwrap</span>() <span class="op">=</span> <span class="ident">value</span>;
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>index = rng.gen::&lt;u64&gt;() % vec.len();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>old_value0 = vec.get(index).unwrap();
+            <span class="kw">let </span>old_value1 = vec.replace(index, <span class="kw-2">&amp;</span>value);
+            <span class="kw">let </span>old_value2 = baseline[index <span class="kw">as </span>usize];
+            <span class="macro">assert_eq!</span>(old_value0, old_value1);
+            <span class="macro">assert_eq!</span>(old_value0, old_value2);
+            <span class="kw-2">*</span>baseline.get_mut(index <span class="kw">as </span>usize).unwrap() = value;
         }
-        <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">to_vec</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">baseline</span>);
+        <span class="kw">let </span>actual = vec.to_vec();
+        <span class="macro">assert_eq!</span>(actual, baseline);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_swap_remove</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">2</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec</span> <span class="op">=</span> <span class="ident">Vector::new</span>(<span class="string">b&quot;v&quot;</span>.<span class="ident">to_vec</span>());
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">baseline</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">vec</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>);
-            <span class="ident">baseline</span>.<span class="ident">push</span>(<span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_swap_remove() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">2</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>vec = Vector::new(<span class="string">b&quot;v&quot;</span>.to_vec());
+        <span class="kw">let </span><span class="kw-2">mut </span>baseline = <span class="macro">vec!</span>[];
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            vec.push(<span class="kw-2">&amp;</span>value);
+            baseline.push(value);
         }
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="ident">vec</span>.<span class="ident">len</span>();
-            <span class="kw">let</span> <span class="ident">old_value0</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">get</span>(<span class="ident">index</span>).<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">old_value1</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">swap_remove</span>(<span class="ident">index</span>);
-            <span class="kw">let</span> <span class="ident">old_value2</span> <span class="op">=</span> <span class="ident">baseline</span>[<span class="ident">index</span> <span class="kw">as</span> <span class="ident">usize</span>];
-            <span class="kw">let</span> <span class="ident">last_index</span> <span class="op">=</span> <span class="ident">baseline</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>;
-            <span class="ident">baseline</span>.<span class="ident">swap</span>(<span class="ident">index</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">last_index</span>);
-            <span class="ident">baseline</span>.<span class="ident">pop</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">old_value0</span>, <span class="ident">old_value1</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">old_value0</span>, <span class="ident">old_value2</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>index = rng.gen::&lt;u64&gt;() % vec.len();
+            <span class="kw">let </span>old_value0 = vec.get(index).unwrap();
+            <span class="kw">let </span>old_value1 = vec.swap_remove(index);
+            <span class="kw">let </span>old_value2 = baseline[index <span class="kw">as </span>usize];
+            <span class="kw">let </span>last_index = baseline.len() - <span class="number">1</span>;
+            baseline.swap(index <span class="kw">as </span>usize, last_index);
+            baseline.pop();
+            <span class="macro">assert_eq!</span>(old_value0, old_value1);
+            <span class="macro">assert_eq!</span>(old_value0, old_value2);
         }
-        <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">to_vec</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">baseline</span>);
+        <span class="kw">let </span>actual = vec.to_vec();
+        <span class="macro">assert_eq!</span>(actual, baseline);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_clear</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">3</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec</span> <span class="op">=</span> <span class="ident">Vector::new</span>(<span class="string">b&quot;v&quot;</span>.<span class="ident">to_vec</span>());
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..(<span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20</span> <span class="op">+</span> <span class="number">1</span>) {
-                <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="ident">vec</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_clear() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">3</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>vec = Vector::new(<span class="string">b&quot;v&quot;</span>.to_vec());
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">for _ in </span><span class="number">0</span>..(rng.gen::&lt;u64&gt;() % <span class="number">20 </span>+ <span class="number">1</span>) {
+                <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+                vec.push(<span class="kw-2">&amp;</span>value);
             }
-            <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">vec</span>.<span class="ident">is_empty</span>());
-            <span class="ident">vec</span>.<span class="ident">clear</span>();
-            <span class="macro">assert!</span>(<span class="ident">vec</span>.<span class="ident">is_empty</span>());
+            <span class="macro">assert!</span>(!vec.is_empty());
+            vec.clear();
+            <span class="macro">assert!</span>(vec.is_empty());
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_extend</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">0</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec</span> <span class="op">=</span> <span class="ident">Vector::new</span>(<span class="string">b&quot;v&quot;</span>.<span class="ident">to_vec</span>());
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">baseline</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">vec</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>);
-            <span class="ident">baseline</span>.<span class="ident">push</span>(<span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_extend() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">0</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>vec = Vector::new(<span class="string">b&quot;v&quot;</span>.to_vec());
+        <span class="kw">let </span><span class="kw-2">mut </span>baseline = <span class="macro">vec!</span>[];
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            vec.push(<span class="kw-2">&amp;</span>value);
+            baseline.push(value);
         }
 
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-            <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span>(<span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20</span> <span class="op">+</span> <span class="number">1</span>) {
-                <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="ident">tmp</span>.<span class="ident">push</span>(<span class="ident">value</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>tmp = <span class="macro">vec!</span>[];
+            <span class="kw">for _ in </span><span class="number">0</span>..=(rng.gen::&lt;u64&gt;() % <span class="number">20 </span>+ <span class="number">1</span>) {
+                <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+                tmp.push(value);
             }
-            <span class="ident">baseline</span>.<span class="ident">extend</span>(<span class="ident">tmp</span>.<span class="ident">clone</span>());
-            <span class="ident">vec</span>.<span class="ident">extend</span>(<span class="ident">tmp</span>.<span class="ident">clone</span>());
+            baseline.extend(tmp.clone());
+            vec.extend(tmp.clone());
         }
-        <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">to_vec</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">baseline</span>);
+        <span class="kw">let </span>actual = vec.to_vec();
+        <span class="macro">assert_eq!</span>(actual, baseline);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_debug</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">4</span>);
-        <span class="kw">let</span> <span class="ident">prefix</span> <span class="op">=</span> <span class="string">b&quot;v&quot;</span>.<span class="ident">to_vec</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec</span> <span class="op">=</span> <span class="ident">Vector::new</span>(<span class="ident">prefix</span>.<span class="ident">clone</span>());
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">baseline</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">vec</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>);
-            <span class="ident">baseline</span>.<span class="ident">push</span>(<span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_debug() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">4</span>);
+        <span class="kw">let </span>prefix = <span class="string">b&quot;v&quot;</span>.to_vec();
+        <span class="kw">let </span><span class="kw-2">mut </span>vec = Vector::new(prefix.clone());
+        <span class="kw">let </span><span class="kw-2">mut </span>baseline = <span class="macro">vec!</span>[];
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">10 </span>{
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            vec.push(<span class="kw-2">&amp;</span>value);
+            baseline.push(value);
         }
-        <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">to_vec</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">baseline</span>);
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">5</span> {
-            <span class="macro">assert_eq!</span>(<span class="ident">baseline</span>.<span class="ident">pop</span>(), <span class="ident">vec</span>.<span class="ident">pop</span>());
+        <span class="kw">let </span>actual = vec.to_vec();
+        <span class="macro">assert_eq!</span>(actual, baseline);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">5 </span>{
+            <span class="macro">assert_eq!</span>(baseline.pop(), vec.pop());
         }
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;expensive-debug&quot;</span>) {
-            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:#?}&quot;</span>, <span class="ident">vec</span>), <span class="macro">format!</span>(<span class="string">&quot;{:#?}&quot;</span>, <span class="ident">baseline</span>));
-        } <span class="kw">else</span> {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;expensive-debug&quot;</span>) {
+            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:#?}&quot;</span>, vec), <span class="macro">format!</span>(<span class="string">&quot;{:#?}&quot;</span>, baseline));
+        } <span class="kw">else </span>{
             <span class="macro">assert_eq!</span>(
-                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">vec</span>),
-                <span class="macro">format!</span>(<span class="string">&quot;Vector {{ len: 5, prefix: {:?} }}&quot;</span>, <span class="ident">vec</span>.<span class="ident">prefix</span>)
+                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, vec),
+                <span class="macro">format!</span>(<span class="string">&quot;Vector {{ len: 5, prefix: {:?} }}&quot;</span>, vec.prefix)
             );
         }
 
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">BorshDeserialize</span>)]</span>
-        <span class="kw">struct</span> <span class="ident">WithoutBorshSerialize</span>(<span class="ident">u64</span>);
+        <span class="attribute">#[derive(Debug, BorshDeserialize)]
+        </span><span class="kw">struct </span>WithoutBorshSerialize(u64);
 
-        <span class="kw">let</span> <span class="ident">deserialize_only_vec</span> <span class="op">=</span>
-            <span class="ident">Vector</span>::<span class="op">&lt;</span><span class="ident">WithoutBorshSerialize</span><span class="op">&gt;</span> { <span class="ident">len</span>: <span class="ident">vec</span>.<span class="ident">len</span>(), <span class="ident">prefix</span>, <span class="ident">el</span>: <span class="ident">Default::default</span>() };
-        <span class="kw">let</span> <span class="ident">baseline</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">baseline</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="ident">WithoutBorshSerialize</span>).<span class="ident">collect</span>();
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;expensive-debug&quot;</span>) {
-            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:#?}&quot;</span>, <span class="ident">deserialize_only_vec</span>), <span class="macro">format!</span>(<span class="string">&quot;{:#?}&quot;</span>, <span class="ident">baseline</span>));
-        } <span class="kw">else</span> {
+        <span class="kw">let </span>deserialize_only_vec =
+            Vector::&lt;WithoutBorshSerialize&gt; { len: vec.len(), prefix, el: Default::default() };
+        <span class="kw">let </span>baseline: Vec&lt;<span class="kw">_</span>&gt; = baseline.into_iter().map(WithoutBorshSerialize).collect();
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;expensive-debug&quot;</span>) {
+            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:#?}&quot;</span>, deserialize_only_vec), <span class="macro">format!</span>(<span class="string">&quot;{:#?}&quot;</span>, baseline));
+        } <span class="kw">else </span>{
             <span class="macro">assert_eq!</span>(
-                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">deserialize_only_vec</span>),
-                <span class="macro">format!</span>(<span class="string">&quot;Vector {{ len: 5, prefix: {:?} }}&quot;</span>, <span class="ident">deserialize_only_vec</span>.<span class="ident">prefix</span>)
+                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, deserialize_only_vec),
+                <span class="macro">format!</span>(<span class="string">&quot;Vector {{ len: 5, prefix: {:?} }}&quot;</span>, deserialize_only_vec.prefix)
             );
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iterator_checks</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec</span> <span class="op">=</span> <span class="ident">Vector::new</span>(<span class="string">b&quot;v&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">baseline</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="ident">vec</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">i</span>);
-            <span class="ident">baseline</span>.<span class="ident">push</span>(<span class="ident">i</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>iterator_checks() {
+        <span class="kw">let </span><span class="kw-2">mut </span>vec = Vector::new(<span class="string">b&quot;v&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>baseline = <span class="macro">vec!</span>[];
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="number">10 </span>{
+            vec.push(<span class="kw-2">&amp;</span>i);
+            baseline.push(i);
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec_iter</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">iter</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bl_iter</span> <span class="op">=</span> <span class="ident">baseline</span>.<span class="ident">iter</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">vec_iter</span>.<span class="ident">next</span>(), <span class="ident">bl_iter</span>.<span class="ident">next</span>().<span class="ident">copied</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">vec_iter</span>.<span class="ident">next_back</span>(), <span class="ident">bl_iter</span>.<span class="ident">next_back</span>().<span class="ident">copied</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">vec_iter</span>.<span class="ident">nth</span>(<span class="number">3</span>), <span class="ident">bl_iter</span>.<span class="ident">nth</span>(<span class="number">3</span>).<span class="ident">copied</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">vec_iter</span>.<span class="ident">nth_back</span>(<span class="number">2</span>), <span class="ident">bl_iter</span>.<span class="ident">nth_back</span>(<span class="number">2</span>).<span class="ident">copied</span>());
+        <span class="kw">let </span><span class="kw-2">mut </span>vec_iter = vec.iter();
+        <span class="kw">let </span><span class="kw-2">mut </span>bl_iter = baseline.iter();
+        <span class="macro">assert_eq!</span>(vec_iter.next(), bl_iter.next().copied());
+        <span class="macro">assert_eq!</span>(vec_iter.next_back(), bl_iter.next_back().copied());
+        <span class="macro">assert_eq!</span>(vec_iter.nth(<span class="number">3</span>), bl_iter.nth(<span class="number">3</span>).copied());
+        <span class="macro">assert_eq!</span>(vec_iter.nth_back(<span class="number">2</span>), bl_iter.nth_back(<span class="number">2</span>).copied());
 
-        <span class="comment">// Check to make sure indexing overflow is handled correctly</span>
-        <span class="macro">assert!</span>(<span class="ident">vec_iter</span>.<span class="ident">nth</span>(<span class="number">5</span>).<span class="ident">is_none</span>());
-        <span class="macro">assert!</span>(<span class="ident">bl_iter</span>.<span class="ident">nth</span>(<span class="number">5</span>).<span class="ident">is_none</span>());
+        <span class="comment">// Check to make sure indexing overflow is handled correctly
+        </span><span class="macro">assert!</span>(vec_iter.nth(<span class="number">5</span>).is_none());
+        <span class="macro">assert!</span>(bl_iter.nth(<span class="number">5</span>).is_none());
 
-        <span class="macro">assert!</span>(<span class="ident">vec_iter</span>.<span class="ident">next</span>().<span class="ident">is_none</span>());
-        <span class="macro">assert!</span>(<span class="ident">bl_iter</span>.<span class="ident">next</span>().<span class="ident">is_none</span>());
+        <span class="macro">assert!</span>(vec_iter.next().is_none());
+        <span class="macro">assert!</span>(bl_iter.next().is_none());
 
-        <span class="comment">// Count check</span>
-        <span class="macro">assert_eq!</span>(<span class="ident">vec</span>.<span class="ident">iter</span>().<span class="ident">count</span>(), <span class="ident">baseline</span>.<span class="ident">len</span>());
+        <span class="comment">// Count check
+        </span><span class="macro">assert_eq!</span>(vec.iter().count(), baseline.len());
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

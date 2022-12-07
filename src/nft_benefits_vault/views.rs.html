@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/views.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>views.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../nft_benefits_vault/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/views.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>views.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../nft_benefits_vault/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -85,92 +85,92 @@
 <span id="85">85</span>
 <span id="86">86</span>
 <span id="87">87</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">near_contract_standards::non_fungible_token::TokenId</span>;
-<span class="kw">use</span> <span class="ident">near_sdk</span>::{
-    <span class="ident">log</span>, <span class="ident">near_bindgen</span>,
-    <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>},
-    <span class="ident">AccountId</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>near_contract_standards::non_fungible_token::TokenId;
+<span class="kw">use </span>near_sdk::{
+    log, near_bindgen,
+    serde::{Deserialize, Serialize},
+    AccountId,
 };
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">nft_id::NftId</span>, <span class="ident">vault::Replenisher</span>, <span class="ident">Contract</span>, <span class="ident">ContractExt</span>};
+<span class="kw">use crate</span>::{nft_id::NftId, vault::Replenisher, Contract, ContractExt};
 
-<span class="doccomment">/// Complete list of tokens in the Vault.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;near_sdk::serde&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BalanceView</span> {
-    <span class="doccomment">/// Unique identifier of the NFT.</span>
-    <span class="kw">pub</span> <span class="ident">nft_id</span>: <span class="ident">NftId</span>,
-    <span class="doccomment">/// List of FTs.</span>
-    <span class="kw">pub</span> <span class="ident">tokens</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Token</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Complete list of tokens in the Vault.
+</span><span class="attribute">#[derive(Debug, Serialize, Deserialize)]
+#[serde(<span class="kw">crate </span>= <span class="string">&quot;near_sdk::serde&quot;</span>)]
+</span><span class="kw">pub struct </span>BalanceView {
+    <span class="doccomment">/// Unique identifier of the NFT.
+    </span><span class="kw">pub </span>nft_id: NftId,
+    <span class="doccomment">/// List of FTs.
+    </span><span class="kw">pub </span>tokens: Vec&lt;Token&gt;,
 }
 
-<span class="doccomment">/// Info about FT.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;near_sdk::serde&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Token</span> {
-    <span class="doccomment">/// Account id of the FT contract.</span>
-    <span class="kw">pub</span> <span class="ident">contract_id</span>: <span class="ident">AccountId</span>,
-    <span class="doccomment">/// Amount of this tokens in the Vault.</span>
-    <span class="kw">pub</span> <span class="ident">amount</span>: <span class="ident">u128</span>,
+<span class="doccomment">/// Info about FT.
+</span><span class="attribute">#[derive(Debug, Serialize, Deserialize)]
+#[serde(<span class="kw">crate </span>= <span class="string">&quot;near_sdk::serde&quot;</span>)]
+</span><span class="kw">pub struct </span>Token {
+    <span class="doccomment">/// Account id of the FT contract.
+    </span><span class="kw">pub </span>contract_id: AccountId,
+    <span class="doccomment">/// Amount of this tokens in the Vault.
+    </span><span class="kw">pub </span>amount: u128,
 }
 
-<span class="doccomment">/// Info about vault.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;near_sdk::serde&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">VaultView</span> {
-    <span class="doccomment">/// Key NFT with access to the Vault.</span>
-    <span class="kw">pub</span> <span class="ident">nft_id</span>: <span class="ident">NftId</span>,
-    <span class="doccomment">/// The number of FT types in the Vault.</span>
-    <span class="kw">pub</span> <span class="ident">assets_count</span>: <span class="ident">u64</span>,
+<span class="doccomment">/// Info about vault.
+</span><span class="attribute">#[derive(Debug, Serialize, Deserialize)]
+#[serde(<span class="kw">crate </span>= <span class="string">&quot;near_sdk::serde&quot;</span>)]
+</span><span class="kw">pub struct </span>VaultView {
+    <span class="doccomment">/// Key NFT with access to the Vault.
+    </span><span class="kw">pub </span>nft_id: NftId,
+    <span class="doccomment">/// The number of FT types in the Vault.
+    </span><span class="kw">pub </span>assets_count: u64,
 }
 
-<span class="attribute">#[<span class="ident">near_bindgen</span>]</span>
-<span class="kw">impl</span> <span class="ident">Contract</span> {
-    <span class="doccomment">/// Function to view balances of all assets in the vault.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">balance_of</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>, <span class="ident">nft_id</span>: <span class="ident">TokenId</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BalanceView</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">nft_id</span> <span class="op">=</span> <span class="ident">NftId::new</span>(<span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
-        <span class="kw">let</span> <span class="ident">vault</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">vaults</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>)<span class="question-mark">?</span>;
+<span class="attribute">#[near_bindgen]
+</span><span class="kw">impl </span>Contract {
+    <span class="doccomment">/// Function to view balances of all assets in the vault.
+    </span><span class="kw">pub fn </span>balance_of(<span class="kw-2">&amp;</span><span class="self">self</span>, nft_contract_id: AccountId, nft_id: TokenId) -&gt; <span class="prelude-ty">Option</span>&lt;BalanceView&gt; {
+        <span class="kw">let </span>nft_id = NftId::new(nft_contract_id, nft_id);
+        <span class="kw">let </span>vault = <span class="self">self</span>.vaults.get(<span class="kw-2">&amp;</span>nft_id)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">tokens</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">vault</span>
-            .<span class="ident">assets</span>()
-            .<span class="ident">iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">contract_id</span>, <span class="ident">asset</span>)<span class="op">|</span> <span class="ident">Token</span> {
-                <span class="ident">contract_id</span>,
-                <span class="ident">amount</span>: <span class="ident">asset</span>.<span class="ident">balance</span>(),
+        <span class="kw">let </span>tokens: Vec&lt;<span class="kw">_</span>&gt; = vault
+            .assets()
+            .iter()
+            .map(|(contract_id, asset)| Token {
+                contract_id,
+                amount: asset.balance(),
             })
-            .<span class="ident">collect</span>();
+            .collect();
 
-        <span class="prelude-val">Some</span>(<span class="ident">BalanceView</span> { <span class="ident">nft_id</span>, <span class="ident">tokens</span> })
+        <span class="prelude-val">Some</span>(BalanceView { nft_id, tokens })
     }
 
-    <span class="doccomment">/// Function to view the amount of assets in the Vault.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">vault_assets_count</span>(
+    <span class="doccomment">/// Function to view the amount of assets in the Vault.
+    </span><span class="kw">pub fn </span>vault_assets_count(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>,
-        <span class="ident">nft_id</span>: <span class="ident">TokenId</span>,
-    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">VaultView</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">nft_id</span> <span class="op">=</span> <span class="ident">NftId::new</span>(<span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
-        <span class="kw">let</span> <span class="ident">vault</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_vault</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>);
-        <span class="prelude-val">Some</span>(<span class="ident">VaultView</span> {
-            <span class="ident">nft_id</span>,
-            <span class="ident">assets_count</span>: <span class="ident">vault</span>.<span class="ident">assets_count</span>(),
+        nft_contract_id: AccountId,
+        nft_id: TokenId,
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;VaultView&gt; {
+        <span class="kw">let </span>nft_id = NftId::new(nft_contract_id, nft_id);
+        <span class="kw">let </span>vault = <span class="self">self</span>.get_vault(<span class="kw-2">&amp;</span>nft_id);
+        <span class="prelude-val">Some</span>(VaultView {
+            nft_id,
+            assets_count: vault.assets_count(),
         })
     }
 
-    <span class="doccomment">/// Function to view the replenishers of the vault.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">replenishers</span>(
+    <span class="doccomment">/// Function to view the replenishers of the vault.
+    </span><span class="kw">pub fn </span>replenishers(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>,
-        <span class="ident">nft_id</span>: <span class="ident">TokenId</span>,
-    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Replenisher</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="macro">log!</span>(<span class="string">&quot;view replenishers: {} {}&quot;</span>, <span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
-        <span class="kw">let</span> <span class="ident">nft_id</span> <span class="op">=</span> <span class="ident">NftId::new</span>(<span class="ident">nft_contract_id</span>, <span class="ident">nft_id</span>);
-        <span class="kw">let</span> <span class="ident">vault</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">vaults</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">nft_id</span>)<span class="question-mark">?</span>;
-        <span class="macro">log!</span>(<span class="string">&quot;vault assets count: {}&quot;</span>, <span class="ident">vault</span>.<span class="ident">assets_count</span>());
-        <span class="kw">let</span> <span class="ident">replenishers</span> <span class="op">=</span> <span class="ident">vault</span>.<span class="ident">replenishers</span>().<span class="ident">as_vector</span>().<span class="ident">to_vec</span>();
-        <span class="macro">log!</span>(<span class="string">&quot;replenishers: {:?}&quot;</span>, <span class="ident">replenishers</span>);
-        <span class="prelude-val">Some</span>(<span class="ident">replenishers</span>)
+        nft_contract_id: AccountId,
+        nft_id: TokenId,
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;Replenisher&gt;&gt; {
+        <span class="macro">log!</span>(<span class="string">&quot;view replenishers: {} {}&quot;</span>, nft_contract_id, nft_id);
+        <span class="kw">let </span>nft_id = NftId::new(nft_contract_id, nft_id);
+        <span class="kw">let </span>vault = <span class="self">self</span>.vaults.get(<span class="kw-2">&amp;</span>nft_id)<span class="question-mark">?</span>;
+        <span class="macro">log!</span>(<span class="string">&quot;vault assets count: {}&quot;</span>, vault.assets_count());
+        <span class="kw">let </span>replenishers = vault.replenishers().as_vector().to_vec();
+        <span class="macro">log!</span>(<span class="string">&quot;replenishers: {:?}&quot;</span>, replenishers);
+        <span class="prelude-val">Some</span>(replenishers)
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="nft_benefits_vault" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="nft_benefits_vault" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

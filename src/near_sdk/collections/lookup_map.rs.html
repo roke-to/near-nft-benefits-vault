@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/collections/lookup_map.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lookup_map.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/collections/lookup_map.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lookup_map.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -375,382 +375,382 @@
 <span id="375">375</span>
 <span id="376">376</span>
 <span id="377">377</span>
-</pre><pre class="rust"><code><span class="doccomment">//! A persistent map without iterators. Unlike `near_sdk::collections::UnorderedMap` this map</span>
-<span class="doccomment">//! doesn&#39;t store keys and values separately in vectors, so it can&#39;t iterate over keys. But it</span>
-<span class="doccomment">//! makes this map more efficient in the number of reads and writes.</span>
-<span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
+</pre><pre class="rust"><code><span class="doccomment">//! A persistent map without iterators. Unlike `near_sdk::collections::UnorderedMap` this map
+//! doesn&#39;t store keys and values separately in vectors, so it can&#39;t iterate over keys. But it
+//! makes this map more efficient in the number of reads and writes.
+</span><span class="kw">use </span>std::marker::PhantomData;
 
-<span class="kw">use</span> <span class="ident">borsh</span>::{<span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>};
+<span class="kw">use </span>borsh::{BorshDeserialize, BorshSerialize};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collections::append_slice</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">env</span>, <span class="ident">IntoStorageKey</span>};
+<span class="kw">use </span><span class="kw">crate</span>::collections::append_slice;
+<span class="kw">use crate</span>::{env, IntoStorageKey};
 
-<span class="kw">const</span> <span class="ident">ERR_KEY_SERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot serialize key with Borsh&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_VALUE_DESERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot deserialize value with Borsh&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_VALUE_SERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot serialize value with Borsh&quot;</span>;
+<span class="kw">const </span>ERR_KEY_SERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot serialize key with Borsh&quot;</span>;
+<span class="kw">const </span>ERR_VALUE_DESERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot deserialize value with Borsh&quot;</span>;
+<span class="kw">const </span>ERR_VALUE_SERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot serialize value with Borsh&quot;</span>;
 
-<span class="doccomment">/// An non-iterable implementation of a map that stores its content directly on the trie.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">BorshSerialize</span>, <span class="ident">BorshDeserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LookupMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-    <span class="ident">key_prefix</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">borsh_skip</span>]</span>
-    <span class="ident">el</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">K</span>, <span class="ident">V</span>)<span class="op">&gt;</span>,
+<span class="doccomment">/// An non-iterable implementation of a map that stores its content directly on the trie.
+</span><span class="attribute">#[derive(BorshSerialize, BorshDeserialize)]
+</span><span class="kw">pub struct </span>LookupMap&lt;K, V&gt; {
+    key_prefix: Vec&lt;u8&gt;,
+    <span class="attribute">#[borsh_skip]
+    </span>el: PhantomData&lt;(K, V)&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">LookupMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Create a new map. Use `key_prefix` as a unique prefix for keys.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LookupMap;</span>
-    <span class="doccomment">/// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">key_prefix</span>: <span class="ident">S</span>) -&gt; <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">IntoStorageKey</span>,
+<span class="kw">impl</span>&lt;K, V&gt; LookupMap&lt;K, V&gt; {
+    <span class="doccomment">/// Create a new map. Use `key_prefix` as a unique prefix for keys.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LookupMap;
+    /// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);
+    /// ```
+    </span><span class="kw">pub fn </span>new&lt;S&gt;(key_prefix: S) -&gt; <span class="self">Self
+    </span><span class="kw">where
+        </span>S: IntoStorageKey,
     {
-        <span class="self">Self</span> { <span class="ident">key_prefix</span>: <span class="ident">key_prefix</span>.<span class="ident">into_storage_key</span>(), <span class="ident">el</span>: <span class="ident">PhantomData</span> }
+        <span class="self">Self </span>{ key_prefix: key_prefix.into_storage_key(), el: PhantomData }
     }
 
-    <span class="kw">fn</span> <span class="ident">raw_key_to_storage_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">raw_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="ident">append_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key_prefix</span>, <span class="ident">raw_key</span>)
+    <span class="kw">fn </span>raw_key_to_storage_key(<span class="kw-2">&amp;</span><span class="self">self</span>, raw_key: <span class="kw-2">&amp;</span>[u8]) -&gt; Vec&lt;u8&gt; {
+        append_slice(<span class="kw-2">&amp;</span><span class="self">self</span>.key_prefix, raw_key)
     }
 
-    <span class="doccomment">/// Returns `true` if the serialized key is present in the map.</span>
-    <span class="kw">fn</span> <span class="ident">contains_key_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> {
-        <span class="kw">let</span> <span class="ident">storage_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_key_to_storage_key</span>(<span class="ident">key_raw</span>);
-        <span class="ident">env::storage_has_key</span>(<span class="kw-2">&amp;</span><span class="ident">storage_key</span>)
+    <span class="doccomment">/// Returns `true` if the serialized key is present in the map.
+    </span><span class="kw">fn </span>contains_key_raw(<span class="kw-2">&amp;</span><span class="self">self</span>, key_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; bool {
+        <span class="kw">let </span>storage_key = <span class="self">self</span>.raw_key_to_storage_key(key_raw);
+        env::storage_has_key(<span class="kw-2">&amp;</span>storage_key)
     }
 
-    <span class="doccomment">/// Returns the serialized value corresponding to the serialized key.</span>
-    <span class="kw">fn</span> <span class="ident">get_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">storage_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_key_to_storage_key</span>(<span class="ident">key_raw</span>);
-        <span class="ident">env::storage_read</span>(<span class="kw-2">&amp;</span><span class="ident">storage_key</span>)
+    <span class="doccomment">/// Returns the serialized value corresponding to the serialized key.
+    </span><span class="kw">fn </span>get_raw(<span class="kw-2">&amp;</span><span class="self">self</span>, key_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">let </span>storage_key = <span class="self">self</span>.raw_key_to_storage_key(key_raw);
+        env::storage_read(<span class="kw-2">&amp;</span>storage_key)
     }
 
-    <span class="doccomment">/// Inserts a serialized key-value pair into the map.</span>
-    <span class="doccomment">/// If the map did not have this key present, `None` is returned. Otherwise returns</span>
-    <span class="doccomment">/// a serialized value. Note, the keys that have the same hash value are undistinguished by</span>
-    <span class="doccomment">/// the implementation.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">key_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">value_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">storage_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_key_to_storage_key</span>(<span class="ident">key_raw</span>);
-        <span class="kw">if</span> <span class="ident">env::storage_write</span>(<span class="kw-2">&amp;</span><span class="ident">storage_key</span>, <span class="ident">value_raw</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">env::storage_get_evicted</span>().<span class="ident">unwrap</span>())
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+    <span class="doccomment">/// Inserts a serialized key-value pair into the map.
+    /// If the map did not have this key present, `None` is returned. Otherwise returns
+    /// a serialized value. Note, the keys that have the same hash value are undistinguished by
+    /// the implementation.
+    </span><span class="kw">pub fn </span>insert_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key_raw: <span class="kw-2">&amp;</span>[u8], value_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">let </span>storage_key = <span class="self">self</span>.raw_key_to_storage_key(key_raw);
+        <span class="kw">if </span>env::storage_write(<span class="kw-2">&amp;</span>storage_key, value_raw) {
+            <span class="prelude-val">Some</span>(env::storage_get_evicted().unwrap())
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 
-    <span class="doccomment">/// Removes a serialized key from the map, returning the serialized value at the key if the key</span>
-    <span class="doccomment">/// was previously in the map.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">key_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">storage_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_key_to_storage_key</span>(<span class="ident">key_raw</span>);
-        <span class="kw">if</span> <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="ident">storage_key</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">env::storage_get_evicted</span>().<span class="ident">unwrap</span>())
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+    <span class="doccomment">/// Removes a serialized key from the map, returning the serialized value at the key if the key
+    /// was previously in the map.
+    </span><span class="kw">pub fn </span>remove_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">let </span>storage_key = <span class="self">self</span>.raw_key_to_storage_key(key_raw);
+        <span class="kw">if </span>env::storage_remove(<span class="kw-2">&amp;</span>storage_key) {
+            <span class="prelude-val">Some</span>(env::storage_get_evicted().unwrap())
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">LookupMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">K</span>: <span class="ident">BorshSerialize</span>,
-    <span class="ident">V</span>: <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;K, V&gt; LookupMap&lt;K, V&gt;
+<span class="kw">where
+    </span>K: BorshSerialize,
+    V: BorshSerialize + BorshDeserialize,
 {
-    <span class="kw">fn</span> <span class="ident">serialize_key</span>(<span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">K</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">key</span>.<span class="ident">try_to_vec</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_KEY_SERIALIZATION</span>),
+    <span class="kw">fn </span>serialize_key(key: <span class="kw-2">&amp;</span>K) -&gt; Vec&lt;u8&gt; {
+        <span class="kw">match </span>key.try_to_vec() {
+            <span class="prelude-val">Ok</span>(x) =&gt; x,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; env::panic_str(ERR_KEY_SERIALIZATION),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">deserialize_value</span>(<span class="ident">raw_value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">V</span> {
-        <span class="kw">match</span> <span class="ident">V::try_from_slice</span>(<span class="ident">raw_value</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_VALUE_DESERIALIZATION</span>),
+    <span class="kw">fn </span>deserialize_value(raw_value: <span class="kw-2">&amp;</span>[u8]) -&gt; V {
+        <span class="kw">match </span>V::try_from_slice(raw_value) {
+            <span class="prelude-val">Ok</span>(x) =&gt; x,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; env::panic_str(ERR_VALUE_DESERIALIZATION),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">serialize_value</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">V</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">try_to_vec</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_VALUE_SERIALIZATION</span>),
+    <span class="kw">fn </span>serialize_value(value: <span class="kw-2">&amp;</span>V) -&gt; Vec&lt;u8&gt; {
+        <span class="kw">match </span>value.try_to_vec() {
+            <span class="prelude-val">Ok</span>(x) =&gt; x,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; env::panic_str(ERR_VALUE_SERIALIZATION),
         }
     }
 
-    <span class="doccomment">/// Returns true if the map contains a given key.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LookupMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// assert_eq!(map.contains_key(&amp;&quot;Toyota&quot;.into()), false);</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Camry&quot;.into());</span>
-    <span class="doccomment">/// assert_eq!(map.contains_key(&amp;&quot;Toyota&quot;.into()), true);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">K</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">contains_key_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_key</span>(<span class="ident">key</span>))
+    <span class="doccomment">/// Returns true if the map contains a given key.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LookupMap;
+    ///
+    /// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);
+    /// assert_eq!(map.contains_key(&amp;&quot;Toyota&quot;.into()), false);
+    ///
+    /// map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Camry&quot;.into());
+    /// assert_eq!(map.contains_key(&amp;&quot;Toyota&quot;.into()), true);
+    /// ```
+    </span><span class="kw">pub fn </span>contains_key(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>K) -&gt; bool {
+        <span class="self">self</span>.contains_key_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_key(key))
     }
 
-    <span class="doccomment">/// Returns the value corresponding to the key.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LookupMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// assert_eq!(map.get(&amp;&quot;Toyota&quot;.into()), None);</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Camry&quot;.into());</span>
-    <span class="doccomment">/// assert_eq!(map.get(&amp;&quot;Toyota&quot;.into()), Some(&quot;Camry&quot;.into()));</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">K</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">get_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_key</span>(<span class="ident">key</span>)).<span class="ident">map</span>(<span class="op">|</span><span class="ident">value_raw</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_value</span>(<span class="kw-2">&amp;</span><span class="ident">value_raw</span>))
+    <span class="doccomment">/// Returns the value corresponding to the key.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LookupMap;
+    ///
+    /// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);
+    /// assert_eq!(map.get(&amp;&quot;Toyota&quot;.into()), None);
+    ///
+    /// map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Camry&quot;.into());
+    /// assert_eq!(map.get(&amp;&quot;Toyota&quot;.into()), Some(&quot;Camry&quot;.into()));
+    /// ```
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>K) -&gt; <span class="prelude-ty">Option</span>&lt;V&gt; {
+        <span class="self">self</span>.get_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_key(key)).map(|value_raw| <span class="self">Self</span>::deserialize_value(<span class="kw-2">&amp;</span>value_raw))
     }
 
-    <span class="doccomment">/// Removes a key from the map, returning the value at the key if the key was previously in the</span>
-    <span class="doccomment">/// map.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LookupMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// assert_eq!(map.remove(&amp;&quot;Toyota&quot;.into()), None);</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Camry&quot;.into());</span>
-    <span class="doccomment">/// assert_eq!(map.remove(&amp;&quot;Toyota&quot;.into()), Some(&quot;Camry&quot;.into()));</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">K</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">remove_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_key</span>(<span class="ident">key</span>))
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">value_raw</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_value</span>(<span class="kw-2">&amp;</span><span class="ident">value_raw</span>))
+    <span class="doccomment">/// Removes a key from the map, returning the value at the key if the key was previously in the
+    /// map.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LookupMap;
+    ///
+    /// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);
+    /// assert_eq!(map.remove(&amp;&quot;Toyota&quot;.into()), None);
+    ///
+    /// map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Camry&quot;.into());
+    /// assert_eq!(map.remove(&amp;&quot;Toyota&quot;.into()), Some(&quot;Camry&quot;.into()));
+    /// ```
+    </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>K) -&gt; <span class="prelude-ty">Option</span>&lt;V&gt; {
+        <span class="self">self</span>.remove_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_key(key))
+            .map(|value_raw| <span class="self">Self</span>::deserialize_value(<span class="kw-2">&amp;</span>value_raw))
     }
 
-    <span class="doccomment">/// Inserts a key-value pair into the map.</span>
-    <span class="doccomment">/// If the map did not have this key present, `None` is returned. Otherwise returns</span>
-    <span class="doccomment">/// a value. Note, the keys that have the same hash value are undistinguished by</span>
-    <span class="doccomment">/// the implementation.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LookupMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// assert_eq!(map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Camry&quot;.into()), None);</span>
-    <span class="doccomment">/// assert_eq!(map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Corolla&quot;.into()), Some(&quot;Camry&quot;.into()));</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">K</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">V</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">insert_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_key</span>(<span class="ident">key</span>), <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_value</span>(<span class="ident">value</span>))
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">value_raw</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_value</span>(<span class="kw-2">&amp;</span><span class="ident">value_raw</span>))
+    <span class="doccomment">/// Inserts a key-value pair into the map.
+    /// If the map did not have this key present, `None` is returned. Otherwise returns
+    /// a value. Note, the keys that have the same hash value are undistinguished by
+    /// the implementation.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LookupMap;
+    ///
+    /// let mut map: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);
+    /// assert_eq!(map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Camry&quot;.into()), None);
+    /// assert_eq!(map.insert(&amp;&quot;Toyota&quot;.into(), &amp;&quot;Corolla&quot;.into()), Some(&quot;Camry&quot;.into()));
+    /// ```
+    </span><span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>K, value: <span class="kw-2">&amp;</span>V) -&gt; <span class="prelude-ty">Option</span>&lt;V&gt; {
+        <span class="self">self</span>.insert_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_key(key), <span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_value(value))
+            .map(|value_raw| <span class="self">Self</span>::deserialize_value(<span class="kw-2">&amp;</span>value_raw))
     }
 
-    <span class="doccomment">/// Inserts all new key-values from the iterator and replaces values with existing keys</span>
-    <span class="doccomment">/// with new values returned from the iterator.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LookupMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut extendee: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// let mut source = vec![];</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// source.push((&quot;Toyota&quot;.into(), &quot;Camry&quot;.into()));</span>
-    <span class="doccomment">/// source.push((&quot;Nissan&quot;.into(), &quot;Almera&quot;.into()));</span>
-    <span class="doccomment">/// source.push((&quot;Ford&quot;.into(), &quot;Mustang&quot;.into()));</span>
-    <span class="doccomment">/// source.push((&quot;Chevrolet&quot;.into(), &quot;Camaro&quot;.into()));</span>
-    <span class="doccomment">/// extendee.extend(source.into_iter());</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extend</span><span class="op">&lt;</span><span class="ident">IT</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="ident">K</span>, <span class="ident">V</span>)<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">iter</span>: <span class="ident">IT</span>) {
-        <span class="kw">for</span> (<span class="ident">el_key</span>, <span class="ident">el_value</span>) <span class="kw">in</span> <span class="ident">iter</span> {
-            <span class="self">self</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">el_key</span>, <span class="kw-2">&amp;</span><span class="ident">el_value</span>);
+    <span class="doccomment">/// Inserts all new key-values from the iterator and replaces values with existing keys
+    /// with new values returned from the iterator.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LookupMap;
+    ///
+    /// let mut extendee: LookupMap&lt;String, String&gt; = LookupMap::new(b&quot;m&quot;);
+    /// let mut source = vec![];
+    ///
+    /// source.push((&quot;Toyota&quot;.into(), &quot;Camry&quot;.into()));
+    /// source.push((&quot;Nissan&quot;.into(), &quot;Almera&quot;.into()));
+    /// source.push((&quot;Ford&quot;.into(), &quot;Mustang&quot;.into()));
+    /// source.push((&quot;Chevrolet&quot;.into(), &quot;Camaro&quot;.into()));
+    /// extendee.extend(source.into_iter());
+    /// ```
+    </span><span class="kw">pub fn </span>extend&lt;IT: IntoIterator&lt;Item = (K, V)&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: IT) {
+        <span class="kw">for </span>(el_key, el_value) <span class="kw">in </span>iter {
+            <span class="self">self</span>.insert(<span class="kw-2">&amp;</span>el_key, <span class="kw-2">&amp;</span>el_value);
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">std::fmt::Debug</span> <span class="kw">for</span> <span class="ident">LookupMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">K</span>: <span class="ident">std::fmt::Debug</span> <span class="op">+</span> <span class="ident">BorshSerialize</span>,
-    <span class="ident">V</span>: <span class="ident">std::fmt::Debug</span> <span class="op">+</span> <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;K, V&gt; std::fmt::Debug <span class="kw">for </span>LookupMap&lt;K, V&gt;
+<span class="kw">where
+    </span>K: std::fmt::Debug + BorshSerialize,
+    V: std::fmt::Debug + BorshSerialize + BorshDeserialize,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;LookupMap&quot;</span>).<span class="ident">field</span>(<span class="string">&quot;key_prefix&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key_prefix</span>).<span class="ident">finish</span>()
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_struct(<span class="string">&quot;LookupMap&quot;</span>).field(<span class="string">&quot;key_prefix&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.key_prefix).finish()
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collections::LookupMap</span>;
-    <span class="kw">use</span> <span class="ident">rand::seq::SliceRandom</span>;
-    <span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">Rng</span>, <span class="ident">SeedableRng</span>};
-    <span class="kw">use</span> <span class="ident">std::collections::HashMap</span>;
+<span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use </span><span class="kw">crate</span>::collections::LookupMap;
+    <span class="kw">use </span>rand::seq::SliceRandom;
+    <span class="kw">use </span>rand::{Rng, SeedableRng};
+    <span class="kw">use </span>std::collections::HashMap;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_one</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">LookupMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="prelude-val">None</span>, <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="number">2</span>));
-        <span class="macro">assert_eq!</span>(<span class="number">2</span>, <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="number">3</span>).<span class="ident">unwrap</span>());
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_one() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = LookupMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="prelude-val">None</span>, map.insert(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="number">2</span>));
+        <span class="macro">assert_eq!</span>(<span class="number">2</span>, map.insert(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="number">3</span>).unwrap());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">LookupMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">0</span>);
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_has_key</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">LookupMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">0</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-        }
-        <span class="comment">// Non existing</span>
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">map</span>.<span class="ident">contains_key</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>), <span class="ident">key_to_value</span>.<span class="ident">contains_key</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>));
-        }
-        <span class="comment">// Existing</span>
-        <span class="kw">for</span> (<span class="ident">key</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="ident">key_to_value</span>.<span class="ident">iter</span>() {
-            <span class="macro">assert!</span>(<span class="ident">map</span>.<span class="ident">contains_key</span>(<span class="ident">key</span>));
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = LookupMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">0</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_remove</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">LookupMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">1</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">keys</span>.<span class="ident">push</span>(<span class="ident">key</span>);
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_has_key() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = LookupMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">0</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
+            key_to_value.insert(key, value);
         }
-        <span class="ident">keys</span>.<span class="ident">shuffle</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-        <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="ident">keys</span> {
-            <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">key_to_value</span>[<span class="kw-2">&amp;</span><span class="ident">key</span>]);
+        <span class="comment">// Non existing
+        </span><span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="macro">assert_eq!</span>(map.contains_key(<span class="kw-2">&amp;</span>key), key_to_value.contains_key(<span class="kw-2">&amp;</span>key));
         }
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_remove_last_reinsert</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">LookupMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="ident">key1</span> <span class="op">=</span> <span class="number">1u64</span>;
-        <span class="kw">let</span> <span class="ident">value1</span> <span class="op">=</span> <span class="number">2u64</span>;
-        <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key1</span>, <span class="kw-2">&amp;</span><span class="ident">value1</span>);
-        <span class="kw">let</span> <span class="ident">key2</span> <span class="op">=</span> <span class="number">3u64</span>;
-        <span class="kw">let</span> <span class="ident">value2</span> <span class="op">=</span> <span class="number">4u64</span>;
-        <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key2</span>, <span class="kw-2">&amp;</span><span class="ident">value2</span>);
-
-        <span class="kw">let</span> <span class="ident">actual_value2</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key2</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual_value2</span>, <span class="ident">value2</span>);
-
-        <span class="kw">let</span> <span class="ident">actual_insert_value2</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key2</span>, <span class="kw-2">&amp;</span><span class="ident">value2</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">actual_insert_value2</span>, <span class="prelude-val">None</span>);
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_override_remove</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">LookupMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">2</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">keys</span>.<span class="ident">push</span>(<span class="ident">key</span>);
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
-        }
-        <span class="ident">keys</span>.<span class="ident">shuffle</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-        <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">keys</span> {
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">key_to_value</span>[<span class="ident">key</span>]);
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="kw-2">*</span><span class="ident">key</span>, <span class="ident">value</span>);
-        }
-        <span class="ident">keys</span>.<span class="ident">shuffle</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-        <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="ident">keys</span> {
-            <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">key_to_value</span>[<span class="kw-2">&amp;</span><span class="ident">key</span>]);
+        <span class="comment">// Existing
+        </span><span class="kw">for </span>(key, <span class="kw">_</span>) <span class="kw">in </span>key_to_value.iter() {
+            <span class="macro">assert!</span>(map.contains_key(key));
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_non_existent</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">LookupMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">3</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20_000</span>;
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_remove() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = LookupMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">1</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = <span class="macro">vec!</span>[];
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            keys.push(key);
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20_000</span>;
-            <span class="macro">assert_eq!</span>(<span class="ident">map</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>), <span class="ident">key_to_value</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">cloned</span>());
+        keys.shuffle(<span class="kw-2">&amp;mut </span>rng);
+        <span class="kw">for </span>key <span class="kw">in </span>keys {
+            <span class="kw">let </span>actual = map.remove(<span class="kw-2">&amp;</span>key).unwrap();
+            <span class="macro">assert_eq!</span>(actual, key_to_value[<span class="kw-2">&amp;</span>key]);
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_extend</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">LookupMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">4</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_remove_last_reinsert() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = LookupMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span>key1 = <span class="number">1u64</span>;
+        <span class="kw">let </span>value1 = <span class="number">2u64</span>;
+        map.insert(<span class="kw-2">&amp;</span>key1, <span class="kw-2">&amp;</span>value1);
+        <span class="kw">let </span>key2 = <span class="number">3u64</span>;
+        <span class="kw">let </span>value2 = <span class="number">4u64</span>;
+        map.insert(<span class="kw-2">&amp;</span>key2, <span class="kw-2">&amp;</span>value2);
+
+        <span class="kw">let </span>actual_value2 = map.remove(<span class="kw-2">&amp;</span>key2).unwrap();
+        <span class="macro">assert_eq!</span>(actual_value2, value2);
+
+        <span class="kw">let </span>actual_insert_value2 = map.insert(<span class="kw-2">&amp;</span>key2, <span class="kw-2">&amp;</span>value2);
+        <span class="macro">assert_eq!</span>(actual_insert_value2, <span class="prelude-val">None</span>);
+    }
+
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_override_remove() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = LookupMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">2</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = <span class="macro">vec!</span>[];
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            keys.push(key);
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-            <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span>(<span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20</span> <span class="op">+</span> <span class="number">1</span>) {
-                <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="ident">tmp</span>.<span class="ident">push</span>((<span class="ident">key</span>, <span class="ident">value</span>));
+        keys.shuffle(<span class="kw-2">&amp;mut </span>rng);
+        <span class="kw">for </span>key <span class="kw">in </span><span class="kw-2">&amp;</span>keys {
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>actual = map.insert(key, <span class="kw-2">&amp;</span>value).unwrap();
+            <span class="macro">assert_eq!</span>(actual, key_to_value[key]);
+            key_to_value.insert(<span class="kw-2">*</span>key, value);
+        }
+        keys.shuffle(<span class="kw-2">&amp;mut </span>rng);
+        <span class="kw">for </span>key <span class="kw">in </span>keys {
+            <span class="kw">let </span>actual = map.remove(<span class="kw-2">&amp;</span>key).unwrap();
+            <span class="macro">assert_eq!</span>(actual, key_to_value[<span class="kw-2">&amp;</span>key]);
+        }
+    }
+
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_get_non_existent() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = LookupMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">3</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;() % <span class="number">20_000</span>;
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
+        }
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;() % <span class="number">20_000</span>;
+            <span class="macro">assert_eq!</span>(map.get(<span class="kw-2">&amp;</span>key), key_to_value.get(<span class="kw-2">&amp;</span>key).cloned());
+        }
+    }
+
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_extend() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = LookupMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">4</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
+        }
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">10 </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>tmp = <span class="macro">vec!</span>[];
+            <span class="kw">for _ in </span><span class="number">0</span>..=(rng.gen::&lt;u64&gt;() % <span class="number">20 </span>+ <span class="number">1</span>) {
+                <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+                <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+                tmp.push((key, value));
             }
-            <span class="ident">key_to_value</span>.<span class="ident">extend</span>(<span class="ident">tmp</span>.<span class="ident">iter</span>().<span class="ident">cloned</span>());
-            <span class="ident">map</span>.<span class="ident">extend</span>(<span class="ident">tmp</span>.<span class="ident">iter</span>().<span class="ident">cloned</span>());
+            key_to_value.extend(tmp.iter().cloned());
+            map.extend(tmp.iter().cloned());
         }
 
-        <span class="kw">for</span> (<span class="ident">key</span>, <span class="ident">value</span>) <span class="kw">in</span> <span class="ident">key_to_value</span> {
-            <span class="macro">assert_eq!</span>(<span class="ident">map</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">unwrap</span>(), <span class="ident">value</span>);
+        <span class="kw">for </span>(key, value) <span class="kw">in </span>key_to_value {
+            <span class="macro">assert_eq!</span>(map.get(<span class="kw-2">&amp;</span>key).unwrap(), value);
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_debug</span>() {
-        <span class="kw">let</span> <span class="ident">map</span>: <span class="ident">LookupMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">LookupMap::new</span>(<span class="string">b&quot;m&quot;</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_debug() {
+        <span class="kw">let </span>map: LookupMap&lt;u64, u64&gt; = LookupMap::new(<span class="string">b&quot;m&quot;</span>);
 
         <span class="macro">assert_eq!</span>(
-            <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">map</span>),
-            <span class="macro">format!</span>(<span class="string">&quot;LookupMap {{ key_prefix: {:?} }}&quot;</span>, <span class="ident">map</span>.<span class="ident">key_prefix</span>)
+            <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, map),
+            <span class="macro">format!</span>(<span class="string">&quot;LookupMap {{ key_prefix: {:?} }}&quot;</span>, map.key_prefix)
         );
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/test_utils/context.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>context.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/test_utils/context.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>context.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -198,205 +198,205 @@
 <span id="198">198</span>
 <span id="199">199</span>
 <span id="200">200</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::mock::MockedBlockchain</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test_utils::test_env</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::AccountId</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Balance</span>, <span class="ident">BlockHeight</span>, <span class="ident">EpochHeight</span>, <span class="ident">Gas</span>, <span class="ident">PromiseResult</span>, <span class="ident">PublicKey</span>, <span class="ident">StorageUsage</span>};
-<span class="kw">use</span> <span class="ident">near_primitives_core::runtime::fees::RuntimeFeesConfig</span>;
-<span class="kw">use</span> <span class="ident">near_vm_logic</span>::{<span class="ident">VMConfig</span>, <span class="ident">ViewConfig</span>};
-<span class="kw">use</span> <span class="ident">std::convert::TryInto</span>;
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::mock::MockedBlockchain;
+<span class="kw">use </span><span class="kw">crate</span>::test_utils::test_env::<span class="kw-2">*</span>;
+<span class="kw">use </span><span class="kw">crate</span>::AccountId;
+<span class="kw">use crate</span>::{Balance, BlockHeight, EpochHeight, Gas, PromiseResult, PublicKey, StorageUsage};
+<span class="kw">use </span>near_primitives_core::runtime::fees::RuntimeFeesConfig;
+<span class="kw">use </span>near_vm_logic::{VMConfig, ViewConfig};
+<span class="kw">use </span>std::convert::TryInto;
 
-<span class="doccomment">/// Returns a pre-defined account_id from a list of 6.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">accounts</span>(<span class="ident">id</span>: <span class="ident">usize</span>) -&gt; <span class="ident">AccountId</span> {
-    <span class="ident">AccountId::new_unchecked</span>(
-        [<span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>, <span class="string">&quot;charlie&quot;</span>, <span class="string">&quot;danny&quot;</span>, <span class="string">&quot;eugene&quot;</span>, <span class="string">&quot;fargo&quot;</span>][<span class="ident">id</span>].<span class="ident">to_string</span>(),
+<span class="doccomment">/// Returns a pre-defined account_id from a list of 6.
+</span><span class="kw">pub fn </span>accounts(id: usize) -&gt; AccountId {
+    AccountId::new_unchecked(
+        [<span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>, <span class="string">&quot;charlie&quot;</span>, <span class="string">&quot;danny&quot;</span>, <span class="string">&quot;eugene&quot;</span>, <span class="string">&quot;fargo&quot;</span>][id].to_string(),
     )
 }
 
-<span class="doccomment">/// Simple VMContext builder that allows to quickly create custom context in tests.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">VMContextBuilder</span> {
-    <span class="kw">pub</span> <span class="ident">context</span>: <span class="ident">VMContext</span>,
+<span class="doccomment">/// Simple VMContext builder that allows to quickly create custom context in tests.
+</span><span class="attribute">#[derive(Clone)]
+</span><span class="kw">pub struct </span>VMContextBuilder {
+    <span class="kw">pub </span>context: VMContext,
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">VMContextBuilder</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::new</span>()
+<span class="kw">impl </span>Default <span class="kw">for </span>VMContextBuilder {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new()
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="doccomment">/// Context for the contract execution.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">VMContext</span> {
-    <span class="doccomment">/// The account id of the current contract that we are executing.</span>
-    <span class="kw">pub</span> <span class="ident">current_account_id</span>: <span class="ident">AccountId</span>,
-    <span class="doccomment">/// The account id of that signed the original transaction that led to this</span>
-    <span class="doccomment">/// execution.</span>
-    <span class="kw">pub</span> <span class="ident">signer_account_id</span>: <span class="ident">AccountId</span>,
-    <span class="doccomment">/// The public key that was used to sign the original transaction that led to</span>
-    <span class="doccomment">/// this execution.</span>
-    <span class="kw">pub</span> <span class="ident">signer_account_pk</span>: <span class="ident">PublicKey</span>,
-    <span class="doccomment">/// If this execution is the result of cross-contract call or a callback then</span>
-    <span class="doccomment">/// predecessor is the account that called it.</span>
-    <span class="doccomment">/// If this execution is the result of direct execution of transaction then it</span>
-    <span class="doccomment">/// is equal to `signer_account_id`.</span>
-    <span class="kw">pub</span> <span class="ident">predecessor_account_id</span>: <span class="ident">AccountId</span>,
-    <span class="doccomment">/// The input to the contract call.</span>
-    <span class="doccomment">/// Encoded as base64 string to be able to pass input in borsh binary format.</span>
-    <span class="kw">pub</span> <span class="ident">input</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The current block height.</span>
-    <span class="kw">pub</span> <span class="ident">block_index</span>: <span class="ident">BlockHeight</span>,
-    <span class="doccomment">/// The current block timestamp (number of non-leap-nanoseconds since January 1, 1970 0:00:00 UTC).</span>
-    <span class="kw">pub</span> <span class="ident">block_timestamp</span>: <span class="ident">u64</span>,
-    <span class="doccomment">/// The current epoch height.</span>
-    <span class="kw">pub</span> <span class="ident">epoch_height</span>: <span class="ident">EpochHeight</span>,
+<span class="attribute">#[derive(Clone)]
+</span><span class="doccomment">/// Context for the contract execution.
+</span><span class="kw">pub struct </span>VMContext {
+    <span class="doccomment">/// The account id of the current contract that we are executing.
+    </span><span class="kw">pub </span>current_account_id: AccountId,
+    <span class="doccomment">/// The account id of that signed the original transaction that led to this
+    /// execution.
+    </span><span class="kw">pub </span>signer_account_id: AccountId,
+    <span class="doccomment">/// The public key that was used to sign the original transaction that led to
+    /// this execution.
+    </span><span class="kw">pub </span>signer_account_pk: PublicKey,
+    <span class="doccomment">/// If this execution is the result of cross-contract call or a callback then
+    /// predecessor is the account that called it.
+    /// If this execution is the result of direct execution of transaction then it
+    /// is equal to `signer_account_id`.
+    </span><span class="kw">pub </span>predecessor_account_id: AccountId,
+    <span class="doccomment">/// The input to the contract call.
+    /// Encoded as base64 string to be able to pass input in borsh binary format.
+    </span><span class="kw">pub </span>input: Vec&lt;u8&gt;,
+    <span class="doccomment">/// The current block height.
+    </span><span class="kw">pub </span>block_index: BlockHeight,
+    <span class="doccomment">/// The current block timestamp (number of non-leap-nanoseconds since January 1, 1970 0:00:00 UTC).
+    </span><span class="kw">pub </span>block_timestamp: u64,
+    <span class="doccomment">/// The current epoch height.
+    </span><span class="kw">pub </span>epoch_height: EpochHeight,
 
-    <span class="doccomment">/// The balance attached to the given account. Excludes the `attached_deposit` that was</span>
-    <span class="doccomment">/// attached to the transaction.</span>
-    <span class="kw">pub</span> <span class="ident">account_balance</span>: <span class="ident">Balance</span>,
-    <span class="doccomment">/// The balance of locked tokens on the given account.</span>
-    <span class="kw">pub</span> <span class="ident">account_locked_balance</span>: <span class="ident">Balance</span>,
-    <span class="doccomment">/// The account&#39;s storage usage before the contract execution</span>
-    <span class="kw">pub</span> <span class="ident">storage_usage</span>: <span class="ident">StorageUsage</span>,
-    <span class="doccomment">/// The balance that was attached to the call that will be immediately deposited before the</span>
-    <span class="doccomment">/// contract execution starts.</span>
-    <span class="kw">pub</span> <span class="ident">attached_deposit</span>: <span class="ident">Balance</span>,
-    <span class="doccomment">/// The gas attached to the call that can be used to pay for the gas fees.</span>
-    <span class="kw">pub</span> <span class="ident">prepaid_gas</span>: <span class="ident">Gas</span>,
-    <span class="doccomment">/// Initial seed for randomness</span>
-    <span class="kw">pub</span> <span class="ident">random_seed</span>: [<span class="ident">u8</span>; <span class="number">32</span>],
-    <span class="doccomment">/// If Some, it means that execution is made in a view mode and defines its configuration.</span>
-    <span class="doccomment">/// View mode means that only read-only operations are allowed.</span>
-    <span class="doccomment">/// See &lt;https://nomicon.io/Proposals/0018-view-change-method.html&gt; for more details.</span>
-    <span class="kw">pub</span> <span class="ident">view_config</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ViewConfig</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// How many `DataReceipt`&#39;s should receive this execution result. This should be empty if</span>
-    <span class="doccomment">/// this function call is a part of a batch and it is not the last action.</span>
-    <span class="kw">pub</span> <span class="ident">output_data_receivers</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The balance attached to the given account. Excludes the `attached_deposit` that was
+    /// attached to the transaction.
+    </span><span class="kw">pub </span>account_balance: Balance,
+    <span class="doccomment">/// The balance of locked tokens on the given account.
+    </span><span class="kw">pub </span>account_locked_balance: Balance,
+    <span class="doccomment">/// The account&#39;s storage usage before the contract execution
+    </span><span class="kw">pub </span>storage_usage: StorageUsage,
+    <span class="doccomment">/// The balance that was attached to the call that will be immediately deposited before the
+    /// contract execution starts.
+    </span><span class="kw">pub </span>attached_deposit: Balance,
+    <span class="doccomment">/// The gas attached to the call that can be used to pay for the gas fees.
+    </span><span class="kw">pub </span>prepaid_gas: Gas,
+    <span class="doccomment">/// Initial seed for randomness
+    </span><span class="kw">pub </span>random_seed: [u8; <span class="number">32</span>],
+    <span class="doccomment">/// If Some, it means that execution is made in a view mode and defines its configuration.
+    /// View mode means that only read-only operations are allowed.
+    /// See &lt;https://nomicon.io/Proposals/0018-view-change-method.html&gt; for more details.
+    </span><span class="kw">pub </span>view_config: <span class="prelude-ty">Option</span>&lt;ViewConfig&gt;,
+    <span class="doccomment">/// How many `DataReceipt`&#39;s should receive this execution result. This should be empty if
+    /// this function call is a part of a batch and it is not the last action.
+    </span><span class="kw">pub </span>output_data_receivers: Vec&lt;AccountId&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">VMContext</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">view_config</span>.<span class="ident">is_some</span>()
+<span class="kw">impl </span>VMContext {
+    <span class="kw">pub fn </span>is_view(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.view_config.is_some()
     }
 }
 
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-<span class="kw">impl</span> <span class="ident">VMContextBuilder</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">context</span>: <span class="ident">VMContext</span> {
-                <span class="ident">current_account_id</span>: <span class="ident">alice</span>(),
-                <span class="ident">signer_account_id</span>: <span class="ident">bob</span>(),
-                <span class="ident">signer_account_pk</span>: <span class="macro">vec!</span>[<span class="number">0u8</span>; <span class="number">33</span>].<span class="ident">try_into</span>().<span class="ident">unwrap</span>(),
-                <span class="ident">predecessor_account_id</span>: <span class="ident">bob</span>(),
-                <span class="ident">input</span>: <span class="macro">vec!</span>[],
-                <span class="ident">block_index</span>: <span class="number">0</span>,
-                <span class="ident">block_timestamp</span>: <span class="number">0</span>,
-                <span class="ident">epoch_height</span>: <span class="number">0</span>,
-                <span class="ident">account_balance</span>: <span class="number">10u128</span>.<span class="ident">pow</span>(<span class="number">26</span>),
-                <span class="ident">account_locked_balance</span>: <span class="number">0</span>,
-                <span class="ident">storage_usage</span>: <span class="number">1024</span> <span class="op">*</span> <span class="number">300</span>,
-                <span class="ident">attached_deposit</span>: <span class="number">0</span>,
-                <span class="ident">prepaid_gas</span>: <span class="ident">Gas</span>(<span class="number">300</span> <span class="op">*</span> <span class="number">10u64</span>.<span class="ident">pow</span>(<span class="number">12</span>)),
-                <span class="ident">random_seed</span>: [<span class="number">0u8</span>; <span class="number">32</span>],
-                <span class="ident">view_config</span>: <span class="prelude-val">None</span>,
-                <span class="ident">output_data_receivers</span>: <span class="macro">vec!</span>[],
+<span class="attribute">#[allow(dead_code)]
+</span><span class="kw">impl </span>VMContextBuilder {
+    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            context: VMContext {
+                current_account_id: alice(),
+                signer_account_id: bob(),
+                signer_account_pk: <span class="macro">vec!</span>[<span class="number">0u8</span>; <span class="number">33</span>].try_into().unwrap(),
+                predecessor_account_id: bob(),
+                input: <span class="macro">vec!</span>[],
+                block_index: <span class="number">0</span>,
+                block_timestamp: <span class="number">0</span>,
+                epoch_height: <span class="number">0</span>,
+                account_balance: <span class="number">10u128</span>.pow(<span class="number">26</span>),
+                account_locked_balance: <span class="number">0</span>,
+                storage_usage: <span class="number">1024 </span>* <span class="number">300</span>,
+                attached_deposit: <span class="number">0</span>,
+                prepaid_gas: Gas(<span class="number">300 </span>* <span class="number">10u64</span>.pow(<span class="number">12</span>)),
+                random_seed: [<span class="number">0u8</span>; <span class="number">32</span>],
+                view_config: <span class="prelude-val">None</span>,
+                output_data_receivers: <span class="macro">vec!</span>[],
             },
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">current_account_id</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">account_id</span>: <span class="ident">AccountId</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">current_account_id</span> <span class="op">=</span> <span class="ident">account_id</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>current_account_id(<span class="kw-2">&amp;mut </span><span class="self">self</span>, account_id: AccountId) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.current_account_id = account_id;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">signer_account_id</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">account_id</span>: <span class="ident">AccountId</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">signer_account_id</span> <span class="op">=</span> <span class="ident">account_id</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>signer_account_id(<span class="kw-2">&amp;mut </span><span class="self">self</span>, account_id: AccountId) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.signer_account_id = account_id;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">signer_account_pk</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">pk</span>: <span class="ident">PublicKey</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">signer_account_pk</span> <span class="op">=</span> <span class="ident">pk</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>signer_account_pk(<span class="kw-2">&amp;mut </span><span class="self">self</span>, pk: PublicKey) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.signer_account_pk = pk;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">predecessor_account_id</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">account_id</span>: <span class="ident">AccountId</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">predecessor_account_id</span> <span class="op">=</span> <span class="ident">account_id</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>predecessor_account_id(<span class="kw-2">&amp;mut </span><span class="self">self</span>, account_id: AccountId) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.predecessor_account_id = account_id;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">block_index</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">block_index</span>: <span class="ident">BlockHeight</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">block_index</span> <span class="op">=</span> <span class="ident">block_index</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>block_index(<span class="kw-2">&amp;mut </span><span class="self">self</span>, block_index: BlockHeight) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.block_index = block_index;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">block_timestamp</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">block_timestamp</span>: <span class="ident">u64</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">block_timestamp</span> <span class="op">=</span> <span class="ident">block_timestamp</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>block_timestamp(<span class="kw-2">&amp;mut </span><span class="self">self</span>, block_timestamp: u64) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.block_timestamp = block_timestamp;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">epoch_height</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">epoch_height</span>: <span class="ident">EpochHeight</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">epoch_height</span> <span class="op">=</span> <span class="ident">epoch_height</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>epoch_height(<span class="kw-2">&amp;mut </span><span class="self">self</span>, epoch_height: EpochHeight) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.epoch_height = epoch_height;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">account_balance</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">amount</span>: <span class="ident">Balance</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">account_balance</span> <span class="op">=</span> <span class="ident">amount</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>account_balance(<span class="kw-2">&amp;mut </span><span class="self">self</span>, amount: Balance) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.account_balance = amount;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">account_locked_balance</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">amount</span>: <span class="ident">Balance</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">account_locked_balance</span> <span class="op">=</span> <span class="ident">amount</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>account_locked_balance(<span class="kw-2">&amp;mut </span><span class="self">self</span>, amount: Balance) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.account_locked_balance = amount;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">storage_usage</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">usage</span>: <span class="ident">StorageUsage</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">storage_usage</span> <span class="op">=</span> <span class="ident">usage</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>storage_usage(<span class="kw-2">&amp;mut </span><span class="self">self</span>, usage: StorageUsage) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.storage_usage = usage;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">attached_deposit</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">amount</span>: <span class="ident">Balance</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">attached_deposit</span> <span class="op">=</span> <span class="ident">amount</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>attached_deposit(<span class="kw-2">&amp;mut </span><span class="self">self</span>, amount: Balance) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.attached_deposit = amount;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">prepaid_gas</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">gas</span>: <span class="ident">Gas</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">prepaid_gas</span> <span class="op">=</span> <span class="ident">gas</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>prepaid_gas(<span class="kw-2">&amp;mut </span><span class="self">self</span>, gas: Gas) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.prepaid_gas = gas;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">random_seed</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">seed</span>: [<span class="ident">u8</span>; <span class="number">32</span>]) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">random_seed</span> <span class="op">=</span> <span class="ident">seed</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>random_seed(<span class="kw-2">&amp;mut </span><span class="self">self</span>, seed: [u8; <span class="number">32</span>]) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.random_seed = seed;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_view</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">is_view</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">view_config</span> <span class="op">=</span>
-            <span class="kw">if</span> <span class="ident">is_view</span> { <span class="prelude-val">Some</span>(<span class="ident">ViewConfig</span> { <span class="ident">max_gas_burnt</span>: <span class="number">200000000000000</span> }) } <span class="kw">else</span> { <span class="prelude-val">None</span> };
-        <span class="self">self</span>
-    }
+    <span class="kw">pub fn </span>is_view(<span class="kw-2">&amp;mut </span><span class="self">self</span>, is_view: bool) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="self">self</span>.context.view_config =
+            <span class="kw">if </span>is_view { <span class="prelude-val">Some</span>(ViewConfig { max_gas_burnt: <span class="number">200000000000000 </span>}) } <span class="kw">else </span>{ <span class="prelude-val">None </span>};
+        <span class="self">self
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">VMContext</span> {
-        <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">clone</span>()
+    <span class="kw">pub fn </span>build(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; VMContext {
+        <span class="self">self</span>.context.clone()
     }
 }
 
-<span class="doccomment">/// Initializes the [`MockedBlockchain`] with a single promise result during execution.</span>
-<span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use `testing_env!` macro to initialize with promise results&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">testing_env_with_promise_results</span>(<span class="ident">context</span>: <span class="ident">VMContext</span>, <span class="ident">promise_result</span>: <span class="ident">PromiseResult</span>) {
-    <span class="kw">let</span> <span class="ident">storage</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::mock::with_mocked_blockchain</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">take_storage</span>());
+<span class="doccomment">/// Initializes the [`MockedBlockchain`] with a single promise result during execution.
+</span><span class="attribute">#[deprecated(since = <span class="string">&quot;4.0.0&quot;</span>, note = <span class="string">&quot;Use `testing_env!` macro to initialize with promise results&quot;</span>)]
+</span><span class="kw">pub fn </span>testing_env_with_promise_results(context: VMContext, promise_result: PromiseResult) {
+    <span class="kw">let </span>storage = <span class="kw">crate</span>::mock::with_mocked_blockchain(|b| b.take_storage());
 
-    <span class="comment">//? This probably shouldn&#39;t need to replace the existing mocked blockchain altogether?</span>
-    <span class="comment">//? Might be a good time to remove this utility function altogether</span>
-    <span class="ident"><span class="kw">crate</span>::env::set_blockchain_interface</span>(<span class="ident">MockedBlockchain::new</span>(
-        <span class="ident">context</span>,
-        <span class="ident">VMConfig::test</span>(),
-        <span class="ident">RuntimeFeesConfig::test</span>(),
-        <span class="macro">vec!</span>[<span class="ident">promise_result</span>],
-        <span class="ident">storage</span>,
-        <span class="ident">Default::default</span>(),
+    <span class="comment">//? This probably shouldn&#39;t need to replace the existing mocked blockchain altogether?
+    //? Might be a good time to remove this utility function altogether
+    </span><span class="kw">crate</span>::env::set_blockchain_interface(MockedBlockchain::new(
+        context,
+        VMConfig::test(),
+        RuntimeFeesConfig::test(),
+        <span class="macro">vec!</span>[promise_result],
+        storage,
+        Default::default(),
         <span class="prelude-val">None</span>,
     ));
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/collections/lazy_option.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lazy_option.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/collections/lazy_option.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lazy_option.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../near_sdk/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -267,274 +267,274 @@
 <span id="267">267</span>
 <span id="268">268</span>
 <span id="269">269</span>
-</pre><pre class="rust"><code><span class="doccomment">//! A persistent lazy option. Stores a value for a given key.</span>
-<span class="doccomment">//! Example:</span>
-<span class="doccomment">//! If the underlying value is large, e.g. the contract needs to store an image, but it doesn&#39;t need</span>
-<span class="doccomment">//! to have access to this image at regular calls, then the contract can wrap this image into</span>
-<span class="doccomment">//! `LazyOption` and it will not be deserialized until requested.</span>
-<span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
+</pre><pre class="rust"><code><span class="doccomment">//! A persistent lazy option. Stores a value for a given key.
+//! Example:
+//! If the underlying value is large, e.g. the contract needs to store an image, but it doesn&#39;t need
+//! to have access to this image at regular calls, then the contract can wrap this image into
+//! `LazyOption` and it will not be deserialized until requested.
+</span><span class="kw">use </span>std::marker::PhantomData;
 
-<span class="kw">use</span> <span class="ident">borsh</span>::{<span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>};
+<span class="kw">use </span>borsh::{BorshDeserialize, BorshSerialize};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::env</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::IntoStorageKey</span>;
+<span class="kw">use </span><span class="kw">crate</span>::env;
+<span class="kw">use </span><span class="kw">crate</span>::IntoStorageKey;
 
-<span class="kw">const</span> <span class="ident">ERR_VALUE_SERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot serialize value with Borsh&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_VALUE_DESERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot deserialize value with Borsh&quot;</span>;
+<span class="kw">const </span>ERR_VALUE_SERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot serialize value with Borsh&quot;</span>;
+<span class="kw">const </span>ERR_VALUE_DESERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot deserialize value with Borsh&quot;</span>;
 
-<span class="doccomment">/// An persistent lazy option, that stores a value in the storage.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">BorshSerialize</span>, <span class="ident">BorshDeserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LazyOption</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">storage_key</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">borsh_skip</span>]</span>
-    <span class="ident">el</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+<span class="doccomment">/// An persistent lazy option, that stores a value in the storage.
+</span><span class="attribute">#[derive(BorshSerialize, BorshDeserialize)]
+</span><span class="kw">pub struct </span>LazyOption&lt;T&gt; {
+    storage_key: Vec&lt;u8&gt;,
+    <span class="attribute">#[borsh_skip]
+    </span>el: PhantomData&lt;T&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">LazyOption</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Returns `true` if the value is present in the storage.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_some</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="ident">env::storage_has_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">storage_key</span>)
+<span class="kw">impl</span>&lt;T&gt; LazyOption&lt;T&gt; {
+    <span class="doccomment">/// Returns `true` if the value is present in the storage.
+    </span><span class="kw">pub fn </span>is_some(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        env::storage_has_key(<span class="kw-2">&amp;</span><span class="self">self</span>.storage_key)
     }
 
-    <span class="doccomment">/// Returns `true` if the value is not present in the storage.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_none</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="op">!</span><span class="self">self</span>.<span class="ident">is_some</span>()
+    <span class="doccomment">/// Returns `true` if the value is not present in the storage.
+    </span><span class="kw">pub fn </span>is_none(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        !<span class="self">self</span>.is_some()
     }
 
-    <span class="doccomment">/// Reads the raw value from the storage</span>
-    <span class="kw">fn</span> <span class="ident">get_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="ident">env::storage_read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">storage_key</span>)
+    <span class="doccomment">/// Reads the raw value from the storage
+    </span><span class="kw">fn </span>get_raw(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        env::storage_read(<span class="kw-2">&amp;</span><span class="self">self</span>.storage_key)
     }
 
-    <span class="doccomment">/// Removes the value from the storage.</span>
-    <span class="doccomment">/// Returns true if the element was present.</span>
-    <span class="kw">fn</span> <span class="ident">remove_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">storage_key</span>)
+    <span class="doccomment">/// Removes the value from the storage.
+    /// Returns true if the element was present.
+    </span><span class="kw">fn </span>remove_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
+        env::storage_remove(<span class="kw-2">&amp;</span><span class="self">self</span>.storage_key)
     }
 
-    <span class="doccomment">/// Removes the raw value from the storage and returns it as an option.</span>
-    <span class="kw">fn</span> <span class="ident">take_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">remove_raw</span>() {
-            <span class="prelude-val">Some</span>(<span class="ident">env::storage_get_evicted</span>().<span class="ident">unwrap</span>())
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+    <span class="doccomment">/// Removes the raw value from the storage and returns it as an option.
+    </span><span class="kw">fn </span>take_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">if </span><span class="self">self</span>.remove_raw() {
+            <span class="prelude-val">Some</span>(env::storage_get_evicted().unwrap())
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 
-    <span class="kw">fn</span> <span class="ident">set_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">raw_value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> {
-        <span class="ident">env::storage_write</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">storage_key</span>, <span class="ident">raw_value</span>)
+    <span class="kw">fn </span>set_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, raw_value: <span class="kw-2">&amp;</span>[u8]) -&gt; bool {
+        env::storage_write(<span class="kw-2">&amp;</span><span class="self">self</span>.storage_key, raw_value)
     }
 
-    <span class="kw">fn</span> <span class="ident">replace_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">raw_value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">set_raw</span>(<span class="ident">raw_value</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">env::storage_get_evicted</span>().<span class="ident">unwrap</span>())
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+    <span class="kw">fn </span>replace_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, raw_value: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">if </span><span class="self">self</span>.set_raw(raw_value) {
+            <span class="prelude-val">Some</span>(env::storage_get_evicted().unwrap())
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">LazyOption</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;T&gt; LazyOption&lt;T&gt;
+<span class="kw">where
+    </span>T: BorshSerialize + BorshDeserialize,
 {
-    <span class="doccomment">/// Create a new lazy option with the given `storage_key` and the initial value.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LazyOption;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, Some(&amp;42));</span>
-    <span class="doccomment">/// let another_option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, None);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">storage_key</span>: <span class="ident">S</span>, <span class="ident">value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">IntoStorageKey</span>,
+    <span class="doccomment">/// Create a new lazy option with the given `storage_key` and the initial value.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LazyOption;
+    ///
+    /// let option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, Some(&amp;42));
+    /// let another_option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, None);
+    /// ```
+    </span><span class="kw">pub fn </span>new&lt;S&gt;(storage_key: S, value: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt;) -&gt; <span class="self">Self
+    </span><span class="kw">where
+        </span>S: IntoStorageKey,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">storage_key</span>: <span class="ident">storage_key</span>.<span class="ident">into_storage_key</span>(), <span class="ident">el</span>: <span class="ident">PhantomData</span> };
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>) <span class="op">=</span> <span class="ident">value</span> {
-            <span class="ident">this</span>.<span class="ident">set</span>(<span class="ident">value</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>this = <span class="self">Self </span>{ storage_key: storage_key.into_storage_key(), el: PhantomData };
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(value) = value {
+            this.set(value);
         }
-        <span class="ident">this</span>
+        this
     }
 
-    <span class="kw">fn</span> <span class="ident">serialize_value</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">try_to_vec</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_VALUE_SERIALIZATION</span>),
-        }
-    }
-
-    <span class="kw">fn</span> <span class="ident">deserialize_value</span>(<span class="ident">raw_value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">T</span> {
-        <span class="kw">match</span> <span class="ident">T::try_from_slice</span>(<span class="ident">raw_value</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_VALUE_DESERIALIZATION</span>),
+    <span class="kw">fn </span>serialize_value(value: <span class="kw-2">&amp;</span>T) -&gt; Vec&lt;u8&gt; {
+        <span class="kw">match </span>value.try_to_vec() {
+            <span class="prelude-val">Ok</span>(x) =&gt; x,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; env::panic_str(ERR_VALUE_SERIALIZATION),
         }
     }
 
-    <span class="doccomment">/// Removes the value from storage without reading it.</span>
-    <span class="doccomment">/// Returns whether the value was present.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LazyOption;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, Some(&amp;42));</span>
-    <span class="doccomment">/// assert_eq!(option.remove(), true);</span>
-    <span class="doccomment">/// assert!(option.is_none());</span>
-    <span class="doccomment">/// assert_eq!(option.remove(), false);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">remove_raw</span>()
+    <span class="kw">fn </span>deserialize_value(raw_value: <span class="kw-2">&amp;</span>[u8]) -&gt; T {
+        <span class="kw">match </span>T::try_from_slice(raw_value) {
+            <span class="prelude-val">Ok</span>(x) =&gt; x,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; env::panic_str(ERR_VALUE_DESERIALIZATION),
+        }
     }
 
-    <span class="doccomment">/// Removes the value from storage and returns it as an option.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LazyOption;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, Some(&amp;42));</span>
-    <span class="doccomment">/// assert_eq!(option.take(), Some(42));</span>
-    <span class="doccomment">/// assert!(option.is_none());</span>
-    <span class="doccomment">/// assert_eq!(option.take(), None);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">take_raw</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_value</span>(<span class="kw-2">&amp;</span><span class="ident">v</span>))
+    <span class="doccomment">/// Removes the value from storage without reading it.
+    /// Returns whether the value was present.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LazyOption;
+    ///
+    /// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, Some(&amp;42));
+    /// assert_eq!(option.remove(), true);
+    /// assert!(option.is_none());
+    /// assert_eq!(option.remove(), false);
+    /// ```
+    </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.remove_raw()
     }
 
-    <span class="doccomment">/// Gets the value from storage and returns it as an option.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LazyOption;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, None);</span>
-    <span class="doccomment">/// assert_eq!(option.get(), None);</span>
-    <span class="doccomment">/// option.set(&amp;42);</span>
-    <span class="doccomment">/// assert_eq!(option.get(), Some(42));</span>
-    <span class="doccomment">/// assert!(option.is_some());</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">get_raw</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_value</span>(<span class="kw-2">&amp;</span><span class="ident">v</span>))
+    <span class="doccomment">/// Removes the value from storage and returns it as an option.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LazyOption;
+    ///
+    /// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, Some(&amp;42));
+    /// assert_eq!(option.take(), Some(42));
+    /// assert!(option.is_none());
+    /// assert_eq!(option.take(), None);
+    /// ```
+    </span><span class="kw">pub fn </span>take(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="self">self</span>.take_raw().map(|v| <span class="self">Self</span>::deserialize_value(<span class="kw-2">&amp;</span>v))
     }
 
-    <span class="doccomment">/// Sets the value into the storage without reading the previous value and returns whether the</span>
-    <span class="doccomment">/// previous value was present.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LazyOption;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, None);</span>
-    <span class="doccomment">/// assert_eq!(option.set(&amp;42), false);</span>
-    <span class="doccomment">/// assert_eq!(option.set(&amp;420), true);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">set_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_value</span>(<span class="ident">value</span>))
+    <span class="doccomment">/// Gets the value from storage and returns it as an option.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LazyOption;
+    ///
+    /// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, None);
+    /// assert_eq!(option.get(), None);
+    /// option.set(&amp;42);
+    /// assert_eq!(option.get(), Some(42));
+    /// assert!(option.is_some());
+    /// ```
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="self">self</span>.get_raw().map(|v| <span class="self">Self</span>::deserialize_value(<span class="kw-2">&amp;</span>v))
     }
 
-    <span class="doccomment">/// Replaces the value in the storage and returns the previous value as an option.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::LazyOption;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, None);</span>
-    <span class="doccomment">/// assert_eq!(option.replace(&amp;42), None);</span>
-    <span class="doccomment">/// assert_eq!(option.replace(&amp;420), Some(42));</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">replace</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">replace_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_value</span>(<span class="ident">value</span>)).<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_value</span>(<span class="kw-2">&amp;</span><span class="ident">v</span>))
+    <span class="doccomment">/// Sets the value into the storage without reading the previous value and returns whether the
+    /// previous value was present.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LazyOption;
+    ///
+    /// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, None);
+    /// assert_eq!(option.set(&amp;42), false);
+    /// assert_eq!(option.set(&amp;420), true);
+    /// ```
+    </span><span class="kw">pub fn </span>set(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>T) -&gt; bool {
+        <span class="self">self</span>.set_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_value(value))
+    }
+
+    <span class="doccomment">/// Replaces the value in the storage and returns the previous value as an option.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::LazyOption;
+    ///
+    /// let mut option: LazyOption&lt;u32&gt; = LazyOption::new(b&quot;l&quot;, None);
+    /// assert_eq!(option.replace(&amp;42), None);
+    /// assert_eq!(option.replace(&amp;420), Some(42));
+    /// ```
+    </span><span class="kw">pub fn </span>replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="self">self</span>.replace_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_value(value)).map(|v| <span class="self">Self</span>::deserialize_value(<span class="kw-2">&amp;</span>v))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">std::fmt::Debug</span> <span class="kw">for</span> <span class="ident">LazyOption</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">std::fmt::Debug</span> <span class="op">+</span> <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;T&gt; std::fmt::Debug <span class="kw">for </span>LazyOption&lt;T&gt;
+<span class="kw">where
+    </span>T: std::fmt::Debug + BorshSerialize + BorshDeserialize,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;expensive-debug&quot;</span>) {
-            <span class="self">self</span>.<span class="ident">get</span>().<span class="ident">fmt</span>(<span class="ident">f</span>)
-        } <span class="kw">else</span> {
-            <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;LazyOption&quot;</span>).<span class="ident">field</span>(<span class="string">&quot;storage_key&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">storage_key</span>).<span class="ident">finish</span>()
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;expensive-debug&quot;</span>) {
+            <span class="self">self</span>.get().fmt(f)
+        } <span class="kw">else </span>{
+            f.debug_struct(<span class="string">&quot;LazyOption&quot;</span>).field(<span class="string">&quot;storage_key&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.storage_key).finish()
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_all</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">LazyOption::new</span>(<span class="string">b&quot;a&quot;</span>, <span class="prelude-val">None</span>);
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_none</span>());
-        <span class="ident">a</span>.<span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="number">42u32</span>);
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_some</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">get</span>(), <span class="prelude-val">Some</span>(<span class="number">42</span>));
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_some</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="number">95</span>), <span class="prelude-val">Some</span>(<span class="number">42</span>));
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_some</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">take</span>(), <span class="prelude-val">Some</span>(<span class="number">95</span>));
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_none</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="number">105</span>), <span class="prelude-val">None</span>);
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_some</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">get</span>(), <span class="prelude-val">Some</span>(<span class="number">105</span>));
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">remove</span>());
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_none</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">get</span>(), <span class="prelude-val">None</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">take</span>(), <span class="prelude-val">None</span>);
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_none</span>());
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_all() {
+        <span class="kw">let </span><span class="kw-2">mut </span>a = LazyOption::new(<span class="string">b&quot;a&quot;</span>, <span class="prelude-val">None</span>);
+        <span class="macro">assert!</span>(a.is_none());
+        a.set(<span class="kw-2">&amp;</span><span class="number">42u32</span>);
+        <span class="macro">assert!</span>(a.is_some());
+        <span class="macro">assert_eq!</span>(a.get(), <span class="prelude-val">Some</span>(<span class="number">42</span>));
+        <span class="macro">assert!</span>(a.is_some());
+        <span class="macro">assert_eq!</span>(a.replace(<span class="kw-2">&amp;</span><span class="number">95</span>), <span class="prelude-val">Some</span>(<span class="number">42</span>));
+        <span class="macro">assert!</span>(a.is_some());
+        <span class="macro">assert_eq!</span>(a.take(), <span class="prelude-val">Some</span>(<span class="number">95</span>));
+        <span class="macro">assert!</span>(a.is_none());
+        <span class="macro">assert_eq!</span>(a.replace(<span class="kw-2">&amp;</span><span class="number">105</span>), <span class="prelude-val">None</span>);
+        <span class="macro">assert!</span>(a.is_some());
+        <span class="macro">assert_eq!</span>(a.get(), <span class="prelude-val">Some</span>(<span class="number">105</span>));
+        <span class="macro">assert!</span>(a.remove());
+        <span class="macro">assert!</span>(a.is_none());
+        <span class="macro">assert_eq!</span>(a.get(), <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(a.take(), <span class="prelude-val">None</span>);
+        <span class="macro">assert!</span>(a.is_none());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_multi</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">LazyOption::new</span>(<span class="string">b&quot;a&quot;</span>, <span class="prelude-val">None</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">LazyOption::new</span>(<span class="string">b&quot;b&quot;</span>, <span class="prelude-val">None</span>);
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_none</span>());
-        <span class="macro">assert!</span>(<span class="ident">b</span>.<span class="ident">is_none</span>());
-        <span class="ident">a</span>.<span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="number">42u32</span>);
-        <span class="macro">assert!</span>(<span class="ident">b</span>.<span class="ident">is_none</span>());
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_some</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">get</span>(), <span class="prelude-val">Some</span>(<span class="number">42</span>));
-        <span class="ident">b</span>.<span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="number">32u32</span>);
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_some</span>());
-        <span class="macro">assert!</span>(<span class="ident">b</span>.<span class="ident">is_some</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">get</span>(), <span class="prelude-val">Some</span>(<span class="number">42</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">b</span>.<span class="ident">get</span>(), <span class="prelude-val">Some</span>(<span class="number">32</span>));
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_multi() {
+        <span class="kw">let </span><span class="kw-2">mut </span>a = LazyOption::new(<span class="string">b&quot;a&quot;</span>, <span class="prelude-val">None</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>b = LazyOption::new(<span class="string">b&quot;b&quot;</span>, <span class="prelude-val">None</span>);
+        <span class="macro">assert!</span>(a.is_none());
+        <span class="macro">assert!</span>(b.is_none());
+        a.set(<span class="kw-2">&amp;</span><span class="number">42u32</span>);
+        <span class="macro">assert!</span>(b.is_none());
+        <span class="macro">assert!</span>(a.is_some());
+        <span class="macro">assert_eq!</span>(a.get(), <span class="prelude-val">Some</span>(<span class="number">42</span>));
+        b.set(<span class="kw-2">&amp;</span><span class="number">32u32</span>);
+        <span class="macro">assert!</span>(a.is_some());
+        <span class="macro">assert!</span>(b.is_some());
+        <span class="macro">assert_eq!</span>(a.get(), <span class="prelude-val">Some</span>(<span class="number">42</span>));
+        <span class="macro">assert_eq!</span>(b.get(), <span class="prelude-val">Some</span>(<span class="number">32</span>));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_init_value</span>() {
-        <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">LazyOption::new</span>(<span class="string">b&quot;a&quot;</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="number">42u32</span>));
-        <span class="macro">assert!</span>(<span class="ident">a</span>.<span class="ident">is_some</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">get</span>(), <span class="prelude-val">Some</span>(<span class="number">42</span>));
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_init_value() {
+        <span class="kw">let </span>a = LazyOption::new(<span class="string">b&quot;a&quot;</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="number">42u32</span>));
+        <span class="macro">assert!</span>(a.is_some());
+        <span class="macro">assert_eq!</span>(a.get(), <span class="prelude-val">Some</span>(<span class="number">42</span>));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_debug</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lazy_option</span> <span class="op">=</span> <span class="ident">LazyOption::new</span>(<span class="string">b&quot;m&quot;</span>, <span class="prelude-val">None</span>);
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;expensive-debug&quot;</span>) {
-            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">lazy_option</span>), <span class="string">&quot;None&quot;</span>);
-        } <span class="kw">else</span> {
-            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">lazy_option</span>), <span class="string">&quot;LazyOption { storage_key: [109] }&quot;</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_debug() {
+        <span class="kw">let </span><span class="kw-2">mut </span>lazy_option = LazyOption::new(<span class="string">b&quot;m&quot;</span>, <span class="prelude-val">None</span>);
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;expensive-debug&quot;</span>) {
+            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, lazy_option), <span class="string">&quot;None&quot;</span>);
+        } <span class="kw">else </span>{
+            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, lazy_option), <span class="string">&quot;LazyOption { storage_key: [109] }&quot;</span>);
         }
 
-        <span class="ident">lazy_option</span>.<span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="number">1u64</span>);
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;expensive-debug&quot;</span>) {
-            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">lazy_option</span>), <span class="string">&quot;Some(1)&quot;</span>);
-        } <span class="kw">else</span> {
-            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">lazy_option</span>), <span class="string">&quot;LazyOption { storage_key: [109] }&quot;</span>);
+        lazy_option.set(<span class="kw-2">&amp;</span><span class="number">1u64</span>);
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;expensive-debug&quot;</span>) {
+            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, lazy_option), <span class="string">&quot;Some(1)&quot;</span>);
+        } <span class="kw">else </span>{
+            <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, lazy_option), <span class="string">&quot;LazyOption { storage_key: [109] }&quot;</span>);
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

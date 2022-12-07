@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/interface/request.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>request.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../nft_benefits_vault/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/interface/request.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>request.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../nft_benefits_vault/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../nft_benefits_vault/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -67,74 +67,74 @@
 <span id="67">67</span>
 <span id="68">68</span>
 <span id="69">69</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">near_contract_standards::non_fungible_token::TokenId</span>;
-<span class="kw">use</span> <span class="ident">near_sdk</span>::{
-    <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>},
-    <span class="ident">serde_json</span>::{<span class="ident">from_str</span>, <span class="ident">Error</span>},
-    <span class="ident">AccountId</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>near_contract_standards::non_fungible_token::TokenId;
+<span class="kw">use </span>near_sdk::{
+    serde::{Deserialize, Serialize},
+    serde_json::{from_str, Error},
+    AccountId,
 };
 
-<span class="doccomment">/// This struct is used to expand the functionality of the Contract when receiving fungible tokens.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Request</span> {
-    <span class="doccomment">/// Id of the NFT unique only within one NFT contract.</span>
-    <span class="ident">nft_id</span>: <span class="ident">TokenId</span>,
-    <span class="doccomment">/// NFT contract account id.</span>
-    <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>,
-    <span class="doccomment">/// Request [`Kind`].</span>
-    <span class="ident">kind</span>: <span class="ident">Kind</span>,
+<span class="doccomment">/// This struct is used to expand the functionality of the Contract when receiving fungible tokens.
+</span><span class="attribute">#[derive(Debug, Serialize, Deserialize)]
+</span><span class="kw">pub struct </span>Request {
+    <span class="doccomment">/// Id of the NFT unique only within one NFT contract.
+    </span>nft_id: TokenId,
+    <span class="doccomment">/// NFT contract account id.
+    </span>nft_contract_id: AccountId,
+    <span class="doccomment">/// Request [`Kind`].
+    </span>kind: Kind,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Kind</span> {
-    <span class="doccomment">/// On ft transfer with this variant as a msg the Contract will increase balance of the corresponding Vault.</span>
-    <span class="ident">TopUp</span>,
-    <span class="doccomment">/// If the contract have received FT with this request kind, it will immediately transfer it to the NFT owner.</span>
-    <span class="ident">Transfer</span>,
+<span class="attribute">#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
+</span><span class="kw">pub enum </span>Kind {
+    <span class="doccomment">/// On ft transfer with this variant as a msg the Contract will increase balance of the corresponding Vault.
+    </span>TopUp,
+    <span class="doccomment">/// If the contract have received FT with this request kind, it will immediately transfer it to the NFT owner.
+    </span>Transfer,
 }
 
-<span class="kw">impl</span> <span class="ident">Request</span> {
-    <span class="doccomment">/// Tryies to deserialize self from the provided json.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_json</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">from_str</span>(<span class="ident">s</span>)
+<span class="kw">impl </span>Request {
+    <span class="doccomment">/// Tryies to deserialize self from the provided json.
+    </span><span class="kw">pub fn </span>from_json(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        from_str(s)
     }
 
-    <span class="doccomment">/// Creates new instance of [`Request`].</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">nft_id</span>: <span class="ident">TokenId</span>, <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>, <span class="ident">kind</span>: <span class="ident">Kind</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">nft_id</span>,
-            <span class="ident">nft_contract_id</span>,
-            <span class="ident">kind</span>,
+    <span class="doccomment">/// Creates new instance of [`Request`].
+    </span><span class="attribute">#[cfg(test)]
+    </span><span class="kw">pub fn </span>new(nft_id: TokenId, nft_contract_id: AccountId, kind: Kind) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            nft_id,
+            nft_contract_id,
+            kind,
         }
     }
 
-    <span class="doccomment">/// Creates new instance of TopUp [`Request`].</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">top_up</span>(<span class="ident">nft_id</span>: <span class="ident">TokenId</span>, <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">nft_id</span>, <span class="ident">nft_contract_id</span>, <span class="ident">Kind::TopUp</span>)
+    <span class="doccomment">/// Creates new instance of TopUp [`Request`].
+    </span><span class="attribute">#[cfg(test)]
+    </span><span class="kw">pub fn </span>top_up(nft_id: TokenId, nft_contract_id: AccountId) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new(nft_id, nft_contract_id, Kind::TopUp)
     }
 
-    <span class="doccomment">/// Creates new instance of Transfer [`Request`].</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">transfer</span>(<span class="ident">nft_id</span>: <span class="ident">TokenId</span>, <span class="ident">nft_contract_id</span>: <span class="ident">AccountId</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">nft_id</span>, <span class="ident">nft_contract_id</span>, <span class="ident">Kind::Transfer</span>)
+    <span class="doccomment">/// Creates new instance of Transfer [`Request`].
+    </span><span class="attribute">#[cfg(test)]
+    </span><span class="kw">pub fn </span>transfer(nft_id: TokenId, nft_contract_id: AccountId) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new(nft_id, nft_contract_id, Kind::Transfer)
     }
 
-    <span class="doccomment">/// Returns request [`Kind`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kind</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Kind</span> {
-        <span class="self">self</span>.<span class="ident">kind</span>
+    <span class="doccomment">/// Returns request [`Kind`].
+    </span><span class="kw">pub fn </span>kind(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Kind {
+        <span class="self">self</span>.kind
     }
 
-    <span class="doccomment">/// Returns reference to the NFT id.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nft_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">TokenId</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">nft_id</span>
+    <span class="doccomment">/// Returns reference to the NFT id.
+    </span><span class="kw">pub fn </span>nft_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>TokenId {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.nft_id
     }
 
-    <span class="doccomment">/// Returns reference to the NFT contract id.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nft_contract_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">AccountId</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">nft_contract_id</span>
+    <span class="doccomment">/// Returns reference to the NFT contract id.
+    </span><span class="kw">pub fn </span>nft_contract_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>AccountId {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.nft_contract_id
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="nft_benefits_vault" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="nft_benefits_vault" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

@@ -1,3 +1,3 @@
-(function() {var implementors = {};
-implementors["near_sdk"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.64.0/core/convert/trait.AsRef.html\" title=\"trait core::convert::AsRef\">AsRef</a>&lt;<a class=\"primitive\" href=\"https://doc.rust-lang.org/1.64.0/std/primitive.str.html\">str</a>&gt; for <a class=\"struct\" href=\"near_sdk/struct.AccountId.html\" title=\"struct near_sdk::AccountId\">AccountId</a>","synthetic":false,"types":["near_sdk::types::account_id::AccountId"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
+(function() {var implementors = {
+"near_sdk":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.65.0/core/convert/trait.AsRef.html\" title=\"trait core::convert::AsRef\">AsRef</a>&lt;<a class=\"primitive\" href=\"https://doc.rust-lang.org/1.65.0/std/primitive.str.html\">str</a>&gt; for <a class=\"struct\" href=\"near_sdk/struct.AccountId.html\" title=\"struct near_sdk::AccountId\">AccountId</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

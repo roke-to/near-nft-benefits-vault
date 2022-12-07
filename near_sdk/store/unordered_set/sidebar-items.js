@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["UnorderedSet","A lazily loaded storage set that stores its content directly on the storage trie. This structure is similar to `near_sdk::store::LookupSet`, except that it keeps track of the elements so that [`UnorderedSet`] can be iterable among other things."]]};

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.0.0/src/collections/unordered_map/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../near_sdk/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/near-sdk-4.1.1/src/collections/unordered_map/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../normalize.css"><link rel="stylesheet" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../dark.css" disabled><link rel="stylesheet" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../near_sdk/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../near_sdk/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -583,590 +583,590 @@
 <span id="583">583</span>
 <span id="584">584</span>
 <span id="585">585</span>
-</pre><pre class="rust"><code><span class="doccomment">//! A map implemented on a trie. Unlike `std::collections::HashMap` the keys in this map are not</span>
-<span class="doccomment">//! hashed but are instead serialized.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! A map implemented on a trie. Unlike `std::collections::HashMap` the keys in this map are not
+//! hashed but are instead serialized.
 
-<span class="kw">mod</span> <span class="ident">iter</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">iter::Iter</span>;
+</span><span class="kw">mod </span>iter;
+<span class="kw">pub use </span>iter::Iter;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collections</span>::{<span class="ident">append</span>, <span class="ident">append_slice</span>, <span class="ident">Vector</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">env</span>, <span class="ident">IntoStorageKey</span>};
-<span class="kw">use</span> <span class="ident">borsh</span>::{<span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>};
-<span class="kw">use</span> <span class="ident">std::mem::size_of</span>;
+<span class="kw">use </span><span class="kw">crate</span>::collections::{append, append_slice, Vector};
+<span class="kw">use crate</span>::{env, IntoStorageKey};
+<span class="kw">use </span>borsh::{BorshDeserialize, BorshSerialize};
+<span class="kw">use </span>std::mem::size_of;
 
-<span class="kw">const</span> <span class="ident">ERR_INCONSISTENT_STATE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;The collection is an inconsistent state. Did previous smart contract execution terminate unexpectedly?&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_KEY_SERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot serialize key with Borsh&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_VALUE_DESERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot deserialize value with Borsh&quot;</span>;
-<span class="kw">const</span> <span class="ident">ERR_VALUE_SERIALIZATION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Cannot serialize value with Borsh&quot;</span>;
+<span class="kw">const </span>ERR_INCONSISTENT_STATE: <span class="kw-2">&amp;</span>str = <span class="string">&quot;The collection is an inconsistent state. Did previous smart contract execution terminate unexpectedly?&quot;</span>;
+<span class="kw">const </span>ERR_KEY_SERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot serialize key with Borsh&quot;</span>;
+<span class="kw">const </span>ERR_VALUE_DESERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot deserialize value with Borsh&quot;</span>;
+<span class="kw">const </span>ERR_VALUE_SERIALIZATION: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Cannot serialize value with Borsh&quot;</span>;
 
-<span class="doccomment">/// An iterable implementation of a map that stores its content directly on the trie.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">BorshSerialize</span>, <span class="ident">BorshDeserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">UnorderedMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-    <span class="ident">key_index_prefix</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="ident">keys</span>: <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
-    <span class="ident">values</span>: <span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>,
+<span class="doccomment">/// An iterable implementation of a map that stores its content directly on the trie.
+</span><span class="attribute">#[derive(BorshSerialize, BorshDeserialize)]
+</span><span class="kw">pub struct </span>UnorderedMap&lt;K, V&gt; {
+    key_index_prefix: Vec&lt;u8&gt;,
+    keys: Vector&lt;K&gt;,
+    values: Vector&lt;V&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">UnorderedMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Returns the number of elements in the map, also referred to as its size.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// assert_eq!(map.len(), 0);</span>
-    <span class="doccomment">/// map.insert(&amp;1, &amp;1);</span>
-    <span class="doccomment">/// map.insert(&amp;2, &amp;2);</span>
-    <span class="doccomment">/// assert_eq!(map.len(), 2);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
-        <span class="kw">let</span> <span class="ident">keys_len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">keys</span>.<span class="ident">len</span>();
-        <span class="kw">let</span> <span class="ident">values_len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">values</span>.<span class="ident">len</span>();
-        <span class="kw">if</span> <span class="ident">keys_len</span> <span class="op">!</span><span class="op">=</span> <span class="ident">values_len</span> {
-            <span class="ident">env::panic_str</span>(<span class="ident">ERR_INCONSISTENT_STATE</span>)
-        } <span class="kw">else</span> {
-            <span class="ident">keys_len</span>
+<span class="kw">impl</span>&lt;K, V&gt; UnorderedMap&lt;K, V&gt; {
+    <span class="doccomment">/// Returns the number of elements in the map, also referred to as its size.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedMap;
+    ///
+    /// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);
+    /// assert_eq!(map.len(), 0);
+    /// map.insert(&amp;1, &amp;1);
+    /// map.insert(&amp;2, &amp;2);
+    /// assert_eq!(map.len(), 2);
+    /// ```
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
+        <span class="kw">let </span>keys_len = <span class="self">self</span>.keys.len();
+        <span class="kw">let </span>values_len = <span class="self">self</span>.values.len();
+        <span class="kw">if </span>keys_len != values_len {
+            env::panic_str(ERR_INCONSISTENT_STATE)
+        } <span class="kw">else </span>{
+            keys_len
         }
     }
 
-    <span class="doccomment">/// Returns `true` if the map contains no elements.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">let</span> <span class="ident">keys_is_empty</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">keys</span>.<span class="ident">is_empty</span>();
-        <span class="kw">let</span> <span class="ident">values_is_empty</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">values</span>.<span class="ident">is_empty</span>();
-        <span class="kw">if</span> <span class="ident">keys_is_empty</span> <span class="op">!</span><span class="op">=</span> <span class="ident">values_is_empty</span> {
-            <span class="ident">env::panic_str</span>(<span class="ident">ERR_INCONSISTENT_STATE</span>)
-        } <span class="kw">else</span> {
-            <span class="ident">keys_is_empty</span>
+    <span class="doccomment">/// Returns `true` if the map contains no elements.
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">let </span>keys_is_empty = <span class="self">self</span>.keys.is_empty();
+        <span class="kw">let </span>values_is_empty = <span class="self">self</span>.values.is_empty();
+        <span class="kw">if </span>keys_is_empty != values_is_empty {
+            env::panic_str(ERR_INCONSISTENT_STATE)
+        } <span class="kw">else </span>{
+            keys_is_empty
         }
     }
 
-    <span class="doccomment">/// Create new map with zero elements. Use `prefix` as a unique identifier.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedMap;</span>
-    <span class="doccomment">/// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">prefix</span>: <span class="ident">S</span>) -&gt; <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">IntoStorageKey</span>,
+    <span class="doccomment">/// Create new map with zero elements. Use `prefix` as a unique identifier.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedMap;
+    /// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);
+    /// ```
+    </span><span class="kw">pub fn </span>new&lt;S&gt;(prefix: S) -&gt; <span class="self">Self
+    </span><span class="kw">where
+        </span>S: IntoStorageKey,
     {
-        <span class="kw">let</span> <span class="ident">prefix</span> <span class="op">=</span> <span class="ident">prefix</span>.<span class="ident">into_storage_key</span>();
-        <span class="kw">let</span> <span class="ident">key_index_prefix</span> <span class="op">=</span> <span class="ident">append</span>(<span class="kw-2">&amp;</span><span class="ident">prefix</span>, <span class="string">b&#39;i&#39;</span>);
-        <span class="kw">let</span> <span class="ident">index_key_id</span> <span class="op">=</span> <span class="ident">append</span>(<span class="kw-2">&amp;</span><span class="ident">prefix</span>, <span class="string">b&#39;k&#39;</span>);
-        <span class="kw">let</span> <span class="ident">index_value_id</span> <span class="op">=</span> <span class="ident">append</span>(<span class="kw-2">&amp;</span><span class="ident">prefix</span>, <span class="string">b&#39;v&#39;</span>);
+        <span class="kw">let </span>prefix = prefix.into_storage_key();
+        <span class="kw">let </span>key_index_prefix = append(<span class="kw-2">&amp;</span>prefix, <span class="string">b&#39;i&#39;</span>);
+        <span class="kw">let </span>index_key_id = append(<span class="kw-2">&amp;</span>prefix, <span class="string">b&#39;k&#39;</span>);
+        <span class="kw">let </span>index_value_id = append(<span class="kw-2">&amp;</span>prefix, <span class="string">b&#39;v&#39;</span>);
 
-        <span class="self">Self</span> {
-            <span class="ident">key_index_prefix</span>,
-            <span class="ident">keys</span>: <span class="ident">Vector::new</span>(<span class="ident">index_key_id</span>),
-            <span class="ident">values</span>: <span class="ident">Vector::new</span>(<span class="ident">index_value_id</span>),
+        <span class="self">Self </span>{
+            key_index_prefix,
+            keys: Vector::new(index_key_id),
+            values: Vector::new(index_value_id),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">serialize_index</span>(<span class="ident">index</span>: <span class="ident">u64</span>) -&gt; [<span class="ident">u8</span>; <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>()] {
-        <span class="ident">index</span>.<span class="ident">to_le_bytes</span>()
+    <span class="kw">fn </span>serialize_index(index: u64) -&gt; [u8; size_of::&lt;u64&gt;()] {
+        index.to_le_bytes()
     }
 
-    <span class="kw">fn</span> <span class="ident">deserialize_index</span>(<span class="ident">raw_index</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">u64</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="number">0u8</span>; <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>()];
-        <span class="ident">result</span>.<span class="ident">copy_from_slice</span>(<span class="ident">raw_index</span>);
-        <span class="ident">u64::from_le_bytes</span>(<span class="ident">result</span>)
+    <span class="kw">fn </span>deserialize_index(raw_index: <span class="kw-2">&amp;</span>[u8]) -&gt; u64 {
+        <span class="kw">let </span><span class="kw-2">mut </span>result = [<span class="number">0u8</span>; size_of::&lt;u64&gt;()];
+        result.copy_from_slice(raw_index);
+        u64::from_le_bytes(result)
     }
 
-    <span class="kw">fn</span> <span class="ident">raw_key_to_index_lookup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">raw_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="ident">append_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key_index_prefix</span>, <span class="ident">raw_key</span>)
+    <span class="kw">fn </span>raw_key_to_index_lookup(<span class="kw-2">&amp;</span><span class="self">self</span>, raw_key: <span class="kw-2">&amp;</span>[u8]) -&gt; Vec&lt;u8&gt; {
+        append_slice(<span class="kw-2">&amp;</span><span class="self">self</span>.key_index_prefix, raw_key)
     }
 
-    <span class="doccomment">/// Returns an index of the given raw key.</span>
-    <span class="kw">fn</span> <span class="ident">get_index_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">index_lookup</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_key_to_index_lookup</span>(<span class="ident">key_raw</span>);
-        <span class="ident">env::storage_read</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">raw_index</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_index</span>(<span class="kw-2">&amp;</span><span class="ident">raw_index</span>))
+    <span class="doccomment">/// Returns an index of the given raw key.
+    </span><span class="kw">fn </span>get_index_raw(<span class="kw-2">&amp;</span><span class="self">self</span>, key_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
+        <span class="kw">let </span>index_lookup = <span class="self">self</span>.raw_key_to_index_lookup(key_raw);
+        env::storage_read(<span class="kw-2">&amp;</span>index_lookup).map(|raw_index| <span class="self">Self</span>::deserialize_index(<span class="kw-2">&amp;</span>raw_index))
     }
 
-    <span class="doccomment">/// Returns the serialized value corresponding to the serialized key.</span>
-    <span class="kw">fn</span> <span class="ident">get_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">get_index_raw</span>(<span class="ident">key_raw</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">index</span><span class="op">|</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">values</span>.<span class="ident">get_raw</span>(<span class="ident">index</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">None</span> =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_INCONSISTENT_STATE</span>),
+    <span class="doccomment">/// Returns the serialized value corresponding to the serialized key.
+    </span><span class="kw">fn </span>get_raw(<span class="kw-2">&amp;</span><span class="self">self</span>, key_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="self">self</span>.get_index_raw(key_raw).map(|index| <span class="kw">match </span><span class="self">self</span>.values.get_raw(index) {
+            <span class="prelude-val">Some</span>(x) =&gt; x,
+            <span class="prelude-val">None </span>=&gt; env::panic_str(ERR_INCONSISTENT_STATE),
         })
     }
 
-    <span class="doccomment">/// Inserts a serialized key-value pair into the map.</span>
-    <span class="doccomment">/// If the map did not have this key present, `None` is returned. Otherwise returns</span>
-    <span class="doccomment">/// a serialized value. Note, the keys that have the same hash value are undistinguished by</span>
-    <span class="doccomment">/// the implementation.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">key_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">value_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">index_lookup</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_key_to_index_lookup</span>(<span class="ident">key_raw</span>);
-        <span class="kw">match</span> <span class="ident">env::storage_read</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">index_raw</span>) =&gt; {
-                <span class="comment">// The element already exists.</span>
-                <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::deserialize_index</span>(<span class="kw-2">&amp;</span><span class="ident">index_raw</span>);
-                <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">values</span>.<span class="ident">replace_raw</span>(<span class="ident">index</span>, <span class="ident">value_raw</span>))
+    <span class="doccomment">/// Inserts a serialized key-value pair into the map.
+    /// If the map did not have this key present, `None` is returned. Otherwise returns
+    /// a serialized value. Note, the keys that have the same hash value are undistinguished by
+    /// the implementation.
+    </span><span class="kw">pub fn </span>insert_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key_raw: <span class="kw-2">&amp;</span>[u8], value_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">let </span>index_lookup = <span class="self">self</span>.raw_key_to_index_lookup(key_raw);
+        <span class="kw">match </span>env::storage_read(<span class="kw-2">&amp;</span>index_lookup) {
+            <span class="prelude-val">Some</span>(index_raw) =&gt; {
+                <span class="comment">// The element already exists.
+                </span><span class="kw">let </span>index = <span class="self">Self</span>::deserialize_index(<span class="kw-2">&amp;</span>index_raw);
+                <span class="prelude-val">Some</span>(<span class="self">self</span>.values.replace_raw(index, value_raw))
             }
-            <span class="prelude-val">None</span> =&gt; {
-                <span class="comment">// The element does not exist yet.</span>
-                <span class="kw">let</span> <span class="ident">next_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">len</span>();
-                <span class="kw">let</span> <span class="ident">next_index_raw</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::serialize_index</span>(<span class="ident">next_index</span>);
-                <span class="ident">env::storage_write</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>, <span class="kw-2">&amp;</span><span class="ident">next_index_raw</span>);
-                <span class="self">self</span>.<span class="ident">keys</span>.<span class="ident">push_raw</span>(<span class="ident">key_raw</span>);
-                <span class="self">self</span>.<span class="ident">values</span>.<span class="ident">push_raw</span>(<span class="ident">value_raw</span>);
-                <span class="prelude-val">None</span>
-            }
+            <span class="prelude-val">None </span>=&gt; {
+                <span class="comment">// The element does not exist yet.
+                </span><span class="kw">let </span>next_index = <span class="self">self</span>.len();
+                <span class="kw">let </span>next_index_raw = <span class="self">Self</span>::serialize_index(next_index);
+                env::storage_write(<span class="kw-2">&amp;</span>index_lookup, <span class="kw-2">&amp;</span>next_index_raw);
+                <span class="self">self</span>.keys.push_raw(key_raw);
+                <span class="self">self</span>.values.push_raw(value_raw);
+                <span class="prelude-val">None
+            </span>}
         }
     }
 
-    <span class="doccomment">/// Removes a serialized key from the map, returning the serialized value at the key if the key</span>
-    <span class="doccomment">/// was previously in the map.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">key_raw</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">index_lookup</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_key_to_index_lookup</span>(<span class="ident">key_raw</span>);
-        <span class="kw">match</span> <span class="ident">env::storage_read</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">index_raw</span>) =&gt; {
-                <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::branches_sharing_code</span>)]</span>
-                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> {
-                    <span class="comment">// If there is only one element then swap remove simply removes it without</span>
-                    <span class="comment">// swapping with the last element.</span>
-                    <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>);
-                } <span class="kw">else</span> {
-                    <span class="comment">// If there is more than one element then swap remove swaps it with the last</span>
-                    <span class="comment">// element.</span>
-                    <span class="kw">let</span> <span class="ident">last_key_raw</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">keys</span>.<span class="ident">get_raw</span>(<span class="self">self</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>) {
-                        <span class="prelude-val">Some</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-                        <span class="prelude-val">None</span> =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_INCONSISTENT_STATE</span>),
+    <span class="doccomment">/// Removes a serialized key from the map, returning the serialized value at the key if the key
+    /// was previously in the map.
+    </span><span class="kw">pub fn </span>remove_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key_raw: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">let </span>index_lookup = <span class="self">self</span>.raw_key_to_index_lookup(key_raw);
+        <span class="kw">match </span>env::storage_read(<span class="kw-2">&amp;</span>index_lookup) {
+            <span class="prelude-val">Some</span>(index_raw) =&gt; {
+                <span class="attribute">#[allow(clippy::branches_sharing_code)]
+                </span><span class="kw">if </span><span class="self">self</span>.len() == <span class="number">1 </span>{
+                    <span class="comment">// If there is only one element then swap remove simply removes it without
+                    // swapping with the last element.
+                    </span>env::storage_remove(<span class="kw-2">&amp;</span>index_lookup);
+                } <span class="kw">else </span>{
+                    <span class="comment">// If there is more than one element then swap remove swaps it with the last
+                    // element.
+                    </span><span class="kw">let </span>last_key_raw = <span class="kw">match </span><span class="self">self</span>.keys.get_raw(<span class="self">self</span>.len() - <span class="number">1</span>) {
+                        <span class="prelude-val">Some</span>(x) =&gt; x,
+                        <span class="prelude-val">None </span>=&gt; env::panic_str(ERR_INCONSISTENT_STATE),
                     };
-                    <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>);
-                    <span class="comment">// If the removed element was the last element from keys, then we don&#39;t need to</span>
-                    <span class="comment">// reinsert the lookup back.</span>
-                    <span class="kw">if</span> <span class="ident">last_key_raw</span> <span class="op">!</span><span class="op">=</span> <span class="ident">key_raw</span> {
-                        <span class="kw">let</span> <span class="ident">last_lookup_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_key_to_index_lookup</span>(<span class="kw-2">&amp;</span><span class="ident">last_key_raw</span>);
-                        <span class="ident">env::storage_write</span>(<span class="kw-2">&amp;</span><span class="ident">last_lookup_key</span>, <span class="kw-2">&amp;</span><span class="ident">index_raw</span>);
+                    env::storage_remove(<span class="kw-2">&amp;</span>index_lookup);
+                    <span class="comment">// If the removed element was the last element from keys, then we don&#39;t need to
+                    // reinsert the lookup back.
+                    </span><span class="kw">if </span>last_key_raw != key_raw {
+                        <span class="kw">let </span>last_lookup_key = <span class="self">self</span>.raw_key_to_index_lookup(<span class="kw-2">&amp;</span>last_key_raw);
+                        env::storage_write(<span class="kw-2">&amp;</span>last_lookup_key, <span class="kw-2">&amp;</span>index_raw);
                     }
                 }
-                <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::deserialize_index</span>(<span class="kw-2">&amp;</span><span class="ident">index_raw</span>);
-                <span class="self">self</span>.<span class="ident">keys</span>.<span class="ident">swap_remove_raw</span>(<span class="ident">index</span>);
-                <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">values</span>.<span class="ident">swap_remove_raw</span>(<span class="ident">index</span>))
+                <span class="kw">let </span>index = <span class="self">Self</span>::deserialize_index(<span class="kw-2">&amp;</span>index_raw);
+                <span class="self">self</span>.keys.swap_remove_raw(index);
+                <span class="prelude-val">Some</span>(<span class="self">self</span>.values.swap_remove_raw(index))
             }
-            <span class="prelude-val">None</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">UnorderedMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">K</span>: <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
-    <span class="ident">V</span>: <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;K, V&gt; UnorderedMap&lt;K, V&gt;
+<span class="kw">where
+    </span>K: BorshSerialize + BorshDeserialize,
+    V: BorshSerialize + BorshDeserialize,
 {
-    <span class="kw">fn</span> <span class="ident">serialize_key</span>(<span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">K</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">key</span>.<span class="ident">try_to_vec</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_KEY_SERIALIZATION</span>),
+    <span class="kw">fn </span>serialize_key(key: <span class="kw-2">&amp;</span>K) -&gt; Vec&lt;u8&gt; {
+        <span class="kw">match </span>key.try_to_vec() {
+            <span class="prelude-val">Ok</span>(x) =&gt; x,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; env::panic_str(ERR_KEY_SERIALIZATION),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">deserialize_value</span>(<span class="ident">raw_value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">V</span> {
-        <span class="kw">match</span> <span class="ident">V::try_from_slice</span>(<span class="ident">raw_value</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_VALUE_DESERIALIZATION</span>),
+    <span class="kw">fn </span>deserialize_value(raw_value: <span class="kw-2">&amp;</span>[u8]) -&gt; V {
+        <span class="kw">match </span>V::try_from_slice(raw_value) {
+            <span class="prelude-val">Ok</span>(x) =&gt; x,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; env::panic_str(ERR_VALUE_DESERIALIZATION),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">serialize_value</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">V</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">try_to_vec</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">env::panic_str</span>(<span class="ident">ERR_VALUE_SERIALIZATION</span>),
+    <span class="kw">fn </span>serialize_value(value: <span class="kw-2">&amp;</span>V) -&gt; Vec&lt;u8&gt; {
+        <span class="kw">match </span>value.try_to_vec() {
+            <span class="prelude-val">Ok</span>(x) =&gt; x,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; env::panic_str(ERR_VALUE_SERIALIZATION),
         }
     }
 
-    <span class="doccomment">/// Returns the value corresponding to the key.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// assert_eq!(map.get(&amp;1), None);</span>
-    <span class="doccomment">/// map.insert(&amp;1, &amp;10);</span>
-    <span class="doccomment">/// assert_eq!(map.get(&amp;1), Some(10));</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">K</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">get_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_key</span>(<span class="ident">key</span>)).<span class="ident">map</span>(<span class="op">|</span><span class="ident">value_raw</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_value</span>(<span class="kw-2">&amp;</span><span class="ident">value_raw</span>))
+    <span class="doccomment">/// Returns the value corresponding to the key.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedMap;
+    ///
+    /// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);
+    /// assert_eq!(map.get(&amp;1), None);
+    /// map.insert(&amp;1, &amp;10);
+    /// assert_eq!(map.get(&amp;1), Some(10));
+    /// ```
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>K) -&gt; <span class="prelude-ty">Option</span>&lt;V&gt; {
+        <span class="self">self</span>.get_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_key(key)).map(|value_raw| <span class="self">Self</span>::deserialize_value(<span class="kw-2">&amp;</span>value_raw))
     }
 
-    <span class="doccomment">/// Removes a key from the map, returning the value at the key if the key was previously in the</span>
-    <span class="doccomment">/// map.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// assert_eq!(map.remove(&amp;1), None);</span>
-    <span class="doccomment">/// map.insert(&amp;1, &amp;10);</span>
-    <span class="doccomment">/// assert_eq!(map.remove(&amp;1), Some(10));</span>
-    <span class="doccomment">/// assert_eq!(map.len(), 0);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">K</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">remove_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_key</span>(<span class="ident">key</span>))
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">value_raw</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_value</span>(<span class="kw-2">&amp;</span><span class="ident">value_raw</span>))
+    <span class="doccomment">/// Removes a key from the map, returning the value at the key if the key was previously in the
+    /// map.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedMap;
+    ///
+    /// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);
+    /// assert_eq!(map.remove(&amp;1), None);
+    /// map.insert(&amp;1, &amp;10);
+    /// assert_eq!(map.remove(&amp;1), Some(10));
+    /// assert_eq!(map.len(), 0);
+    /// ```
+    </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>K) -&gt; <span class="prelude-ty">Option</span>&lt;V&gt; {
+        <span class="self">self</span>.remove_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_key(key))
+            .map(|value_raw| <span class="self">Self</span>::deserialize_value(<span class="kw-2">&amp;</span>value_raw))
     }
 
-    <span class="doccomment">/// Inserts a key-value pair into the map.</span>
-    <span class="doccomment">/// If the map did not have this key present, `None` is returned. Otherwise returns</span>
-    <span class="doccomment">/// a value. Note, the keys that have the same hash value are undistinguished by</span>
-    <span class="doccomment">/// the implementation.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// map.insert(&amp;1, &amp;10);</span>
-    <span class="doccomment">/// assert_eq!(map.get(&amp;1), Some(10));</span>
-    <span class="doccomment">/// assert_eq!(map.len(), 1);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">K</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">V</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">insert_raw</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_key</span>(<span class="ident">key</span>), <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::serialize_value</span>(<span class="ident">value</span>))
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">value_raw</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::deserialize_value</span>(<span class="kw-2">&amp;</span><span class="ident">value_raw</span>))
+    <span class="doccomment">/// Inserts a key-value pair into the map.
+    /// If the map did not have this key present, `None` is returned. Otherwise returns
+    /// a value. Note, the keys that have the same hash value are undistinguished by
+    /// the implementation.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedMap;
+    ///
+    /// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);
+    /// map.insert(&amp;1, &amp;10);
+    /// assert_eq!(map.get(&amp;1), Some(10));
+    /// assert_eq!(map.len(), 1);
+    /// ```
+    </span><span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>K, value: <span class="kw-2">&amp;</span>V) -&gt; <span class="prelude-ty">Option</span>&lt;V&gt; {
+        <span class="self">self</span>.insert_raw(<span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_key(key), <span class="kw-2">&amp;</span><span class="self">Self</span>::serialize_value(value))
+            .map(|value_raw| <span class="self">Self</span>::deserialize_value(<span class="kw-2">&amp;</span>value_raw))
     }
 
-    <span class="doccomment">/// Clears the map, removing all elements.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use near_sdk::collections::UnorderedMap;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);</span>
-    <span class="doccomment">/// map.insert(&amp;1, &amp;10);</span>
-    <span class="doccomment">/// map.insert(&amp;2, &amp;20);</span>
-    <span class="doccomment">/// map.clear();</span>
-    <span class="doccomment">/// assert_eq!(map.len(), 0);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">for</span> <span class="ident">raw_key</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">keys</span>.<span class="ident">iter_raw</span>() {
-            <span class="kw">let</span> <span class="ident">index_lookup</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">raw_key_to_index_lookup</span>(<span class="kw-2">&amp;</span><span class="ident">raw_key</span>);
-            <span class="ident">env::storage_remove</span>(<span class="kw-2">&amp;</span><span class="ident">index_lookup</span>);
+    <span class="doccomment">/// Clears the map, removing all elements.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use near_sdk::collections::UnorderedMap;
+    ///
+    /// let mut map: UnorderedMap&lt;u8, u8&gt; = UnorderedMap::new(b&quot;m&quot;);
+    /// map.insert(&amp;1, &amp;10);
+    /// map.insert(&amp;2, &amp;20);
+    /// map.clear();
+    /// assert_eq!(map.len(), 0);
+    /// ```
+    </span><span class="kw">pub fn </span>clear(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">for </span>raw_key <span class="kw">in </span><span class="self">self</span>.keys.iter_raw() {
+            <span class="kw">let </span>index_lookup = <span class="self">self</span>.raw_key_to_index_lookup(<span class="kw-2">&amp;</span>raw_key);
+            env::storage_remove(<span class="kw-2">&amp;</span>index_lookup);
         }
-        <span class="self">self</span>.<span class="ident">keys</span>.<span class="ident">clear</span>();
-        <span class="self">self</span>.<span class="ident">values</span>.<span class="ident">clear</span>();
+        <span class="self">self</span>.keys.clear();
+        <span class="self">self</span>.values.clear();
     }
 
-    <span class="doccomment">/// Copies elements into an `std::vec::Vec`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_vec</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">std::vec::Vec</span><span class="op">&lt;</span>(<span class="ident">K</span>, <span class="ident">V</span>)<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">iter</span>().<span class="ident">collect</span>()
+    <span class="doccomment">/// Copies elements into an `std::vec::Vec`.
+    </span><span class="kw">pub fn </span>to_vec(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::vec::Vec&lt;(K, V)&gt; {
+        <span class="self">self</span>.iter().collect()
     }
 
-    <span class="doccomment">/// An iterator visiting all keys. The iterator element type is `K`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">K</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
-        <span class="self">self</span>.<span class="ident">keys</span>.<span class="ident">iter</span>()
+    <span class="doccomment">/// An iterator visiting all keys. The iterator element type is `K`.
+    </span><span class="kw">pub fn </span>keys(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = K&gt; + <span class="lifetime">&#39;_ </span>{
+        <span class="self">self</span>.keys.iter()
     }
 
-    <span class="doccomment">/// An iterator visiting all values. The iterator element type is `V`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">values</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">V</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
-        <span class="self">self</span>.<span class="ident">values</span>.<span class="ident">iter</span>()
+    <span class="doccomment">/// An iterator visiting all values. The iterator element type is `V`.
+    </span><span class="kw">pub fn </span>values(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = V&gt; + <span class="lifetime">&#39;_ </span>{
+        <span class="self">self</span>.values.iter()
     }
 
-    <span class="doccomment">/// Iterate over deserialized keys and values.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Iter</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-        <span class="ident">Iter::new</span>(<span class="self">self</span>)
+    <span class="doccomment">/// Iterate over deserialized keys and values.
+    </span><span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Iter&lt;K, V&gt; {
+        Iter::new(<span class="self">self</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extend</span><span class="op">&lt;</span><span class="ident">IT</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="ident">K</span>, <span class="ident">V</span>)<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">iter</span>: <span class="ident">IT</span>) {
-        <span class="kw">for</span> (<span class="ident">el_key</span>, <span class="ident">el_value</span>) <span class="kw">in</span> <span class="ident">iter</span> {
-            <span class="self">self</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">el_key</span>, <span class="kw-2">&amp;</span><span class="ident">el_value</span>);
+    <span class="kw">pub fn </span>extend&lt;IT: IntoIterator&lt;Item = (K, V)&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: IT) {
+        <span class="kw">for </span>(el_key, el_value) <span class="kw">in </span>iter {
+            <span class="self">self</span>.insert(<span class="kw-2">&amp;</span>el_key, <span class="kw-2">&amp;</span>el_value);
         }
     }
 
-    <span class="doccomment">/// Returns a view of keys as a vector.</span>
-    <span class="doccomment">/// It&#39;s sometimes useful to have random access to the keys.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keys_as_vector</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">keys</span>
+    <span class="doccomment">/// Returns a view of keys as a vector.
+    /// It&#39;s sometimes useful to have random access to the keys.
+    </span><span class="kw">pub fn </span>keys_as_vector(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Vector&lt;K&gt; {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.keys
     }
 
-    <span class="doccomment">/// Returns a view of values as a vector.</span>
-    <span class="doccomment">/// It&#39;s sometimes useful to have random access to the values.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">values_as_vector</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Vector</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">values</span>
+    <span class="doccomment">/// Returns a view of values as a vector.
+    /// It&#39;s sometimes useful to have random access to the values.
+    </span><span class="kw">pub fn </span>values_as_vector(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Vector&lt;V&gt; {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.values
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">std::fmt::Debug</span> <span class="kw">for</span> <span class="ident">UnorderedMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">K</span>: <span class="ident">std::fmt::Debug</span> <span class="op">+</span> <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
-    <span class="ident">V</span>: <span class="ident">std::fmt::Debug</span> <span class="op">+</span> <span class="ident">BorshSerialize</span> <span class="op">+</span> <span class="ident">BorshDeserialize</span>,
+<span class="kw">impl</span>&lt;K, V&gt; std::fmt::Debug <span class="kw">for </span>UnorderedMap&lt;K, V&gt;
+<span class="kw">where
+    </span>K: std::fmt::Debug + BorshSerialize + BorshDeserialize,
+    V: std::fmt::Debug + BorshSerialize + BorshDeserialize,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;UnorderedMap&quot;</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;key_index_prefix&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key_index_prefix</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;keys&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">keys</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;values&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">values</span>)
-            .<span class="ident">finish</span>()
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_struct(<span class="string">&quot;UnorderedMap&quot;</span>)
+            .field(<span class="string">&quot;key_index_prefix&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.key_index_prefix)
+            .field(<span class="string">&quot;keys&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.keys)
+            .field(<span class="string">&quot;values&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.values)
+            .finish()
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::collections::UnorderedMap</span>;
-    <span class="kw">use</span> <span class="ident">borsh</span>::{<span class="ident">BorshDeserialize</span>, <span class="ident">BorshSerialize</span>};
-    <span class="kw">use</span> <span class="ident">rand::seq::SliceRandom</span>;
-    <span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">Rng</span>, <span class="ident">SeedableRng</span>};
-    <span class="kw">use</span> <span class="ident">std::collections</span>::{<span class="ident">HashMap</span>, <span class="ident">HashSet</span>};
-    <span class="kw">use</span> <span class="ident">std::iter::FromIterator</span>;
-    <span class="kw">use</span> <span class="ident">std::sync::atomic</span>::{<span class="ident">AtomicUsize</span>, <span class="ident">Ordering</span>};
+<span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use </span><span class="kw">crate</span>::collections::UnorderedMap;
+    <span class="kw">use </span>borsh::{BorshDeserialize, BorshSerialize};
+    <span class="kw">use </span>rand::seq::SliceRandom;
+    <span class="kw">use </span>rand::{Rng, SeedableRng};
+    <span class="kw">use </span>std::collections::{HashMap, HashSet};
+    <span class="kw">use </span>std::iter::FromIterator;
+    <span class="kw">use </span>std::sync::atomic::{AtomicUsize, Ordering};
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_one</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="prelude-val">None</span>, <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="number">2</span>));
-        <span class="macro">assert_eq!</span>(<span class="number">2</span>, <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="number">3</span>).<span class="ident">unwrap</span>());
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_one() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="prelude-val">None</span>, map.insert(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="number">2</span>));
+        <span class="macro">assert_eq!</span>(<span class="number">2</span>, map.insert(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="number">3</span>).unwrap());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">0</span>);
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_remove</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">1</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">keys</span>.<span class="ident">push</span>(<span class="ident">key</span>);
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
-        }
-        <span class="ident">keys</span>.<span class="ident">shuffle</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-        <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="ident">keys</span> {
-            <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">key_to_value</span>[<span class="kw-2">&amp;</span><span class="ident">key</span>]);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">0</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_remove_last_reinsert</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="ident">key1</span> <span class="op">=</span> <span class="number">1u64</span>;
-        <span class="kw">let</span> <span class="ident">value1</span> <span class="op">=</span> <span class="number">2u64</span>;
-        <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key1</span>, <span class="kw-2">&amp;</span><span class="ident">value1</span>);
-        <span class="kw">let</span> <span class="ident">key2</span> <span class="op">=</span> <span class="number">3u64</span>;
-        <span class="kw">let</span> <span class="ident">value2</span> <span class="op">=</span> <span class="number">4u64</span>;
-        <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key2</span>, <span class="kw-2">&amp;</span><span class="ident">value2</span>);
-
-        <span class="kw">let</span> <span class="ident">actual_value2</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key2</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual_value2</span>, <span class="ident">value2</span>);
-
-        <span class="kw">let</span> <span class="ident">actual_insert_value2</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key2</span>, <span class="kw-2">&amp;</span><span class="ident">value2</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">actual_insert_value2</span>, <span class="prelude-val">None</span>);
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_insert_override_remove</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">2</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">keys</span>.<span class="ident">push</span>(<span class="ident">key</span>);
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_remove() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">1</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = <span class="macro">vec!</span>[];
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            keys.push(key);
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
-        <span class="ident">keys</span>.<span class="ident">shuffle</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-        <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">keys</span> {
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">key_to_value</span>[<span class="ident">key</span>]);
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="kw-2">*</span><span class="ident">key</span>, <span class="ident">value</span>);
-        }
-        <span class="ident">keys</span>.<span class="ident">shuffle</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>);
-        <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="ident">keys</span> {
-            <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">key_to_value</span>[<span class="kw-2">&amp;</span><span class="ident">key</span>]);
+        keys.shuffle(<span class="kw-2">&amp;mut </span>rng);
+        <span class="kw">for </span>key <span class="kw">in </span>keys {
+            <span class="kw">let </span>actual = map.remove(<span class="kw-2">&amp;</span>key).unwrap();
+            <span class="macro">assert_eq!</span>(actual, key_to_value[<span class="kw-2">&amp;</span>key]);
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_non_existent</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">3</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20_000</span>;
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_remove_last_reinsert() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span>key1 = <span class="number">1u64</span>;
+        <span class="kw">let </span>value1 = <span class="number">2u64</span>;
+        map.insert(<span class="kw-2">&amp;</span>key1, <span class="kw-2">&amp;</span>value1);
+        <span class="kw">let </span>key2 = <span class="number">3u64</span>;
+        <span class="kw">let </span>value2 = <span class="number">4u64</span>;
+        map.insert(<span class="kw-2">&amp;</span>key2, <span class="kw-2">&amp;</span>value2);
+
+        <span class="kw">let </span>actual_value2 = map.remove(<span class="kw-2">&amp;</span>key2).unwrap();
+        <span class="macro">assert_eq!</span>(actual_value2, value2);
+
+        <span class="kw">let </span>actual_insert_value2 = map.insert(<span class="kw-2">&amp;</span>key2, <span class="kw-2">&amp;</span>value2);
+        <span class="macro">assert_eq!</span>(actual_insert_value2, <span class="prelude-val">None</span>);
+    }
+
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_insert_override_remove() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">2</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = <span class="macro">vec!</span>[];
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            keys.push(key);
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">500</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20_000</span>;
-            <span class="macro">assert_eq!</span>(<span class="ident">map</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>), <span class="ident">key_to_value</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">cloned</span>());
+        keys.shuffle(<span class="kw-2">&amp;mut </span>rng);
+        <span class="kw">for </span>key <span class="kw">in </span><span class="kw-2">&amp;</span>keys {
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>actual = map.insert(key, <span class="kw-2">&amp;</span>value).unwrap();
+            <span class="macro">assert_eq!</span>(actual, key_to_value[key]);
+            key_to_value.insert(<span class="kw-2">*</span>key, value);
+        }
+        keys.shuffle(<span class="kw-2">&amp;mut </span>rng);
+        <span class="kw">for </span>key <span class="kw">in </span>keys {
+            <span class="kw">let </span>actual = map.remove(<span class="kw-2">&amp;</span>key).unwrap();
+            <span class="macro">assert_eq!</span>(actual, key_to_value[<span class="kw-2">&amp;</span>key]);
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_to_vec</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">4</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">400</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_get_non_existent() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">3</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;() % <span class="number">20_000</span>;
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
-        <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">HashMap::from_iter</span>(<span class="ident">map</span>.<span class="ident">to_vec</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">key_to_value</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">500 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;() % <span class="number">20_000</span>;
+            <span class="macro">assert_eq!</span>(map.get(<span class="kw-2">&amp;</span>key), key_to_value.get(<span class="kw-2">&amp;</span>key).cloned());
+        }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_clear</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">5</span>);
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span>(<span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20</span> <span class="op">+</span> <span class="number">1</span>) {
-                <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_to_vec() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">4</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">400 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
+        }
+        <span class="kw">let </span>actual = HashMap::from_iter(map.to_vec());
+        <span class="macro">assert_eq!</span>(actual, key_to_value);
+    }
+
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_clear() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">5</span>);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">10 </span>{
+            <span class="kw">for _ in </span><span class="number">0</span>..=(rng.gen::&lt;u64&gt;() % <span class="number">20 </span>+ <span class="number">1</span>) {
+                <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+                <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+                map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
             }
-            <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">map</span>.<span class="ident">to_vec</span>().<span class="ident">is_empty</span>());
-            <span class="ident">map</span>.<span class="ident">clear</span>();
-            <span class="macro">assert!</span>(<span class="ident">map</span>.<span class="ident">to_vec</span>().<span class="ident">is_empty</span>());
+            <span class="macro">assert!</span>(!map.to_vec().is_empty());
+            map.clear();
+            <span class="macro">assert!</span>(map.to_vec().is_empty());
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_keys_values</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">4</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">400</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_keys_values() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">4</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">400 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
-        <span class="kw">let</span> <span class="ident">actual</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashMap::from_iter</span>(<span class="ident">map</span>.<span class="ident">to_vec</span>());
+        <span class="kw">let </span>actual: HashMap&lt;u64, u64&gt; = HashMap::from_iter(map.to_vec());
         <span class="macro">assert_eq!</span>(
-            <span class="ident">actual</span>.<span class="ident">keys</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
-            <span class="ident">key_to_value</span>.<span class="ident">keys</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()
+            actual.keys().collect::&lt;HashSet&lt;<span class="kw">_</span>&gt;&gt;(),
+            key_to_value.keys().collect::&lt;HashSet&lt;<span class="kw">_</span>&gt;&gt;()
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">actual</span>.<span class="ident">values</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
-            <span class="ident">key_to_value</span>.<span class="ident">values</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()
+            actual.values().collect::&lt;HashSet&lt;<span class="kw">_</span>&gt;&gt;(),
+            key_to_value.values().collect::&lt;HashSet&lt;<span class="kw">_</span>&gt;&gt;()
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_iter</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">4</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">400</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_iter() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">4</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">400 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
-        <span class="kw">let</span> <span class="ident">actual</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">key_to_value</span>);
+        <span class="kw">let </span>actual: HashMap&lt;u64, u64&gt; = map.iter().collect();
+        <span class="macro">assert_eq!</span>(actual, key_to_value);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_iter_nth</span>() {
-        <span class="kw">static</span> <span class="ident">DES_COUNT</span>: <span class="ident">AtomicUsize</span> <span class="op">=</span> <span class="ident">AtomicUsize::new</span>(<span class="number">0</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_iter_nth() {
+        <span class="kw">static </span>DES_COUNT: AtomicUsize = AtomicUsize::new(<span class="number">0</span>);
 
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">BorshSerialize</span>)]</span>
-        <span class="kw">struct</span> <span class="ident">DeserializeCounter</span>(<span class="ident">u64</span>);
+        <span class="attribute">#[derive(BorshSerialize)]
+        </span><span class="kw">struct </span>DeserializeCounter(u64);
 
-        <span class="kw">impl</span> <span class="ident">BorshDeserialize</span> <span class="kw">for</span> <span class="ident">DeserializeCounter</span> {
-            <span class="kw">fn</span> <span class="ident">deserialize</span>(<span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">std::io::Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-                <span class="ident">DES_COUNT</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Ordering::SeqCst</span>);
-                <span class="ident">u64::deserialize</span>(<span class="ident">buf</span>).<span class="ident">map</span>(<span class="ident">DeserializeCounter</span>)
+        <span class="kw">impl </span>BorshDeserialize <span class="kw">for </span>DeserializeCounter {
+            <span class="kw">fn </span>deserialize(buf: <span class="kw-2">&amp;mut &amp;</span>[u8]) -&gt; std::io::Result&lt;<span class="self">Self</span>&gt; {
+                DES_COUNT.fetch_add(<span class="number">1</span>, Ordering::SeqCst);
+                u64::deserialize(buf).map(DeserializeCounter)
             }
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
 
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">i</span>, <span class="kw-2">&amp;</span><span class="ident">DeserializeCounter</span>(<span class="ident">i</span>));
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="number">10 </span>{
+            map.insert(<span class="kw-2">&amp;</span>i, <span class="kw-2">&amp;</span>DeserializeCounter(i));
         }
-        <span class="macro">assert_eq!</span>(<span class="ident">DES_COUNT</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>), <span class="number">0</span>);
+        <span class="macro">assert_eq!</span>(DES_COUNT.load(Ordering::SeqCst), <span class="number">0</span>);
 
-        <span class="kw">let</span> <span class="ident">collected</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">iter</span>().<span class="ident">skip</span>(<span class="number">5</span>).<span class="ident">take</span>(<span class="number">4</span>).<span class="ident">map</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">v</span>)<span class="op">|</span> <span class="ident">v</span>.<span class="number">0</span>).<span class="ident">collect</span>();
-        <span class="comment">// 5 because skip is a bit inefficient in that it calls nth to skip.</span>
-        <span class="macro">assert_eq!</span>(<span class="ident">DES_COUNT</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>), <span class="number">5</span>);
-        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">collected</span>, <span class="kw-2">&amp;</span>[<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]);
+        <span class="kw">let </span>collected: Vec&lt;u64&gt; = map.iter().skip(<span class="number">5</span>).take(<span class="number">4</span>).map(|(<span class="kw">_</span>, v)| v.<span class="number">0</span>).collect();
+        <span class="comment">// 4 or 5 is accepted because pre 1.65 Rust skip loaded an extra value.
+        </span><span class="macro">assert!</span>((<span class="number">4</span>..=<span class="number">5</span>).contains(<span class="kw-2">&amp;</span>DES_COUNT.load(Ordering::SeqCst)));
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>collected, <span class="kw-2">&amp;</span>[<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]);
 
-        <span class="ident">DES_COUNT</span>.<span class="ident">store</span>(<span class="number">0</span>, <span class="ident">Ordering::SeqCst</span>);
-        <span class="kw">let</span> <span class="ident">collected</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">values</span>().<span class="ident">skip</span>(<span class="number">5</span>).<span class="ident">take</span>(<span class="number">4</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="number">0</span>).<span class="ident">collect</span>();
-        <span class="comment">// 5 because skip is a bit inefficient in that it calls nth to skip.</span>
-        <span class="macro">assert_eq!</span>(<span class="ident">DES_COUNT</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>), <span class="number">5</span>);
-        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">collected</span>, <span class="kw-2">&amp;</span>[<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]);
+        DES_COUNT.store(<span class="number">0</span>, Ordering::SeqCst);
+        <span class="kw">let </span>collected: Vec&lt;u64&gt; = map.values().skip(<span class="number">5</span>).take(<span class="number">4</span>).map(|v| v.<span class="number">0</span>).collect();
+        <span class="comment">// 4 or 5 is accepted because pre 1.65 Rust skip loaded an extra value.
+        </span><span class="macro">assert!</span>((<span class="number">4</span>..=<span class="number">5</span>).contains(<span class="kw-2">&amp;</span>DES_COUNT.load(Ordering::SeqCst)));
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>collected, <span class="kw-2">&amp;</span>[<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_extend</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand_xorshift::XorShiftRng::seed_from_u64</span>(<span class="number">4</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_to_value</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">100</span> {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-            <span class="ident">key_to_value</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">value</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">pub fn </span>test_extend() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = rand_xorshift::XorShiftRng::seed_from_u64(<span class="number">4</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>key_to_value = HashMap::new();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">100 </span>{
+            <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+            <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+            key_to_value.insert(key, value);
+            map.insert(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>value);
         }
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-            <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span>(<span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>() <span class="op">%</span> <span class="number">20</span> <span class="op">+</span> <span class="number">1</span>) {
-                <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>();
-                <span class="ident">tmp</span>.<span class="ident">push</span>((<span class="ident">key</span>, <span class="ident">value</span>));
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">10 </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>tmp = <span class="macro">vec!</span>[];
+            <span class="kw">for _ in </span><span class="number">0</span>..=(rng.gen::&lt;u64&gt;() % <span class="number">20 </span>+ <span class="number">1</span>) {
+                <span class="kw">let </span>key = rng.gen::&lt;u64&gt;();
+                <span class="kw">let </span>value = rng.gen::&lt;u64&gt;();
+                tmp.push((key, value));
             }
-            <span class="ident">key_to_value</span>.<span class="ident">extend</span>(<span class="ident">tmp</span>.<span class="ident">iter</span>().<span class="ident">cloned</span>());
-            <span class="ident">map</span>.<span class="ident">extend</span>(<span class="ident">tmp</span>.<span class="ident">iter</span>().<span class="ident">cloned</span>());
+            key_to_value.extend(tmp.iter().cloned());
+            map.extend(tmp.iter().cloned());
         }
 
-        <span class="kw">let</span> <span class="ident">actual</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>, <span class="ident">key_to_value</span>);
+        <span class="kw">let </span>actual: HashMap&lt;u64, u64&gt; = map.iter().collect();
+        <span class="macro">assert_eq!</span>(actual, key_to_value);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_debug</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">UnorderedMap::new</span>(<span class="string">b&quot;m&quot;</span>);
-        <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">1u64</span>, <span class="kw-2">&amp;</span><span class="number">100u64</span>);
-        <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">3u64</span>, <span class="kw-2">&amp;</span><span class="number">300u64</span>);
-        <span class="ident">map</span>.<span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="number">2u64</span>, <span class="kw-2">&amp;</span><span class="number">200u64</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_debug() {
+        <span class="kw">let </span><span class="kw-2">mut </span>map = UnorderedMap::new(<span class="string">b&quot;m&quot;</span>);
+        map.insert(<span class="kw-2">&amp;</span><span class="number">1u64</span>, <span class="kw-2">&amp;</span><span class="number">100u64</span>);
+        map.insert(<span class="kw-2">&amp;</span><span class="number">3u64</span>, <span class="kw-2">&amp;</span><span class="number">300u64</span>);
+        map.insert(<span class="kw-2">&amp;</span><span class="number">2u64</span>, <span class="kw-2">&amp;</span><span class="number">200u64</span>);
 
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;expensive-debug&quot;</span>) {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;expensive-debug&quot;</span>) {
             <span class="macro">assert_eq!</span>(
-                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">map</span>),
-                <span class="string">&quot;UnorderedMap { key_index_prefix: [109, 105], keys: [1, 3, 2], values: [100, 300, 200] }&quot;</span>
-            );
-        } <span class="kw">else</span> {
+                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, map),
+                <span class="string">&quot;UnorderedMap { key_index_prefix: [109, 105], keys: [1, 3, 2], values: [100, 300, 200] }&quot;
+            </span>);
+        } <span class="kw">else </span>{
             <span class="macro">assert_eq!</span>(
-                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">map</span>),
+                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, map),
                 <span class="string">&quot;UnorderedMap { key_index_prefix: [109, 105], \
                 keys: Vector { len: 3, prefix: [109, 107] }, \
-                values: Vector { len: 3, prefix: [109, 118] } }&quot;</span>
-            );
+                values: Vector { len: 3, prefix: [109, 118] } }&quot;
+            </span>);
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="near_sdk" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>
