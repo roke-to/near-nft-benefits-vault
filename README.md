@@ -52,6 +52,12 @@ The next command will initialize contract using `new` method:
 near call $CONTRACT_ID new '' --accountId $CONTRACT_ID
 ```
 
+To top up balance in vault you need to make `ft_transfer_call` with specific msg:
+```sh
+near call $TOKEN_ID ft_transfer_call \
+`{"receiver_id": "<receiver-contract>", "amount": "<amount>", "msg": "{\"nft_id\":\"awesome_test_pic_666\",\"nft_contract_id\":\"dev-20221207113253-32677407921596\",\"kind\":\"TopUp\"}"}`
+```
+
 ## Standard deploy
 You should create an account on NEAR.
 For convenience you can save account Id for the contract to the env variable.
