@@ -23,7 +23,10 @@ Make sure <code>near-cli</code> is installed</p>
 near dev-deploy --wasmFile dist/nft_benefits_vault.wasm</code></pre></div>
 <p><code>near-cli</code> will create new dev account and deploy wasm code to it.
 The next command will initialize contract using <code>new</code> method:</p>
-<div class="example-wrap"><pre class="language-sh"><code>near call $CONTRACT_ID new &#39;&#39; --accountId $CONTRACT_ID</code></pre></div><h3 id="standard-deploy"><a href="#standard-deploy">Standard deploy</a></h3>
+<div class="example-wrap"><pre class="language-sh"><code>near call $CONTRACT_ID new &#39;&#39; --accountId $CONTRACT_ID</code></pre></div>
+<p>To top up balance in vault you need to make <code>ft_transfer_call</code> with specific msg:</p>
+<div class="example-wrap"><pre class="language-sh"><code>near call $TOKEN_ID ft_transfer_call \
+`{&quot;receiver_id&quot;: &quot;&lt;receiver-contract&gt;&quot;, &quot;amount&quot;: &quot;&lt;amount&gt;&quot;, &quot;msg&quot;: &quot;{\&quot;nft_id\&quot;:\&quot;awesome_test_pic_666\&quot;,\&quot;nft_contract_id\&quot;:\&quot;dev-20221207113253-32677407921596\&quot;,\&quot;kind\&quot;:\&quot;TopUp\&quot;}&quot;}`</code></pre></div><h3 id="standard-deploy"><a href="#standard-deploy">Standard deploy</a></h3>
 <p>You should create an account on NEAR.
 For convenience you can save account Id for the contract to the env variable.
 In the below command, replace MY_ACCOUNT_NAME with the contract account name.</p>
