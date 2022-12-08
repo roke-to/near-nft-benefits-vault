@@ -66,7 +66,6 @@ near call $CONTRACT_ID withdraw \
 '{"nft_contract_id": "<nft-contract>", "nft_id": "<token-id>", "fungible-token": "<ft-contract-id>"}' \
 --accountId $ACCOUNT_ID
 --deposit 1
-`{"receiver_id": "<receiver-contract>", "amount": "<amount>", "msg": "{\"nft_id\":\"awesome_test_pic_666\",\"nft_contract_id\":\"dev-20221207113253-32677407921596\",\"kind\":\"TopUp\"}"}`
 ```
 
 ## Standard deploy
