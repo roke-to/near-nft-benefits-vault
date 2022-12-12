@@ -36,7 +36,7 @@ use crate::{
             },
         },
         FT_BALANCE_OF_CALL, FT_TRANSFER_WITH_CALLBACK_CALL, NFT_MINT_CALL,
-        NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID, NFT_TRANSFER_CALL,
+        NFT_MINT_STORAGE_DEPOSIT, NFT_TOKEN_ID_BASE, NFT_TRANSFER_CALL,
         VAULT_ADD_REPLENISHMENT_CALLBACK_CALL, VAULT_ASSETS_COUNT_VIEW, VAULT_BALANCE_OF_VIEW,
         VAULT_REPLENISH_ARGS, VAULT_REPLENISH_CALLBACK, VAULT_TEST_DEPOSIT,
         VAULT_TEST_REPLENISHER_WASM, VAULT_VIEW_REPLENISHERS_CALL, VAULT_WITHDRAW_ALL_CALL,
@@ -105,6 +105,12 @@ impl Environment {
         })
     }
 
+    pub async fn add_nft_contract(&mut self) -> Result<()> {
+        let contract = prepare_nft_contract(self.sandbox.clone()).await?;
+        self.non_fungible_tokens.push(contract);
+        Ok(())
+    }
+
     pub fn nft_first(&self) -> &Contract {
         self.non_fungible_tokens.get(0).unwrap()
     }
@@ -144,7 +150,7 @@ impl Environment {
 
     pub async fn top_up_replenishers(&self, token: &AccountId, amount: u128) -> Result<()> {
         let req = Request::transfer(
-            NFT_TOKEN_ID.to_owned(),
+            NFT_TOKEN_ID_BASE.to_owned(),
             self.nft_first().id().as_str().parse()?,
         );
         let transfer_req = to_string(&req)?;
@@ -164,25 +170,44 @@ impl Environment {
         Ok(())
     }
 
-    pub async fn nft_mint(&self) -> Result<()> {
-        let token_metadata = nft_metadata_json();
-        let args = nft_mint_json(self.issuer.id(), &token_metadata);
-        let res = self
-            .nft_first()
-            .call(NFT_MINT_CALL)
-            .args_json(args)
-            .deposit(NFT_MINT_STORAGE_DEPOSIT)
-            .transact()
-            .await?;
-        debug!("NFT mint: {}", format_execution_result(&res));
+    pub async fn nft_mint_all(&self) -> Result<()> {
+        for (i, contract) in self.non_fungible_tokens.iter().enumerate() {
+            let token_metadata = nft_metadata_json(i);
+            let args = nft_mint_json(self.issuer.id(), &token_metadata, i);
+            let res = contract
+                .call(NFT_MINT_CALL)
+                .args_json(args)
+                .deposit(NFT_MINT_STORAGE_DEPOSIT)
+                .transact()
+                .await?;
+            debug!("NFT #[{i}] mint: {}", format_execution_result(&res));
+        }
         Ok(())
     }
 
     pub async fn nft_transfer(&self) -> Result<()> {
-        let args = nft_transfer_json(self.nft_owner.id());
-        let res = self
-            .issuer
-            .call(self.nft_first().id(), NFT_TRANSFER_CALL)
+        let nft_contract_id = self.nft_first().id();
+        Self::nft_transfer_impl(&self.issuer, self.nft_owner.id(), nft_contract_id, 0).await
+    }
+
+    pub async fn nft_transfer_all(&self) -> Result<()> {
+        let from = &self.issuer;
+        let to = self.nft_owner.id();
+        for (i, contract) in self.non_fungible_tokens.iter().enumerate() {
+            Self::nft_transfer_impl(from, to, contract.id(), i).await?;
+        }
+        Ok(())
+    }
+
+    pub async fn nft_transfer_impl(
+        from: &Account,
+        to: &AccountId,
+        nft_contract_id: &AccountId,
+        index: usize,
+    ) -> Result<()> {
+        let args = nft_transfer_json(to, index);
+        let res = from
+            .call(nft_contract_id, NFT_TRANSFER_CALL)
             .args_json(args)
             .deposit(1)
             .transact()
@@ -221,7 +246,7 @@ impl Environment {
     pub async fn vault_deposit(&self, token_contract_id: &AccountId) -> Result<()> {
         let nft_contract_id =
             near_sdk::AccountId::from_str(self.nft_first().id().as_str()).unwrap();
-        let nft_id = NFT_TOKEN_ID.to_owned();
+        let nft_id = NFT_TOKEN_ID_BASE.to_owned();
         let request = Request::top_up(nft_id, nft_contract_id);
         let request = near_sdk::serde_json::to_string(&request).unwrap();
 
@@ -333,7 +358,7 @@ impl Environment {
     pub async fn vault_add_test_replenisher(&self) -> Result<()> {
         let args = json!({
             "nft_contract_id": self.nft_first().id(),
-            "nft_id": NFT_TOKEN_ID,
+            "nft_id": NFT_TOKEN_ID_BASE,
             "callback": VAULT_REPLENISH_CALLBACK,
             "args": VAULT_REPLENISH_ARGS,
         });
@@ -353,7 +378,7 @@ impl Environment {
     pub async fn vault_view_replenishers(&self) -> Result<Option<Vec<Replenisher>>> {
         let args = to_vec(&json!({
             "nft_contract_id": self.nft_first().id(),
-            "nft_id": NFT_TOKEN_ID,
+            "nft_id": NFT_TOKEN_ID_BASE,
         }))?;
         let res = self
             .issuer

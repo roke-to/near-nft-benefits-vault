@@ -8,7 +8,7 @@ use crate::{
     interface::request::Request,
     tests::{
         environment::{setup::replenish_account_wrap_near, Environment},
-        NEAR, NFT_TOKEN_ID, VAULT_TEST_DEPOSIT,
+        NEAR, NFT_TOKEN_ID_BASE, VAULT_TEST_DEPOSIT,
     },
 };
 
@@ -99,12 +99,12 @@ async fn test_ft_on_transfer_request_top_up_existing_vault() -> Result<()> {
 async fn test_ft_on_transfer_request_transfer_new_vault() -> Result<()> {
     let env = Environment::new(0).await?;
 
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     env.nft_transfer().await?;
     replenish_account_wrap_near(&env.nft_owner, env.fungible_tokens[0].id()).await?;
 
     let nft_contract_id = near_sdk::AccountId::from_str(env.nft_first().id().as_str())?;
-    let request = Request::transfer(NFT_TOKEN_ID.to_owned(), nft_contract_id);
+    let request = Request::transfer(NFT_TOKEN_ID_BASE.to_owned(), nft_contract_id);
     let request = to_string(&request)?;
 
     let token_contract_id = env.fungible_tokens[0].id();
@@ -153,12 +153,12 @@ async fn test_ft_on_transfer_request_transfer_new_vault() -> Result<()> {
 async fn test_ft_on_transfer_request_transfer_existing_vault() -> Result<()> {
     let env = Environment::new(0).await?;
 
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     env.nft_transfer().await?;
     replenish_account_wrap_near(&env.nft_owner, env.fungible_tokens[0].id()).await?;
 
     let nft_contract_id = near_sdk::AccountId::from_str(env.nft_first().id().as_str())?;
-    let request = Request::transfer(NFT_TOKEN_ID.to_owned(), nft_contract_id);
+    let request = Request::transfer(NFT_TOKEN_ID_BASE.to_owned(), nft_contract_id);
     let request = to_string(&request)?;
 
     let token_contract_id = env.fungible_tokens[0].id();
@@ -211,4 +211,15 @@ async fn test_ft_on_transfer_request_transfer_existing_vault() -> Result<()> {
     );
 
     Ok(())
+}
+
+#[tokio::test]
+async fn test_ft_on_transfer_request_top_up_multiple_nft_new_vaults() -> Result<()> {
+    let mut env = Environment::new(0).await?;
+    env.add_nft_contract().await?;
+
+    env.nft_mint_all().await?;
+
+    env.nft_transfer_all().await?;
+    todo!()
 }

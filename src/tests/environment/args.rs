@@ -5,29 +5,32 @@ use near_sdk::{
 };
 use workspaces::AccountId;
 
-use crate::tests::{NEAR, NFT_TOKEN_ID};
+use crate::tests::{NEAR, NFT_TOKEN_ID_BASE};
 
-pub fn nft_metadata_json() -> Value {
+pub fn nft_metadata_json(index: usize) -> Value {
+    let title = format!("Olympus Mons #[{index}]");
     json!({
-        "title": "Olympus Mons",
+        "title": title,
         "description": "Tallest mountain in charted solar system",
         "media": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Olympus_Mons_alt.jpg/1024px-Olympus_Mons_alt.jpg",
         "copies": 1
     })
 }
 
-pub fn nft_mint_json(receiver_id: &AccountId, token_metadata: &Value) -> Value {
+pub fn nft_mint_json(receiver_id: &AccountId, token_metadata: &Value, index: usize) -> Value {
+    let token_id = format!("{NFT_TOKEN_ID_BASE}{index}");
     json!({
-        "token_id": NFT_TOKEN_ID,
+        "token_id": token_id,
         "receiver_id": receiver_id,
         "token_metadata": token_metadata
     })
 }
 
-pub fn nft_transfer_json(receiver_id: &AccountId) -> Value {
+pub fn nft_transfer_json(receiver_id: &AccountId, index: usize) -> Value {
+    let token_id = format!("{NFT_TOKEN_ID_BASE}{index}");
     json!({
         "receiver_id": receiver_id,
-        "token_id": NFT_TOKEN_ID,
+        "token_id": token_id,
     })
 }
 
@@ -55,7 +58,7 @@ pub fn add_replenishment_callback_str(nft_contract_id: &AccountId, args: &str) -
 pub fn add_replenishment_callback_json(nft_contract_id: &AccountId, args: &str) -> Value {
     json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID,
+        "nft_id": NFT_TOKEN_ID_BASE,
         "callback": "withdraw_call",
         "args": args,
     })
@@ -73,7 +76,7 @@ pub fn replenisher_ft_on_transfer_request_str(vault: &AccountId, args: &str) -> 
 pub fn vault_view_bytes(nft_contract_id: &AccountId) -> Result<Vec<u8>> {
     let args = to_vec(&json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID,
+        "nft_id": NFT_TOKEN_ID_BASE,
     }))?;
 
     Ok(args)
@@ -82,7 +85,7 @@ pub fn vault_view_bytes(nft_contract_id: &AccountId) -> Result<Vec<u8>> {
 pub fn vault_balance_of_bytes(nft_contract_id: &AccountId) -> Result<Vec<u8>> {
     let args = to_vec(&json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID,
+        "nft_id": NFT_TOKEN_ID_BASE,
     }))?;
 
     Ok(args)
@@ -91,14 +94,14 @@ pub fn vault_balance_of_bytes(nft_contract_id: &AccountId) -> Result<Vec<u8>> {
 pub fn vault_withdraw_all_json(nft_contract_id: &AccountId) -> Value {
     json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID,
+        "nft_id": NFT_TOKEN_ID_BASE,
     })
 }
 
 pub fn vault_withdraw_json(nft_contract_id: &AccountId, fungible_token: &AccountId) -> Value {
     json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID,
+        "nft_id": NFT_TOKEN_ID_BASE,
         "fungible_token": fungible_token,
     })
 }
@@ -110,7 +113,7 @@ pub fn vault_withdraw_amount_json(
 ) -> Value {
     json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID,
+        "nft_id": NFT_TOKEN_ID_BASE,
         "fungible_token": fungible_token,
         "amount": amount,
     })

@@ -13,7 +13,7 @@ use crate::{
             },
             Environment,
         },
-        NEAR, NFT_TOKEN_ID,
+        NEAR, NFT_TOKEN_ID_BASE,
     },
 };
 
@@ -51,7 +51,7 @@ async fn check_vault_state(env: &Environment) -> Result<()> {
 pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
     let mut env = Environment::new(0).await?;
     env.deploy_replenishers(1).await?;
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     env.nft_transfer().await?;
 
     let (token_account, balance) =
@@ -60,7 +60,7 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
 
     let amount = NEAR;
     let req = Request::transfer(
-        NFT_TOKEN_ID.to_owned(),
+        NFT_TOKEN_ID_BASE.to_owned(),
         env.nft_first().id().as_str().parse()?,
     );
     let transfer_req = to_string(&req)?;
@@ -98,7 +98,7 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
     );
     assert_eq!(
         vault_balance.nft_id.token_id(),
-        NFT_TOKEN_ID,
+        NFT_TOKEN_ID_BASE,
         "NFT TokenIds don't match"
     );
     assert!(vault_balance.tokens.is_empty(), "vault should be empty");

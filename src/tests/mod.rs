@@ -29,8 +29,8 @@ const WRAP_NEAR_DEPOSIT: u128 = 10 * NEAR;
 // Constants related to the NFT contract.
 const NFT_NEW_DEFAULT_META_CALL: &str = "new_default_meta";
 const NFT_MINT_CALL: &str = "nft_mint";
-const NFT_MINT_STORAGE_DEPOSIT: u128 = 8_400_000_000_000_000_000_000;
-const NFT_TOKEN_ID: &str = "awesome_test_pic_666";
+const NFT_MINT_STORAGE_DEPOSIT: u128 = 8_450_000_000_000_000_000_000;
+const NFT_TOKEN_ID_BASE: &str = "awesome_test_pic_";
 const NFT_TRANSFER_CALL: &str = "nft_transfer";
 
 // Constants related to the nft-benefits-vault contract.

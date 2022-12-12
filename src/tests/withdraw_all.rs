@@ -9,7 +9,7 @@ async fn test_withdraw_all() -> Result<()> {
     let env = Environment::new(2).await?;
     println!("\n<--- test environment initialized --->\n");
 
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     println!("\n<--- nft issued --->\n");
 
     env.nft_transfer().await?;

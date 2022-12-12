@@ -31,7 +31,7 @@ async fn test_withdraw_all_callback_get_nft_info_failed() -> Result<()> {
 #[tokio::test]
 async fn test_withdraw_all_callback_zero_assets() -> Result<()> {
     let env = Environment::new(0).await?;
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     env.nft_transfer().await?;
 
     let res = env
@@ -60,7 +60,7 @@ async fn test_withdraw_all_callback_zero_assets() -> Result<()> {
 
 async fn withdraw_all_callback_with_assets_impl(custom_ft_count: usize) -> Result<()> {
     let env = Environment::new(custom_ft_count).await?;
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     env.nft_transfer().await?;
     for token in env.fungible_tokens.iter().map(|t| t.id()) {
         env.vault_deposit(token).await?;
