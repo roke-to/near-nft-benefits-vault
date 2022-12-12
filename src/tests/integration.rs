@@ -33,7 +33,7 @@ pub async fn test_contract() -> Result<()> {
 }
 
 async fn check_vault_state(env: &Environment) -> Result<()> {
-    println!("nft_contract_id: {}", env.nft.id());
+    println!("nft_contract_id: {}", env.nft_first().id());
     let balance = env.vault_balance_of().await?.unwrap();
     assert_eq!(
         balance
@@ -59,12 +59,15 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
     debug!("ft_balance: \n\ttoken: {token_account},\n\tbalance: {balance}");
 
     let amount = NEAR;
-    let req = Request::transfer(NFT_TOKEN_ID.to_owned(), env.nft.id().as_str().parse()?);
+    let req = Request::transfer(
+        NFT_TOKEN_ID.to_owned(),
+        env.nft_first().id().as_str().parse()?,
+    );
     let transfer_req = to_string(&req)?;
 
     let args = replenisher_withdraw_str(&transfer_req)?;
 
-    let args = add_replenishment_callback_str(env.nft.id(), &args)?;
+    let args = add_replenishment_callback_str(env.nft_first().id(), &args)?;
 
     let msg = replenisher_ft_on_transfer_request_str(env.vault.id(), &args)?;
 
@@ -90,7 +93,7 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
     let vault_balance = env.vault_balance_of().await?.unwrap();
     assert_eq!(
         vault_balance.nft_id.contract_id().as_str(),
-        env.nft.id().as_str(),
+        env.nft_first().id().as_str(),
         "NFT contracts don't match"
     );
     assert_eq!(

@@ -59,7 +59,7 @@ pub struct Environment {
     /// The Vault contract.
     pub vault: Contract,
     /// A simple NFT contract.
-    pub nft: Contract,
+    pub non_fungible_tokens: Vec<Contract>,
     pub replenishers: Vec<Contract>,
 }
 
@@ -88,7 +88,7 @@ impl Environment {
         let issuer = issuer.await??;
         let nft_owner = nft_owner.await??;
         let vault = vault.await??;
-        let nft = nft.await??;
+        let non_fungible_tokens = vec![nft.await??];
 
         info!("issuer account: {}", issuer.id());
         info!("NFT owner account: {}", nft_owner.id());
@@ -100,9 +100,13 @@ impl Environment {
             issuer,
             nft_owner,
             vault,
-            nft,
+            non_fungible_tokens,
             replenishers: Vec::new(),
         })
+    }
+
+    pub fn nft_first(&self) -> &Contract {
+        self.non_fungible_tokens.get(0).unwrap()
     }
 
     pub async fn deploy_replenishers(&mut self, count: usize) -> Result<()> {
@@ -139,12 +143,15 @@ impl Environment {
     }
 
     pub async fn top_up_replenishers(&self, token: &AccountId, amount: u128) -> Result<()> {
-        let req = Request::transfer(NFT_TOKEN_ID.to_owned(), self.nft.id().as_str().parse()?);
+        let req = Request::transfer(
+            NFT_TOKEN_ID.to_owned(),
+            self.nft_first().id().as_str().parse()?,
+        );
         let transfer_req = to_string(&req)?;
 
         let args = replenisher_withdraw_str(&transfer_req)?;
 
-        let args = add_replenishment_callback_str(self.nft.id(), &args)?;
+        let args = add_replenishment_callback_str(self.nft_first().id(), &args)?;
 
         let msg = replenisher_ft_on_transfer_request_str(self.vault.id(), &args)?;
 
@@ -161,7 +168,7 @@ impl Environment {
         let token_metadata = nft_metadata_json();
         let args = nft_mint_json(self.issuer.id(), &token_metadata);
         let res = self
-            .nft
+            .nft_first()
             .call(NFT_MINT_CALL)
             .args_json(args)
             .deposit(NFT_MINT_STORAGE_DEPOSIT)
@@ -175,7 +182,7 @@ impl Environment {
         let args = nft_transfer_json(self.nft_owner.id());
         let res = self
             .issuer
-            .call(self.nft.id(), NFT_TRANSFER_CALL)
+            .call(self.nft_first().id(), NFT_TRANSFER_CALL)
             .args_json(args)
             .deposit(1)
             .transact()
@@ -212,7 +219,8 @@ impl Environment {
     }
 
     pub async fn vault_deposit(&self, token_contract_id: &AccountId) -> Result<()> {
-        let nft_contract_id = near_sdk::AccountId::from_str(self.nft.id().as_str()).unwrap();
+        let nft_contract_id =
+            near_sdk::AccountId::from_str(self.nft_first().id().as_str()).unwrap();
         let nft_id = NFT_TOKEN_ID.to_owned();
         let request = Request::top_up(nft_id, nft_contract_id);
         let request = near_sdk::serde_json::to_string(&request).unwrap();
@@ -233,7 +241,7 @@ impl Environment {
     }
 
     pub async fn vault_view_print(&self) -> Result<()> {
-        let args = vault_view_bytes(self.nft.id())?;
+        let args = vault_view_bytes(self.nft_first().id())?;
         let res = self.vault.view(VAULT_ASSETS_COUNT_VIEW, args).await?;
         let vault_view: Option<VaultView> = res.json()?;
         println!("vault view: {vault_view:#?}");
@@ -241,7 +249,7 @@ impl Environment {
     }
 
     pub async fn vault_balance_of(&self) -> Result<Option<BalanceView>> {
-        let args = vault_balance_of_bytes(self.nft.id())?;
+        let args = vault_balance_of_bytes(self.nft_first().id())?;
         let res = self
             .sandbox
             .view(self.vault.id(), VAULT_BALANCE_OF_VIEW, args)
@@ -252,7 +260,7 @@ impl Environment {
     }
 
     pub async fn vault_withdraw_all(&self) -> Result<ExecutionFinalResult> {
-        let args = vault_withdraw_all_json(self.nft.id());
+        let args = vault_withdraw_all_json(self.nft_first().id());
         let res = self
             .nft_owner
             .call(self.vault.id(), VAULT_WITHDRAW_ALL_CALL)
@@ -267,7 +275,7 @@ impl Environment {
     }
 
     pub async fn vault_withdraw(&self, fungible_token: &AccountId) -> Result<ExecutionFinalResult> {
-        let args = vault_withdraw_json(self.nft.id(), fungible_token);
+        let args = vault_withdraw_json(self.nft_first().id(), fungible_token);
         let res = self
             .nft_owner
             .call(self.vault.id(), VAULT_WITHDRAW_CALL)
@@ -287,7 +295,7 @@ impl Environment {
         fungible_token: &AccountId,
         amount: u128,
     ) -> Result<()> {
-        let args = vault_withdraw_amount_json(self.nft.id(), fungible_token, U128(amount));
+        let args = vault_withdraw_amount_json(self.nft_first().id(), fungible_token, U128(amount));
         let res = self
             .nft_owner
             .call(self.vault.id(), VAULT_WITHDRAW_AMOUNT_CALL)
@@ -324,7 +332,7 @@ impl Environment {
 
     pub async fn vault_add_test_replenisher(&self) -> Result<()> {
         let args = json!({
-            "nft_contract_id": self.nft.id(),
+            "nft_contract_id": self.nft_first().id(),
             "nft_id": NFT_TOKEN_ID,
             "callback": VAULT_REPLENISH_CALLBACK,
             "args": VAULT_REPLENISH_ARGS,
@@ -344,7 +352,7 @@ impl Environment {
 
     pub async fn vault_view_replenishers(&self) -> Result<Option<Vec<Replenisher>>> {
         let args = to_vec(&json!({
-            "nft_contract_id": self.nft.id(),
+            "nft_contract_id": self.nft_first().id(),
             "nft_id": NFT_TOKEN_ID,
         }))?;
         let res = self
