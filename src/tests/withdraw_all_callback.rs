@@ -63,7 +63,7 @@ async fn withdraw_all_callback_with_assets_impl(custom_ft_count: usize) -> Resul
     env.nft_mint_all().await?;
     env.nft_transfer().await?;
     for token in env.fungible_tokens.iter().map(|t| t.id()) {
-        env.vault_deposit(token).await?;
+        env.vault_deposit(token, 0).await?;
     }
 
     let res = env

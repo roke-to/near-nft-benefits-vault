@@ -22,7 +22,7 @@ pub async fn test_contract() -> Result<()> {
     let env = Environment::new(0).await?;
 
     for contract_id in env.fungible_tokens.iter().map(Contract::id) {
-        env.vault_deposit(contract_id).await?;
+        env.vault_deposit(contract_id, 0).await?;
         println!("deposit to vault {contract_id}: OK",);
     }
 
@@ -34,7 +34,7 @@ pub async fn test_contract() -> Result<()> {
 
 async fn check_vault_state(env: &Environment) -> Result<()> {
     println!("nft_contract_id: {}", env.nft_first().id());
-    let balance = env.vault_balance_of().await?.unwrap();
+    let balance = env.vault_balance_of(0).await?.unwrap();
     assert_eq!(
         balance
             .tokens
@@ -90,7 +90,7 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
             .await?;
     info!("balance of NFT owner BEFORE withdrawal: {balance_before} of tokens {token_before}");
 
-    let vault_balance = env.vault_balance_of().await?.unwrap();
+    let vault_balance = env.vault_balance_of(0).await?.unwrap();
     assert_eq!(
         vault_balance.nft_id.contract_id().as_str(),
         env.nft_first().id().as_str(),

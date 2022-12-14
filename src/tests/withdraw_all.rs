@@ -19,7 +19,7 @@ async fn test_withdraw_all() -> Result<()> {
     println!("\n<--- nft owner initial balances: {nft_owner_initial_balances:?} --->\n");
 
     for contract_id in env.fungible_tokens.iter().map(Contract::id) {
-        env.vault_deposit(contract_id).await?;
+        env.vault_deposit(contract_id, 0).await?;
         println!("\ndeposit to vault of {contract_id}");
     }
     println!("\n<--- deposited to vault --->\n");

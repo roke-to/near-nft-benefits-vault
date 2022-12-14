@@ -18,7 +18,7 @@ async fn test_withdraw_amount_single_ft() -> Result<()> {
     println!("\n<--- nft owner initial balances: {nft_owner_initial_balances:?} --->\n");
 
     for contract_id in env.fungible_tokens.iter().map(Contract::id) {
-        env.vault_deposit(contract_id).await?;
+        env.vault_deposit(contract_id, 0).await?;
         println!("\ndeposit to vault of {contract_id}");
     }
     println!("\n<--- deposited to vault --->\n");
@@ -51,7 +51,7 @@ async fn test_withdraw_amount_single_ft() -> Result<()> {
         "NFT owner balance of custom FT should increase by the half of standard test deposit amount"
     );
 
-    let vault_balance = env.vault_balance_of().await?.expect("vault should exist");
+    let vault_balance = env.vault_balance_of(0).await?.expect("vault should exist");
 
     let token = vault_balance
         .tokens

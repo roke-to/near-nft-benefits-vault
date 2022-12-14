@@ -112,7 +112,13 @@ impl Environment {
     }
 
     pub fn nft_first(&self) -> &Contract {
-        self.non_fungible_tokens.get(0).unwrap()
+        self.nft_nth(0)
+    }
+
+    pub fn nft_nth(&self, index: usize) -> &Contract {
+        self.non_fungible_tokens
+            .get(index)
+            .expect("NFT with given index wasn't deployed")
     }
 
     pub async fn deploy_replenishers(&mut self, count: usize) -> Result<()> {
@@ -243,10 +249,14 @@ impl Environment {
         Ok(res)
     }
 
-    pub async fn vault_deposit(&self, token_contract_id: &AccountId) -> Result<()> {
+    pub async fn vault_deposit(
+        &self,
+        token_contract_id: &AccountId,
+        nft_index: usize,
+    ) -> Result<()> {
         let nft_contract_id =
-            near_sdk::AccountId::from_str(self.nft_first().id().as_str()).unwrap();
-        let nft_id = NFT_TOKEN_ID_BASE.to_owned();
+            near_sdk::AccountId::from_str(self.nft_nth(nft_index).id().as_str()).unwrap();
+        let nft_id = format!("{NFT_TOKEN_ID_BASE}{nft_index}");
         let request = Request::top_up(nft_id, nft_contract_id);
         let request = near_sdk::serde_json::to_string(&request).unwrap();
 
@@ -260,21 +270,24 @@ impl Environment {
             )
             .await?
             .into_result()?;
-        info!("ft transfer call: {:#?}", res);
+        debug!("ft transfer call: {:#?}", res);
 
-        self.vault_view_print().await
+        info!("check vault view: token_contract_id: {token_contract_id}, nft_index: {nft_index}");
+        self.vault_view_print(nft_index).await
     }
 
-    pub async fn vault_view_print(&self) -> Result<()> {
-        let args = vault_view_bytes(self.nft_first().id())?;
+    pub async fn vault_view_print(&self, index: usize) -> Result<()> {
+        let args = vault_view_bytes(self.nft_nth(index).id(), index)?;
         let res = self.vault.view(VAULT_ASSETS_COUNT_VIEW, args).await?;
         let vault_view: Option<VaultView> = res.json()?;
         println!("vault view: {vault_view:#?}");
         Ok(())
     }
 
-    pub async fn vault_balance_of(&self) -> Result<Option<BalanceView>> {
-        let args = vault_balance_of_bytes(self.nft_first().id())?;
+    pub async fn vault_balance_of(&self, nft_contract_index: usize) -> Result<Option<BalanceView>> {
+        let nft_contract_id = self.nft_nth(nft_contract_index).id();
+        let args = vault_balance_of_bytes(nft_contract_id, nft_contract_index)?;
+
         let res = self
             .sandbox
             .view(self.vault.id(), VAULT_BALANCE_OF_VIEW, args)

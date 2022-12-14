@@ -73,19 +73,21 @@ pub fn replenisher_ft_on_transfer_request_str(vault: &AccountId, args: &str) -> 
     Ok(args)
 }
 
-pub fn vault_view_bytes(nft_contract_id: &AccountId) -> Result<Vec<u8>> {
+pub fn vault_view_bytes(nft_contract_id: &AccountId, index: usize) -> Result<Vec<u8>> {
+    let token_id = format!("{NFT_TOKEN_ID_BASE}{index}");
     let args = to_vec(&json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID_BASE,
+        "nft_id": token_id,
     }))?;
 
     Ok(args)
 }
 
-pub fn vault_balance_of_bytes(nft_contract_id: &AccountId) -> Result<Vec<u8>> {
+pub fn vault_balance_of_bytes(nft_contract_id: &AccountId, index: usize) -> Result<Vec<u8>> {
+    let token_id = format!("{NFT_TOKEN_ID_BASE}{index}");
     let args = to_vec(&json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID_BASE,
+        "nft_id": token_id,
     }))?;
 
     Ok(args)
