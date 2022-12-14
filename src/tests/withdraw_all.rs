@@ -24,7 +24,7 @@ async fn test_withdraw_all() -> Result<()> {
     }
     println!("\n<--- deposited to vault --->\n");
 
-    env.vault_withdraw_all()
+    env.vault_withdraw_all(0)
         .await?
         .into_result()
         .expect("withdraw failed");

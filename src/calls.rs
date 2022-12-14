@@ -224,7 +224,7 @@ impl Contract {
                     replenisher.callback().to_owned(),
                     replenisher.args().as_bytes().to_vec(),
                     0,
-                    Gas(1),
+                    Gas::ONE_TERA * 100,
                 );
                 promise = Some(if let Some(p) = promise {
                     p.then(replenish)
@@ -254,11 +254,13 @@ impl Contract {
         assert_one_yocto();
 
         let nft_id = NftId::new(nft_contract_id, nft_id);
+        log!("NFT Id: {:?}", nft_id);
 
         let mut vault = self.get_vault_or_create(&nft_id);
 
         let contract_id = env::predecessor_account_id();
 
+        log!("add replenisher: [{}].{}(args)", contract_id, callback);
         vault.add_replenisher(contract_id, callback, args);
 
         self.vaults.insert(&nft_id, &vault);

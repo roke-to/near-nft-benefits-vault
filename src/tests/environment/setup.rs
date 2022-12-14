@@ -129,7 +129,8 @@ pub async fn replenish_account_wrap_near(account: &Account, wrap_near: &AccountI
         .transact()
         .await?;
     info!(
-        "deposit {WRAP_NEAR_DEPOSIT} of {wrap_near} to {}: {}",
+        "deposit {} NEAR of {wrap_near} to {}: {}",
+        WRAP_NEAR_DEPOSIT / NEAR,
         account.id(),
         format_execution_result(&res)
     );

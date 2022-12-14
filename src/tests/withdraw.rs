@@ -6,7 +6,6 @@ use crate::tests::{environment::Environment, VAULT_TEST_DEPOSIT};
 #[tokio::test]
 async fn test_withdraw_single_ft() -> Result<()> {
     let env = Environment::new(1).await?;
-    println!("\n<--- test environment initialized --->\n");
 
     env.nft_mint_all().await?;
     println!("\n<--- nft issued --->\n");
@@ -23,7 +22,7 @@ async fn test_withdraw_single_ft() -> Result<()> {
     }
     println!("\n<--- deposited to vault --->\n");
 
-    env.vault_withdraw(env.fungible_tokens[1].id())
+    env.vault_withdraw(env.fungible_tokens[1].id(), 0)
         .await?
         .into_result()?;
     println!("\n<--- gathered all benefits --->\n");

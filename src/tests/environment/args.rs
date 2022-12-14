@@ -50,15 +50,25 @@ pub fn replenisher_withdraw_str(msg: &str) -> Result<String> {
     Ok(args)
 }
 
-pub fn add_replenishment_callback_str(nft_contract_id: &AccountId, args: &str) -> Result<String> {
-    let args = to_string(&add_replenishment_callback_json(nft_contract_id, args))?;
+pub fn add_replenishment_callback_str(
+    nft_contract_id: &AccountId,
+    args: &str,
+    index: usize,
+) -> Result<String> {
+    let args_json = add_replenishment_callback_json(nft_contract_id, args, index);
+    let args = to_string(&args_json)?;
     Ok(args)
 }
 
-pub fn add_replenishment_callback_json(nft_contract_id: &AccountId, args: &str) -> Value {
+pub fn add_replenishment_callback_json(
+    nft_contract_id: &AccountId,
+    args: &str,
+    index: usize,
+) -> Value {
+    let token_id = format!("{NFT_TOKEN_ID_BASE}{index}");
     json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID_BASE,
+        "nft_id": token_id,
         "callback": "withdraw_call",
         "args": args,
     })
@@ -93,17 +103,23 @@ pub fn vault_balance_of_bytes(nft_contract_id: &AccountId, index: usize) -> Resu
     Ok(args)
 }
 
-pub fn vault_withdraw_all_json(nft_contract_id: &AccountId) -> Value {
+pub fn vault_withdraw_all_json(nft_contract_id: &AccountId, index: usize) -> Value {
+    let token_id = format!("{NFT_TOKEN_ID_BASE}{index}");
     json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID_BASE,
+        "nft_id": token_id,
     })
 }
 
-pub fn vault_withdraw_json(nft_contract_id: &AccountId, fungible_token: &AccountId) -> Value {
+pub fn vault_withdraw_json(
+    nft_contract_id: &AccountId,
+    fungible_token: &AccountId,
+    index: usize,
+) -> Value {
+    let token_id = format!("{NFT_TOKEN_ID_BASE}{index}");
     json!({
         "nft_contract_id": nft_contract_id,
-        "nft_id": NFT_TOKEN_ID_BASE,
+        "nft_id": token_id,
         "fungible_token": fungible_token,
     })
 }

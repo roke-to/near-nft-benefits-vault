@@ -7,7 +7,7 @@ async fn test_withdraw_all_callback_get_nft_info_failed() -> Result<()> {
     let env = Environment::new(0).await?;
 
     let res = env
-        .vault_withdraw_all()
+        .vault_withdraw_all(0)
         .await?
         .into_result()
         .expect_err("should fail");
@@ -35,7 +35,7 @@ async fn test_withdraw_all_callback_zero_assets() -> Result<()> {
     env.nft_transfer().await?;
 
     let res = env
-        .vault_withdraw_all()
+        .vault_withdraw_all(0)
         .await?
         .into_result()
         .expect_err("should fail");
@@ -67,7 +67,7 @@ async fn withdraw_all_callback_with_assets_impl(custom_ft_count: usize) -> Resul
     }
 
     let res = env
-        .vault_withdraw_all()
+        .vault_withdraw_all(0)
         .await?
         .into_result()
         .expect("should succeed");

@@ -105,7 +105,7 @@ async fn test_ft_on_transfer_request_transfer_new_vault() -> Result<()> {
     replenish_account_wrap_near(&env.nft_owner, env.fungible_tokens[0].id()).await?;
 
     let nft_contract_id = near_sdk::AccountId::from_str(env.nft_first().id().as_str())?;
-    let request = Request::transfer(NFT_TOKEN_ID_BASE.to_owned(), nft_contract_id);
+    let request = Request::transfer(format!("{NFT_TOKEN_ID_BASE}0"), nft_contract_id);
     let request = to_string(&request)?;
 
     let token_contract_id = env.fungible_tokens[0].id();
@@ -159,7 +159,7 @@ async fn test_ft_on_transfer_request_transfer_existing_vault() -> Result<()> {
     replenish_account_wrap_near(&env.nft_owner, env.fungible_tokens[0].id()).await?;
 
     let nft_contract_id = near_sdk::AccountId::from_str(env.nft_first().id().as_str())?;
-    let request = Request::transfer(NFT_TOKEN_ID_BASE.to_owned(), nft_contract_id);
+    let request = Request::transfer(format!("{NFT_TOKEN_ID_BASE}0"), nft_contract_id);
     let request = to_string(&request)?;
 
     let token_contract_id = env.fungible_tokens[0].id();

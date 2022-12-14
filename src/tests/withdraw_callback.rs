@@ -7,7 +7,7 @@ async fn test_withdraw_callback_get_nft_info_failed() -> Result<()> {
     let env = Environment::new(0).await?;
 
     let res = env
-        .vault_withdraw(env.fungible_tokens[0].id())
+        .vault_withdraw(env.fungible_tokens[0].id(), 0)
         .await?
         .into_result()
         .expect_err("should fail");
@@ -35,7 +35,7 @@ async fn test_withdraw_callback_no_replenishers_zero_assets() -> Result<()> {
     env.nft_transfer().await?;
 
     let res = env
-        .vault_withdraw(env.fungible_tokens[0].id())
+        .vault_withdraw(env.fungible_tokens[0].id(), 0)
         .await?
         .into_result()
         .expect_err("should fail");
@@ -68,7 +68,7 @@ async fn withdraw_callback_with_assets_impl(custom_ft_count: usize) -> Result<()
     }
 
     let res = env
-        .vault_withdraw(env.fungible_tokens[custom_ft_count].id())
+        .vault_withdraw(env.fungible_tokens[custom_ft_count].id(), 0)
         .await?
         .into_result()
         .expect("should succeed");
@@ -103,7 +103,7 @@ async fn withdraw_callback_single_asset_impl(replenishers_count: usize) -> Resul
     env.vault_deposit(env.fungible_tokens[0].id(), 0).await?;
 
     let res = env
-        .vault_withdraw(env.fungible_tokens[0].id())
+        .vault_withdraw(env.fungible_tokens[0].id(), 0)
         .await?
         .into_result()
         .expect("should succeed");

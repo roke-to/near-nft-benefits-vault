@@ -9,7 +9,7 @@ async fn test_add_replenisher() -> Result<()> {
     env.vault_add_test_replenisher().await?;
 
     let replenishers = env
-        .vault_view_replenishers()
+        .vault_view_replenishers(0)
         .await?
         .expect("must be some, because vault is created");
 

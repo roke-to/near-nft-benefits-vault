@@ -94,6 +94,7 @@ impl Environment {
         info!("NFT owner account: {}", nft_owner.id());
         info!("NFT benefits vault account ready on: {}\n", vault.id());
 
+        info!("<-----environment initialized----->\n\n");
         Ok(Environment {
             sandbox,
             fungible_tokens,
@@ -163,7 +164,7 @@ impl Environment {
 
         let args = replenisher_withdraw_str(&transfer_req)?;
 
-        let args = add_replenishment_callback_str(self.nft_first().id(), &args)?;
+        let args = add_replenishment_callback_str(self.nft_first().id(), &args, 0)?;
 
         let msg = replenisher_ft_on_transfer_request_str(self.vault.id(), &args)?;
 
@@ -231,7 +232,11 @@ impl Environment {
         msg: &str,
     ) -> Result<ExecutionFinalResult> {
         info!(
-            "ft_transfer_call: \n\tsender: {sender:?} \n\treceiver: {receiver} \n\ttoken: {token:?}"
+            "ft_transfer_call: 
+\tsender: {sender:?} 
+\treceiver: {receiver} 
+\ttoken: {token:?} 
+\tmsg: \"{msg}\""
         );
 
         let args = ft_transfer_call_json(receiver, U128(amount), msg);
@@ -244,7 +249,7 @@ impl Environment {
             .transact()
             .await?;
 
-        debug!("ft_transfer_call res: {}", format_execution_result(&res));
+        info!("ft_transfer_call res: {}", format_execution_result(&res));
 
         Ok(res)
     }
@@ -297,8 +302,11 @@ impl Environment {
         Ok(balance)
     }
 
-    pub async fn vault_withdraw_all(&self) -> Result<ExecutionFinalResult> {
-        let args = vault_withdraw_all_json(self.nft_first().id());
+    pub async fn vault_withdraw_all(
+        &self,
+        nft_contract_index: usize,
+    ) -> Result<ExecutionFinalResult> {
+        let args = vault_withdraw_all_json(self.nft_first().id(), nft_contract_index);
         let res = self
             .nft_owner
             .call(self.vault.id(), VAULT_WITHDRAW_ALL_CALL)
@@ -312,8 +320,12 @@ impl Environment {
         Ok(res)
     }
 
-    pub async fn vault_withdraw(&self, fungible_token: &AccountId) -> Result<ExecutionFinalResult> {
-        let args = vault_withdraw_json(self.nft_first().id(), fungible_token);
+    pub async fn vault_withdraw(
+        &self,
+        fungible_token: &AccountId,
+        nft_contract_index: usize,
+    ) -> Result<ExecutionFinalResult> {
+        let args = vault_withdraw_json(self.nft_first().id(), fungible_token, nft_contract_index);
         let res = self
             .nft_owner
             .call(self.vault.id(), VAULT_WITHDRAW_CALL)
@@ -322,8 +334,8 @@ impl Environment {
             .max_gas()
             .transact()
             .await?;
-        // debug!("withdraw: {}", format_execution_result(&res));
-        debug!("withdraw: {res:#?}");
+        // info!("withdraw: {}", format_execution_result(&res));
+        info!("withdraw: {res:#?}");
 
         Ok(res)
     }
@@ -388,11 +400,14 @@ impl Environment {
         Ok(())
     }
 
-    pub async fn vault_view_replenishers(&self) -> Result<Option<Vec<Replenisher>>> {
-        let args = to_vec(&json!({
+    pub async fn vault_view_replenishers(&self, index: usize) -> Result<Option<Vec<Replenisher>>> {
+        let token_id = format!("{NFT_TOKEN_ID_BASE}{index}");
+        let args_json = json!({
             "nft_contract_id": self.nft_first().id(),
-            "nft_id": NFT_TOKEN_ID_BASE,
-        }))?;
+            "nft_id": token_id,
+        });
+        let args = to_vec(&args_json)?;
+
         let res = self
             .issuer
             .view(self.vault.id(), VAULT_VIEW_REPLENISHERS_CALL, args)
