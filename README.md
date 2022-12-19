@@ -63,7 +63,7 @@ near call $TOKEN_ID ft_transfer_call \
 To withdraw FTs from the Vault NFT owner should make a call:
 ```sh
 near call $CONTRACT_ID withdraw \
-'{"nft_contract_id": "<nft-contract>", "nft_id": "<token-id>", "fungible-token": "<ft-contract-id>"}' \
+'{"nft_contract_id": "<nft-contract>", "nft_id": "<token-id>", "fungible_token": "<ft-contract-id>"}' \
 --accountId $ACCOUNT_ID
 --deposit 1
 ```

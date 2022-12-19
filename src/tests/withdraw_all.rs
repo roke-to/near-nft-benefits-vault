@@ -9,7 +9,7 @@ async fn test_withdraw_all() -> Result<()> {
     let env = Environment::new(2).await?;
     println!("\n<--- test environment initialized --->\n");
 
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     println!("\n<--- nft issued --->\n");
 
     env.nft_transfer().await?;
@@ -19,12 +19,12 @@ async fn test_withdraw_all() -> Result<()> {
     println!("\n<--- nft owner initial balances: {nft_owner_initial_balances:?} --->\n");
 
     for contract_id in env.fungible_tokens.iter().map(Contract::id) {
-        env.vault_deposit(contract_id).await?;
+        env.vault_deposit(contract_id, 0).await?;
         println!("\ndeposit to vault of {contract_id}");
     }
     println!("\n<--- deposited to vault --->\n");
 
-    env.vault_withdraw_all()
+    env.vault_withdraw_all(0)
         .await?
         .into_result()
         .expect("withdraw failed");

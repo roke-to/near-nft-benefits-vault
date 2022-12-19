@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 use anyhow::Result;
+use log::info;
 use near_sdk::serde_json::to_string;
 use workspaces::error::ErrorKind;
 
@@ -8,7 +9,7 @@ use crate::{
     interface::request::Request,
     tests::{
         environment::{setup::replenish_account_wrap_near, Environment},
-        NEAR, NFT_TOKEN_ID, VAULT_TEST_DEPOSIT,
+        NEAR, NFT_TOKEN_ID_BASE, VAULT_TEST_DEPOSIT,
     },
 };
 
@@ -47,10 +48,10 @@ async fn test_ft_on_transfer_request_top_up_new_vault() -> Result<()> {
     let env = Environment::new(0).await?;
 
     let token_contract_id = env.fungible_tokens[0].id();
-    env.vault_deposit(token_contract_id).await?;
+    env.vault_deposit(token_contract_id, 0).await?;
 
     let balance = env
-        .vault_balance_of()
+        .vault_balance_of(0)
         .await?
         .expect("should be some: vault deposit failed");
     let token = balance
@@ -72,12 +73,12 @@ async fn test_ft_on_transfer_request_top_up_existing_vault() -> Result<()> {
     let env = Environment::new(0).await?;
 
     let token_contract_id = env.fungible_tokens[0].id();
-    env.vault_deposit(token_contract_id).await?;
+    env.vault_deposit(token_contract_id, 0).await?;
 
-    env.vault_deposit(token_contract_id).await?;
+    env.vault_deposit(token_contract_id, 0).await?;
 
     let balance = env
-        .vault_balance_of()
+        .vault_balance_of(0)
         .await?
         .expect("should be some: vault deposit failed");
     let token = balance
@@ -99,12 +100,12 @@ async fn test_ft_on_transfer_request_top_up_existing_vault() -> Result<()> {
 async fn test_ft_on_transfer_request_transfer_new_vault() -> Result<()> {
     let env = Environment::new(0).await?;
 
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     env.nft_transfer().await?;
     replenish_account_wrap_near(&env.nft_owner, env.fungible_tokens[0].id()).await?;
 
-    let nft_contract_id = near_sdk::AccountId::from_str(env.nft.id().as_str())?;
-    let request = Request::transfer(NFT_TOKEN_ID.to_owned(), nft_contract_id);
+    let nft_contract_id = near_sdk::AccountId::from_str(env.nft_first().id().as_str())?;
+    let request = Request::transfer(format!("{NFT_TOKEN_ID_BASE}0"), nft_contract_id);
     let request = to_string(&request)?;
 
     let token_contract_id = env.fungible_tokens[0].id();
@@ -132,7 +133,7 @@ async fn test_ft_on_transfer_request_transfer_new_vault() -> Result<()> {
     );
 
     let balance = env
-        .vault_balance_of()
+        .vault_balance_of(0)
         .await?
         .expect("should be some: ft_transfer_call failed");
     let token = balance
@@ -153,12 +154,12 @@ async fn test_ft_on_transfer_request_transfer_new_vault() -> Result<()> {
 async fn test_ft_on_transfer_request_transfer_existing_vault() -> Result<()> {
     let env = Environment::new(0).await?;
 
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     env.nft_transfer().await?;
     replenish_account_wrap_near(&env.nft_owner, env.fungible_tokens[0].id()).await?;
 
-    let nft_contract_id = near_sdk::AccountId::from_str(env.nft.id().as_str())?;
-    let request = Request::transfer(NFT_TOKEN_ID.to_owned(), nft_contract_id);
+    let nft_contract_id = near_sdk::AccountId::from_str(env.nft_first().id().as_str())?;
+    let request = Request::transfer(format!("{NFT_TOKEN_ID_BASE}0"), nft_contract_id);
     let request = to_string(&request)?;
 
     let token_contract_id = env.fungible_tokens[0].id();
@@ -196,7 +197,7 @@ async fn test_ft_on_transfer_request_transfer_existing_vault() -> Result<()> {
     );
 
     let balance = env
-        .vault_balance_of()
+        .vault_balance_of(0)
         .await?
         .expect("should be some: ft_transfer_call failed");
     let token = balance
@@ -209,6 +210,47 @@ async fn test_ft_on_transfer_request_transfer_existing_vault() -> Result<()> {
         token.amount, 0,
         "vault token balance should be equal to amount in Request"
     );
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_ft_on_transfer_request_top_up_multiple_nft_new_vaults() -> Result<()> {
+    let mut env = Environment::new(0).await?;
+    env.add_nft_contract().await?;
+    info!("second NFT contract added");
+
+    env.nft_mint_all().await?;
+    info!("all NFT minted");
+
+    env.nft_transfer_all().await?;
+    info!("all NFTs transferred to issuer");
+
+    let token_contract_id = env.fungible_tokens[0].id();
+
+    for i in 0..2 {
+        info!("test case NFT index: {i}");
+
+        env.vault_deposit(token_contract_id, i).await?;
+        info!("#{i} vault deposit completed");
+
+        let balance = env
+            .vault_balance_of(i)
+            .await?
+            .expect("should be some: vault deposit failed");
+        info!("#{i} received vault balance");
+
+        let token = balance
+            .tokens
+            .iter()
+            .find(|t| t.contract_id.as_str() == token_contract_id.as_str())
+            .expect("should be some");
+
+        assert_eq!(
+            token.amount, VAULT_TEST_DEPOSIT,
+            "vault token balance should be equal to amount in Request"
+        );
+    }
 
     Ok(())
 }

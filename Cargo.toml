@@ -21,9 +21,9 @@ near-contract-standards = "4.0"
 serde = "1.0"
 
 [dev-dependencies]
-tokio = { version = "1.21", features = ["macros", "rt"] }
+tokio = { version = "1.23", features = ["macros", "rt"] }
 futures = "0.3"
 anyhow = "1.0"
-workspaces = "0.6"
-env_logger = "0.9"
+workspaces = "0.7"
+env_logger = "0.10"
 log = "0.4"

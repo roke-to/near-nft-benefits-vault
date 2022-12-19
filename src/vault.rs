@@ -1,12 +1,13 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
     collections::{UnorderedMap, UnorderedSet},
+    env::sha256,
     require,
     serde::{Deserialize, Serialize},
     AccountId,
 };
 
-use crate::asset::Asset;
+use crate::{asset::Asset, nft_id::NftId};
 
 /// Stores map with different FT assets.
 /// FT contracts' account ids used as keys.
@@ -26,9 +27,18 @@ pub struct Replenisher {
 
 impl Vault {
     /// Creates new vault.
-    pub fn new() -> Self {
-        let assets = UnorderedMap::new(b"b");
-        let replenishers = UnorderedSet::new(b"c");
+    pub fn new(nft_id: &NftId) -> Self {
+        let nft_id_borsh = borsh::to_vec(&nft_id).expect("can't serialize NftId");
+
+        let mut prefix = sha256(&nft_id_borsh);
+
+        let mut prefix_assets = prefix.clone();
+        prefix_assets.extend_from_slice(b"assets");
+        let assets = UnorderedMap::new(prefix_assets);
+
+        prefix.extend_from_slice(b"replenishers");
+        let replenishers = UnorderedSet::new(prefix);
+
         Self {
             assets,
             replenishers,
@@ -89,12 +99,6 @@ impl Vault {
     /// Returns the assets count of this [`Vault`].
     pub fn assets_count(&self) -> u64 {
         self.assets.len()
-    }
-}
-
-impl Default for Vault {
-    fn default() -> Self {
-        Self::new()
     }
 }
 

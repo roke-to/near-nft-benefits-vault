@@ -1,4 +1,5 @@
 use anyhow::Result;
+use log::debug;
 
 use crate::tests::environment::Environment;
 
@@ -7,7 +8,7 @@ async fn test_withdraw_all_callback_get_nft_info_failed() -> Result<()> {
     let env = Environment::new(0).await?;
 
     let res = env
-        .vault_withdraw_all()
+        .vault_withdraw_all(0)
         .await?
         .into_result()
         .expect_err("should fail");
@@ -18,12 +19,11 @@ async fn test_withdraw_all_callback_get_nft_info_failed() -> Result<()> {
         "vault should panic in callback"
     );
 
-    assert!(failure
-        .clone()
-        .into_result()
-        .expect_err("should be error")
-        .to_string()
-        .contains("NFT info query returned nothing"));
+    let error = failure.clone().into_result().expect_err("should be error");
+    let error = format!("{error:?}");
+
+    debug!("{error}");
+    assert!(error.contains("NFT info query returned nothing"));
 
     Ok(())
 }
@@ -31,11 +31,11 @@ async fn test_withdraw_all_callback_get_nft_info_failed() -> Result<()> {
 #[tokio::test]
 async fn test_withdraw_all_callback_zero_assets() -> Result<()> {
     let env = Environment::new(0).await?;
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     env.nft_transfer().await?;
 
     let res = env
-        .vault_withdraw_all()
+        .vault_withdraw_all(0)
         .await?
         .into_result()
         .expect_err("should fail");
@@ -46,13 +46,14 @@ async fn test_withdraw_all_callback_zero_assets() -> Result<()> {
         "vault should panic in callback"
     );
 
+    let error = failure.clone().into_result().expect_err("should be error");
+
+    let error = format!("{error:?}");
+
+    debug!("{error}");
+
     assert!(
-        failure
-            .clone()
-            .into_result()
-            .expect_err("should be error")
-            .to_string()
-            .contains("vault is not created"),
+        error.contains("vault is not created"),
         "expected a specific log message"
     );
     Ok(())
@@ -60,14 +61,14 @@ async fn test_withdraw_all_callback_zero_assets() -> Result<()> {
 
 async fn withdraw_all_callback_with_assets_impl(custom_ft_count: usize) -> Result<()> {
     let env = Environment::new(custom_ft_count).await?;
-    env.nft_mint().await?;
+    env.nft_mint_all().await?;
     env.nft_transfer().await?;
     for token in env.fungible_tokens.iter().map(|t| t.id()) {
-        env.vault_deposit(token).await?;
+        env.vault_deposit(token, 0).await?;
     }
 
     let res = env
-        .vault_withdraw_all()
+        .vault_withdraw_all(0)
         .await?
         .into_result()
         .expect("should succeed");
@@ -86,6 +87,6 @@ async fn test_withdraw_all_callback_two_assets() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_withdraw_all_callback_ten_assets() -> Result<()> {
-    withdraw_all_callback_with_assets_impl(9).await
+async fn test_withdraw_all_callback_many_assets() -> Result<()> {
+    withdraw_all_callback_with_assets_impl(8).await
 }
