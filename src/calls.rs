@@ -91,6 +91,7 @@ impl Contract {
         }
 
         let nft_id = NftId::new(nft_contract_id, nft_id);
+        log!("key: {:?}", nft_id);
 
         let get_nft_info = nft::ext(nft_id.contract_id().clone())
             // .with_static_gas(Gas::ONE_TERA * 4)

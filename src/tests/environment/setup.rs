@@ -9,7 +9,7 @@ use tokio::fs::read;
 use workspaces::{network::Sandbox, testnet, Account, AccountId, Contract, Worker};
 
 use crate::tests::{
-    environment::{args::ft_new_json, format_helpers::format_execution_result},
+    environment::{args::ft_new, format_helpers::format_execution_result},
     FT_STORAGE_DEPOSIT, FT_STORAGE_DEPOSIT_CALL, FT_TRANSFER_CALL, FUNGIBLE_TOKEN_WASM, NEAR,
     NFT_NEW_DEFAULT_META_CALL, NFT_WASM, WASMS_LOCATION, WRAP_NEAR_DEPOSIT, WRAP_NEAR_DEPOSIT_CALL,
     WRAP_NEAR_TESTNET_ACCOUNT_ID, WRAP_NEAR_WASM,
@@ -80,7 +80,7 @@ async fn prepare_custom_ft(sandbox: Worker<Sandbox>, index: usize) -> Result<Con
     let wasm = read(path).await?;
     let contract = sandbox.dev_deploy(&wasm).await?;
 
-    let args = ft_new_json(contract.id(), index);
+    let args = ft_new(contract.id(), index);
 
     let res = contract.call("new").args_json(args).transact().await?;
     debug!(

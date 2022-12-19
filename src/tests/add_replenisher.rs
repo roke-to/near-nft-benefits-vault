@@ -6,7 +6,7 @@ use super::{environment::Environment, VAULT_REPLENISH_ARGS, VAULT_REPLENISH_CALL
 async fn test_add_replenisher() -> Result<()> {
     let env = Environment::new(0).await?;
 
-    env.vault_add_test_replenisher().await?;
+    env.vault_add_test_replenisher(0).await?;
 
     let replenishers = env
         .vault_view_replenishers(0)

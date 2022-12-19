@@ -1,4 +1,5 @@
 use anyhow::Result;
+use log::debug;
 
 use crate::tests::environment::Environment;
 
@@ -18,12 +19,11 @@ async fn test_withdraw_all_callback_get_nft_info_failed() -> Result<()> {
         "vault should panic in callback"
     );
 
-    assert!(failure
-        .clone()
-        .into_result()
-        .expect_err("should be error")
-        .to_string()
-        .contains("NFT info query returned nothing"));
+    let error = failure.clone().into_result().expect_err("should be error");
+    let error = format!("{error:?}");
+
+    debug!("{error}");
+    assert!(error.contains("NFT info query returned nothing"));
 
     Ok(())
 }
@@ -46,13 +46,14 @@ async fn test_withdraw_all_callback_zero_assets() -> Result<()> {
         "vault should panic in callback"
     );
 
+    let error = failure.clone().into_result().expect_err("should be error");
+
+    let error = format!("{error:?}");
+
+    debug!("{error}");
+
     assert!(
-        failure
-            .clone()
-            .into_result()
-            .expect_err("should be error")
-            .to_string()
-            .contains("vault is not created"),
+        error.contains("vault is not created"),
         "expected a specific log message"
     );
     Ok(())
@@ -86,6 +87,6 @@ async fn test_withdraw_all_callback_two_assets() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_withdraw_all_callback_ten_assets() -> Result<()> {
-    withdraw_all_callback_with_assets_impl(9).await
+async fn test_withdraw_all_callback_many_assets() -> Result<()> {
+    withdraw_all_callback_with_assets_impl(8).await
 }
