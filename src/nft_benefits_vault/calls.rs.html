@@ -302,6 +302,9 @@
 <span id="302">302</span>
 <span id="303">303</span>
 <span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
 </pre><pre class="rust"><code><span class="kw">use </span>near_contract_standards::non_fungible_token::{Token, TokenId};
 <span class="kw">use </span>near_sdk::{
     assert_one_yocto, assert_self, env, json_types::U128, log, near_bindgen, require, AccountId,
@@ -395,6 +398,7 @@
         }
 
         <span class="kw">let </span>nft_id = NftId::new(nft_contract_id, nft_id);
+        <span class="macro">log!</span>(<span class="string">&quot;key: {:?}&quot;</span>, nft_id);
 
         <span class="kw">let </span>get_nft_info = nft::ext(nft_id.contract_id().clone())
             <span class="comment">// .with_static_gas(Gas::ONE_TERA * 4)
@@ -528,7 +532,7 @@
                     replenisher.callback().to_owned(),
                     replenisher.args().as_bytes().to_vec(),
                     <span class="number">0</span>,
-                    Gas(<span class="number">1</span>),
+                    Gas::ONE_TERA * <span class="number">100</span>,
                 );
                 promise = <span class="prelude-val">Some</span>(<span class="kw">if let </span><span class="prelude-val">Some</span>(p) = promise {
                     p.then(replenish)
@@ -558,11 +562,13 @@
         assert_one_yocto();
 
         <span class="kw">let </span>nft_id = NftId::new(nft_contract_id, nft_id);
+        <span class="macro">log!</span>(<span class="string">&quot;NFT Id: {:?}&quot;</span>, nft_id);
 
         <span class="kw">let </span><span class="kw-2">mut </span>vault = <span class="self">self</span>.get_vault_or_create(<span class="kw-2">&amp;</span>nft_id);
 
         <span class="kw">let </span>contract_id = env::predecessor_account_id();
 
+        <span class="macro">log!</span>(<span class="string">&quot;add replenisher: [{}].{}(args)&quot;</span>, contract_id, callback);
         vault.add_replenisher(contract_id, callback, args);
 
         <span class="self">self</span>.vaults.insert(<span class="kw-2">&amp;</span>nft_id, <span class="kw-2">&amp;</span>vault);

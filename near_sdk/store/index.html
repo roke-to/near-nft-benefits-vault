@@ -11,7 +11,7 @@ storage.</p>
 For example, a store::Vector is stored as several key-value pairs, where indices are the keys.
 So, accessing a single element would only load this specific element.</p>
 <p>It can be expensive to load all values into memory, and because of this, <code>serde</code>
-<a href="https://docs.rs/serde/1.0.149/serde/ser/trait.Serialize.html"><code>Serialize</code></a> and <a href="https://docs.rs/serde/1.0.149/serde/de/trait.Deserialize.html"><code>Deserialize</code></a> traits are
+<a href="https://docs.rs/serde/1.0.151/serde/ser/trait.Serialize.html"><code>Serialize</code></a> and <a href="https://docs.rs/serde/1.0.151/serde/de/trait.Deserialize.html"><code>Deserialize</code></a> traits are
 intentionally not implemented. If you want to return all values from a storage collection from
 a function, consider using pagination with the collection iterators.</p>
 <p>All of the collections implement <a href="borsh::BorshSerialize"><code>BorshSerialize</code></a> and

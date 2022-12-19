@@ -114,15 +114,20 @@
 <span id="114">114</span>
 <span id="115">115</span>
 <span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
 </pre><pre class="rust"><code><span class="kw">use </span>near_sdk::{
     borsh::{<span class="self">self</span>, BorshDeserialize, BorshSerialize},
     collections::{UnorderedMap, UnorderedSet},
+    env::sha256,
     require,
     serde::{Deserialize, Serialize},
     AccountId,
 };
 
-<span class="kw">use </span><span class="kw">crate</span>::asset::Asset;
+<span class="kw">use crate</span>::{asset::Asset, nft_id::NftId};
 
 <span class="doccomment">/// Stores map with different FT assets.
 /// FT contracts&#39; account ids used as keys.
@@ -142,9 +147,18 @@
 
 <span class="kw">impl </span>Vault {
     <span class="doccomment">/// Creates new vault.
-    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span>assets = UnorderedMap::new(<span class="string">b&quot;b&quot;</span>);
-        <span class="kw">let </span>replenishers = UnorderedSet::new(<span class="string">b&quot;c&quot;</span>);
+    </span><span class="kw">pub fn </span>new(nft_id: <span class="kw-2">&amp;</span>NftId) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>nft_id_borsh = borsh::to_vec(<span class="kw-2">&amp;</span>nft_id).expect(<span class="string">&quot;can&#39;t serialize NftId&quot;</span>);
+
+        <span class="kw">let </span><span class="kw-2">mut </span>prefix = sha256(<span class="kw-2">&amp;</span>nft_id_borsh);
+
+        <span class="kw">let </span><span class="kw-2">mut </span>prefix_assets = prefix.clone();
+        prefix_assets.extend_from_slice(<span class="string">b&quot;assets&quot;</span>);
+        <span class="kw">let </span>assets = UnorderedMap::new(prefix_assets);
+
+        prefix.extend_from_slice(<span class="string">b&quot;replenishers&quot;</span>);
+        <span class="kw">let </span>replenishers = UnorderedSet::new(prefix);
+
         <span class="self">Self </span>{
             assets,
             replenishers,
@@ -205,12 +219,6 @@
     <span class="doccomment">/// Returns the assets count of this [`Vault`].
     </span><span class="kw">pub fn </span>assets_count(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
         <span class="self">self</span>.assets.len()
-    }
-}
-
-<span class="kw">impl </span>Default <span class="kw">for </span>Vault {
-    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>::new()
     }
 }
 

@@ -96,6 +96,8 @@
 <span id="96">96</span>
 <span id="97">97</span>
 <span id="98">98</span>
+<span id="99">99</span>
+<span id="100">100</span>
 </pre><pre class="rust"><code><span class="attribute">#![warn(clippy::all)]
 #![doc = <span class="macro">include_str!</span>(<span class="string">&quot;../README.md&quot;</span>)]
 
@@ -149,7 +151,9 @@
     /// If there is no vault for the provided [`NftId`] then it will create a new one.
     </span><span class="kw">pub fn </span>store(<span class="kw-2">&amp;mut </span><span class="self">self</span>, nft_id: <span class="kw-2">&amp;</span>NftId, fungible_token: <span class="kw-2">&amp;</span>AccountId, amount: u128) {
         <span class="kw">let </span><span class="kw-2">mut </span>vault = <span class="self">self</span>.get_vault_or_create(nft_id);
+        <span class="macro">log!</span>(<span class="string">&quot;vault from storage for: {:?}&quot;</span>, nft_id);
         vault.store(fungible_token, amount);
+        <span class="macro">log!</span>(<span class="string">&quot;called store on the vault struct&quot;</span>);
 
         <span class="self">self</span>.vaults.insert(nft_id, <span class="kw-2">&amp;</span>vault);
         <span class="macro">log!</span>(<span class="string">&quot;{} of {} stored in {:?}&quot;</span>, amount, fungible_token, nft_id);
@@ -169,7 +173,7 @@
     </span><span class="kw">pub fn </span>get_vault_or_create(<span class="kw-2">&amp;</span><span class="self">self</span>, nft_id: <span class="kw-2">&amp;</span>NftId) -&gt; Vault {
         <span class="self">self</span>.vaults.get(nft_id).unwrap_or_else(|| {
             <span class="macro">log!</span>(<span class="string">&quot;new vault created: {:?}&quot;</span>, nft_id);
-            Vault::new()
+            Vault::new(nft_id)
         })
     }
 
