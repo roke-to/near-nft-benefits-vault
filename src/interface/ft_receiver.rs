@@ -30,7 +30,12 @@ impl FungibleTokenReceiver for Contract {
         // so predecessor account IS the FT contract.
         let fungible_token = env::predecessor_account_id();
 
-        log!("received {} tokens from {}", amount, sender_id);
+        log!(
+            "received {} tokens from {}, msg: {}",
+            amount,
+            sender_id,
+            msg
+        );
 
         let request = match Request::from_json(&msg) {
             Ok(req) => req,

@@ -2,6 +2,7 @@ use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
     collections::{UnorderedMap, UnorderedSet},
     env::sha256,
+    json_types::U128,
     require,
     serde::{Deserialize, Serialize},
     AccountId,
@@ -17,12 +18,13 @@ pub struct Vault {
     replenishers: UnorderedSet<Replenisher>,
 }
 
-#[derive(Debug, BorshSerialize, BorshDeserialize, Serialize, Deserialize)]
+#[derive(Debug, BorshSerialize, BorshDeserialize, Serialize, Deserialize, Clone)]
 #[serde(crate = "near_sdk::serde")]
 pub struct Replenisher {
     contract_id: AccountId,
     callback: String,
     args: String,
+    deposit: U128,
 }
 
 impl Vault {
@@ -68,11 +70,18 @@ impl Vault {
     /// # Panics
     ///
     /// Panics if replenisher is already registered.
-    pub fn add_replenisher(&mut self, contract_id: AccountId, callback: String, args: String) {
+    pub fn add_replenisher(
+        &mut self,
+        contract_id: AccountId,
+        callback: String,
+        args: String,
+        deposit: U128,
+    ) {
         let replenisher = Replenisher {
             contract_id,
             callback,
             args,
+            deposit,
         };
         require!(
             !self.replenishers.contains(&replenisher),
@@ -116,5 +125,10 @@ impl Replenisher {
     /// Returns a reference to the args of this [`Replenisher`].
     pub fn args(&self) -> &str {
         self.args.as_ref()
+    }
+
+    /// Returns required deposit for the call.
+    pub fn deposit(&self) -> u128 {
+        self.deposit.0
     }
 }
