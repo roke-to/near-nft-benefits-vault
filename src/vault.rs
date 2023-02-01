@@ -1,10 +1,10 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
     collections::{UnorderedMap, UnorderedSet},
-    env::sha256,
+    env::{self, sha256},
     require,
     serde::{Deserialize, Serialize},
-    AccountId, Timestamp,
+    AccountId,
 };
 
 use crate::{asset::Asset, nft_id::NftId};
@@ -23,7 +23,7 @@ pub struct Replenisher {
     contract_id: AccountId,
     callback: String,
     args: String,
-    expiration_timestamp: Option<Timestamp>,
+    expiration_timestamp_ms: Option<u64>,
 }
 
 impl Vault {
@@ -69,12 +69,23 @@ impl Vault {
     /// # Panics
     ///
     /// Panics if replenisher is already registered.
-    pub fn add_replenisher(&mut self, contract_id: AccountId, callback: String, args: String) {
+    pub fn add_replenisher(
+        &mut self,
+        contract_id: AccountId,
+        callback: String,
+        args: String,
+        duration_secs: Option<u64>,
+    ) {
+        let expiration_timestamp_ms = duration_secs.map(|d| {
+            let now_ms = env::block_timestamp_ms();
+            let duration_ms = d * 1000;
+            now_ms + duration_ms
+        });
         let replenisher = Replenisher {
             contract_id,
             callback,
             args,
-            expiration_timestamp: None,
+            expiration_timestamp_ms,
         };
         require!(
             !self.replenishers.contains(&replenisher),

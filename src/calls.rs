@@ -251,6 +251,7 @@ impl Contract {
         nft_id: TokenId,
         callback: String,
         args: String,
+        duration_secs: Option<u64>,
     ) {
         assert_one_yocto();
 
@@ -262,7 +263,10 @@ impl Contract {
         let contract_id = env::predecessor_account_id();
 
         log!("add replenisher: [{}].{}(args)", contract_id, callback);
-        vault.add_replenisher(contract_id, callback, args);
+        if let Some(d) = duration_secs {
+            log!("replenisher will expire in {} seconds", d);
+        }
+        vault.add_replenisher(contract_id, callback, args, duration_secs);
 
         self.vaults.insert(&nft_id, &vault);
     }
