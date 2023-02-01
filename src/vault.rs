@@ -4,7 +4,7 @@ use near_sdk::{
     env::sha256,
     require,
     serde::{Deserialize, Serialize},
-    AccountId,
+    AccountId, Timestamp,
 };
 
 use crate::{asset::Asset, nft_id::NftId};
@@ -23,6 +23,7 @@ pub struct Replenisher {
     contract_id: AccountId,
     callback: String,
     args: String,
+    expiration_timestamp: Option<Timestamp>,
 }
 
 impl Vault {
@@ -73,6 +74,7 @@ impl Vault {
             contract_id,
             callback,
             args,
+            expiration_timestamp: None,
         };
         require!(
             !self.replenishers.contains(&replenisher),
