@@ -184,7 +184,7 @@ impl Contract {
 
         log!("vault access granted");
 
-        let vault = self.get_vault(&nft_id);
+        let mut vault = self.get_vault(&nft_id);
 
         let asset = vault.get_asset(&fungible_token);
 
@@ -203,7 +203,7 @@ impl Contract {
 
             let transfer = Self::transfer_to(fungible_token.clone(), nft_owner, amount);
             let adjust = Self::ext(env::current_account_id()).adjust_balance(
-                nft_id,
+                nft_id.clone(),
                 fungible_token,
                 U128(amount),
             );
@@ -214,7 +214,7 @@ impl Contract {
         };
 
         if replenish {
-            for replenisher in vault.replenishers().iter() {
+            for replenisher in vault.remove_replenishers().into_iter() {
                 log!(
                     "calling replenisher: {}.{}({})",
                     replenisher.contract_id(),
@@ -232,7 +232,17 @@ impl Contract {
                 } else {
                     replenish
                 });
+                if replenisher.is_expired() {
+                    log!(
+                        "replenisher {}.{}() is expired",
+                        replenisher.contract_id(),
+                        replenisher.callback()
+                    );
+                } else {
+                    vault.insert_replenisher(&replenisher);
+                }
             }
+            self.vaults.insert(&nft_id, &vault);
         }
     }
 

@@ -94,6 +94,19 @@ impl Vault {
         self.replenishers.insert(&replenisher);
     }
 
+    pub fn insert_replenisher(&mut self, replenisher: &Replenisher) {
+        require!(
+            !self.replenishers.insert(replenisher),
+            "replenisher already exists"
+        );
+    }
+
+    pub fn remove_replenishers(&mut self) -> Vec<Replenisher> {
+        let repl = self.replenishers.to_vec();
+        self.replenishers.clear();
+        repl
+    }
+
     /// Returns a reference to the replenishers of this [`Vault`].
     pub fn replenishers(&self) -> &UnorderedSet<Replenisher> {
         &self.replenishers
@@ -129,5 +142,10 @@ impl Replenisher {
     /// Returns a reference to the args of this [`Replenisher`].
     pub fn args(&self) -> &str {
         self.args.as_ref()
+    }
+
+    pub fn is_expired(&self) -> bool {
+        let now = env::block_timestamp_ms();
+        self.expiration_timestamp_ms.map(|ts| ts <= now) == Some(true)
     }
 }

@@ -80,7 +80,7 @@ impl Contract {
         let nft_id = NftId::new(nft_contract_id, nft_id);
         let vault = self.vaults.get(&nft_id)?;
         log!("vault assets count: {}", vault.assets_count());
-        let replenishers = vault.replenishers().as_vector().to_vec();
+        let replenishers = vault.replenishers().to_vec();
         log!("replenishers: {:?}", replenishers);
         Some(replenishers)
     }
