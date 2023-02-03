@@ -54,19 +54,26 @@ pub fn add_replenishment_callback_str(
     nft_contract_id: &AccountId,
     args: &str,
     index: usize,
+    duration_secs: u64,
 ) -> Result<String> {
-    let args_json = add_replenishment_callback(nft_contract_id, args, index);
+    let args_json = add_replenishment_callback(nft_contract_id, args, index, duration_secs);
     let args = to_string(&args_json)?;
     Ok(args)
 }
 
-pub fn add_replenishment_callback(nft_contract_id: &AccountId, args: &str, index: usize) -> Value {
+pub fn add_replenishment_callback(
+    nft_contract_id: &AccountId,
+    args: &str,
+    index: usize,
+    duration_secs: u64,
+) -> Value {
     let token_id = format!("{NFT_TOKEN_ID_BASE}{index}");
     json!({
         "nft_contract_id": nft_contract_id,
         "nft_id": token_id,
         "callback": "withdraw_call",
         "args": args,
+        "duration_secs": duration_secs,
     })
 }
 

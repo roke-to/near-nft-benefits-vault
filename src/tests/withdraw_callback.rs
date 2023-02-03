@@ -1,4 +1,8 @@
+use std::time::Duration;
+
 use anyhow::Result;
+use log::info;
+use tokio::time::sleep;
 
 use crate::tests::{environment::Environment, NEAR};
 
@@ -106,6 +110,35 @@ async fn withdraw_callback_single_asset_impl(replenishers_count: usize) -> Resul
         .into_result()
         .expect("should succeed");
     assert!(res.failures().is_empty(), "should be no failures");
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_withdraw_callback_single_replenisher_with_expiration() -> Result<()> {
+    let mut env = Environment::new(0).await?;
+    env.nft_mint_all().await?;
+    env.nft_transfer().await?;
+
+    env.deploy_replenishers(1).await?;
+
+    let token = env.fungible_tokens[0].id();
+    env.top_up_replenishers(token, NEAR, 0).await?;
+
+    env.vault_deposit(token, 0).await?;
+
+    info!("wait for 1 sec");
+    sleep(Duration::from_secs(1)).await;
+
+    let res = env
+        .vault_withdraw(env.fungible_tokens[0].id(), 0)
+        .await?
+        .into_result()
+        .expect("should succeed");
+    assert!(res.failures().is_empty(), "should be no failures");
+
+    let replenishers_count = env.vault_view_replenishers(0).await?.unwrap().len();
+    assert!(replenishers_count == 0, "replenisher should expire");
 
     Ok(())
 }

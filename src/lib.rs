@@ -51,7 +51,6 @@ impl Contract {
     /// If there is no vault for the provided [`NftId`] then it will create a new one.
     pub fn store(&mut self, nft_id: &NftId, fungible_token: &AccountId, amount: u128) {
         let mut vault = self.get_vault_or_create(nft_id);
-        log!("vault from storage for: {:?}", nft_id);
         vault.store(fungible_token, amount);
         log!("called store on the vault struct");
 
@@ -86,7 +85,6 @@ impl Contract {
         );
         let memo = Some("Nft Benefits transfer".to_string());
 
-        log!("ft transfer: {}", fungible_token);
         ft::ext(fungible_token)
             .with_attached_deposit(1)
             .ft_transfer(nft_owner, U128(amount), memo)

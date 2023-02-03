@@ -96,7 +96,7 @@ impl Vault {
 
     pub fn insert_replenisher(&mut self, replenisher: &Replenisher) {
         require!(
-            !self.replenishers.insert(replenisher),
+            self.replenishers.insert(replenisher),
             "replenisher already exists"
         );
     }
@@ -146,6 +146,10 @@ impl Replenisher {
 
     pub fn is_expired(&self) -> bool {
         let now = env::block_timestamp_ms();
-        self.expiration_timestamp_ms.map(|ts| ts <= now) == Some(true)
+        if let Some(ts) = self.expiration_timestamp_ms {
+            ts <= now
+        } else {
+            false
+        }
     }
 }

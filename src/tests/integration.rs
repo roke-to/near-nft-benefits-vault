@@ -66,7 +66,7 @@ pub async fn test_interaction_with_contract_replenisher() -> Result<()> {
 
     let args = replenisher_withdraw_str(&transfer_req)?;
 
-    let args = add_replenishment_callback_str(env.nft_first().id(), &args, 0)?;
+    let args = add_replenishment_callback_str(env.nft_first().id(), &args, 0, 1000)?;
 
     let msg = replenisher_ft_on_transfer_request_str(env.vault.id(), &args)?;
 

@@ -173,7 +173,6 @@ impl Contract {
     ) {
         assert_self();
         let signer = env::signer_account_id();
-        log!("withdraw callback called by signer: {}", signer);
 
         let nft_info = nft_info
             .expect("failed to get nft info")
@@ -214,7 +213,8 @@ impl Contract {
         };
 
         if replenish {
-            for replenisher in vault.remove_replenishers().into_iter() {
+            let replenishers_vec = vault.remove_replenishers();
+            for replenisher in replenishers_vec.into_iter() {
                 log!(
                     "calling replenisher: {}.{}({})",
                     replenisher.contract_id(),
@@ -234,7 +234,7 @@ impl Contract {
                 });
                 if replenisher.is_expired() {
                     log!(
-                        "replenisher {}.{}() is expired",
+                        "replenisher {}.{}() is expired and removed",
                         replenisher.contract_id(),
                         replenisher.callback()
                     );
@@ -314,8 +314,5 @@ impl Contract {
         } else {
             log!("transfer {} if {} tokens failed", amount, fungible_token);
         }
-
-        let used_gas = env::used_gas();
-        log!("withdraw callback start gas used: {}", used_gas.0);
     }
 }

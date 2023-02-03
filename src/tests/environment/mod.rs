@@ -168,7 +168,7 @@ impl Environment {
 
         let args = replenisher_withdraw_str(&transfer_req)?;
 
-        let args = add_replenishment_callback_str(self.nft_first().id(), &args, 0)?;
+        let args = add_replenishment_callback_str(self.nft_first().id(), &args, 0, 1)?;
 
         let msg = replenisher_ft_on_transfer_request_str(self.vault.id(), &args)?;
 
